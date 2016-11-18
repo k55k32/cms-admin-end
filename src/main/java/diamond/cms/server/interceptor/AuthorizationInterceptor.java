@@ -1,5 +1,7 @@
 package diamond.cms.server.interceptor;
 
+import java.util.Optional;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,14 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import diamond.cms.server.annotations.IgnoreToken;
-import diamond.cms.server.exceptions.AppException;
-import diamond.cms.server.exceptions.Error;
+import diamond.cms.server.exceptions.AuthorizationException;
 import diamond.cms.server.services.UserService;
 
 @Component
@@ -30,6 +30,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        System.out.println(request.getMethod() + ":" + request.getRequestURL());
         if (handler instanceof HandlerMethod) {
             HandlerMethod methodHandler = (HandlerMethod) handler;
             Object bean = methodHandler.getBean();
@@ -38,10 +39,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
                 if (type.getAnnotation(IgnoreToken.class)!=null || methodHandler.getMethodAnnotation(IgnoreToken.class)!=null) {
                     return true;
                 }
-                String token = request.getHeader("AUTHORIZATION_HEADER");
-                if (StringUtils.isEmpty(token))
-                    throw new AppException(Error.INVALID_TOKEN);
-                userService.getByToken(token);
+                String token = request.getHeader("Authorization");
+                Optional.ofNullable(token).orElseThrow(() -> new AuthorizationException());
+                Optional.ofNullable(userService.getByToken(token)).orElseThrow(() -> new AuthorizationException());
             }
         }
         return true;

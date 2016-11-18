@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.Result;
+import diamond.cms.server.exceptions.AuthorizationException;
 import diamond.cms.server.model.User;
 import diamond.cms.server.services.UserService;
 
@@ -36,8 +37,11 @@ public class UserController {
     }
 
     @RequestMapping(value="{token}", method = RequestMethod.GET)
-    public User get(@PathVariable String token) {
+    public User get(@PathVariable String token) throws AuthorizationException {
         User user = userService.getByToken(token);
+        if (user == null) {
+            throw new AuthorizationException();
+        }
         return user;
     }
 }

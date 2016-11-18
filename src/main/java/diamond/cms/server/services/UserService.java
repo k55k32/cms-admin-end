@@ -48,9 +48,6 @@ public class UserService extends AbstractService<User, String>{
         User user = (User) createQuery("From User where token = ? and expired > ?")
                 .setString(0, token)
                 .setLong(1, System.currentTimeMillis()).uniqueResult();
-        if (user == null) {
-            throw new AppException(Error.INVALID_TOKEN);
-        }
         return user;
     }
 }

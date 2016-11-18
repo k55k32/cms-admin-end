@@ -15,10 +15,13 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>1.3.3.RELEASE</version>
   </parent> 
+  
   <properties>
+    <java.version>1.8</java.version>
     <hibernate-version>4.2.21.Final</hibernate-version>
     <aspectj-version>1.8.9</aspectj-version>
   </properties>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
