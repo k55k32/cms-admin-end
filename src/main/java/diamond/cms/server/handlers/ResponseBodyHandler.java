@@ -1,5 +1,7 @@
 package diamond.cms.server.handlers;
 
+import java.lang.reflect.Type;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -19,7 +21,9 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object>{
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-		boolean flag = returnType.getGenericParameterType().equals(Result.class);
+	    Type type = returnType.getGenericParameterType();
+	    // 不处理Result 和 String
+		boolean flag = type.equals(Result.class) || type.equals(String.class);
 		return !flag;
 	}
 

@@ -31,7 +31,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         System.out.println(request.getMethod() + ":" + request.getRequestURL());
-        if (handler instanceof HandlerMethod) {
+        if (handler instanceof HandlerMethod && !request.getMethod().equals("OPTIONS")) {
             HandlerMethod methodHandler = (HandlerMethod) handler;
             Object bean = methodHandler.getBean();
             Class<?> type = bean.getClass();
