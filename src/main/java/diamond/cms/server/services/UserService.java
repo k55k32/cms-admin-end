@@ -1,17 +1,17 @@
 package diamond.cms.server.services;
 
-import java.util.Date;
+import static diamond.cms.server.model.jooq.Tables.C_USER;
+
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.exceptions.AppException;
-import diamond.cms.server.exceptions.Error;
 import diamond.cms.server.model.User;
 import diamond.cms.server.utils.PwdUtils;
 
 @Service
-public class UserService extends AbstractService<User, String>{
+public class UserService extends GenericService<User>{
 
     public static final long EXPIRED_TIME = 1000 * 60 * 60 * 2;
 
@@ -19,25 +19,22 @@ public class UserService extends AbstractService<User, String>{
         User user =new User();
         user.setUsername(username);
         user.setPassword(PwdUtils.pwd(password));
-        user.setCreateTime(new Date());
-        user.setLastLoginTime(new Date());
         generateToken(user);
         this.save(user);
         return user.getToken();
     }
 
     public String login(String username,String password) {
-        User user = (User) createQuery("From User where username = ? and password = ?")
-        .setString(0, username)
-        .setString(1, PwdUtils.pwd(password)).uniqueResult();
-        if (user == null) {
-            throw new AppException(Error.USERNAME_OR_PASSWORD_ERROR);
-        }
+        User user = dao
+                .fetchOne(C_USER.USERNAME.eq(username).and(C_USER.PASSWORD.eq(PwdUtils.pwd(password))))
+                .orElseThrow(() -> new AppException(diamond.cms.server.exceptions.Error.USERNAME_OR_PASSWORD_ERROR));
         generateToken(user);
-        user.setLastLoginTime(new Date());
-        update(user);
+        user.setLastlogintime(currentTime());
+        this.update(user);
         return user.getToken();
     }
+
+
 
     private void generateToken(User user) {
         user.setToken(UUID.randomUUID().toString());
@@ -45,9 +42,9 @@ public class UserService extends AbstractService<User, String>{
     }
 
     public User getByToken(String token) {
-        User user = (User) createQuery("From User where token = ? and expired > ?")
-                .setString(0, token)
-                .setLong(1, System.currentTimeMillis()).uniqueResult();
+        User user = dao.fetchOne(C_USER.TOKEN.eq(token).and(C_USER.EXPIRED.ge(System.currentTimeMillis()))).orElse(null);
         return user;
     }
+//
+
 }

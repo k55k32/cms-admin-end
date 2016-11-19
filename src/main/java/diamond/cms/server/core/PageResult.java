@@ -1,13 +1,14 @@
 package diamond.cms.server.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Page<T> {
-    private int pageCount;
-    private int total;
-    private int currentPage;
-    private int pageSize;
-    private List<T> data;
+public class PageResult<T> {
+    private int pageCount = 1;
+    private int total = 1;
+    private int currentPage = 1;
+    private int pageSize = 10;
+    private List<T> data = new ArrayList<>();
 
     public List<T> getData() {
         return data;
@@ -42,5 +43,13 @@ public class Page<T> {
 
     public int getStart() {
         return pageSize * currentPage;
+    }
+
+    public static <E>PageResult<E> create(int page, int count, List<E> data) {
+        PageResult<E> pageResult = new PageResult<>();
+        pageResult.setCurrentPage(page);
+        pageResult.setTotal(count);
+        pageResult.setData(data);
+        return pageResult;
     }
 }

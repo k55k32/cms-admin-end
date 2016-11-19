@@ -1,4 +1,4 @@
-package diamond.cms.server.handlers;
+package diamond.cms.server.controllers.advice;
 
 import java.lang.reflect.Type;
 
@@ -17,12 +17,11 @@ import diamond.cms.server.core.Result;
  *
  */
 @ControllerAdvice
-public class ResponseBodyHandler implements ResponseBodyAdvice<Object>{
+public class CustomerResponseBodyAdvice implements ResponseBodyAdvice<Object>{
 
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 	    Type type = returnType.getGenericParameterType();
-	    // 不处理Result 和 String
 		boolean flag = type.equals(Result.class) || type.equals(String.class);
 		return !flag;
 	}
@@ -31,6 +30,9 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object>{
 	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 			ServerHttpResponse response) {
+	    if (body instanceof Result || body instanceof String) { // 不处理Result 和 String
+	        return body;
+	    }
 		Result result = new Result();
 		result.setSuccess(true);
 		result.setData(body);

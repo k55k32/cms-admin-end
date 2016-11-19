@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+  <jdbc>
+      <driver>com.mysql.jdbc.Driver</driver>
+      <url>jdbc:mysql://localhost:3306/cms</url>
+      <user>root</user>
+      <password>root</password>
+  </jdbc>
+  
+
+  <!-- Generator parameters -->
+  <generator>
+      <!-- 自定义一些生成的规则  -->
+        <strategy>
+            <name>diamond.cms.server.CustomerJOOQGeneratorStrategy</name>
+        </strategy>
+        <generate>
+            <pojos>true</pojos>
+            <interfaces>true</interfaces>
+            <validationAnnotations>true</validationAnnotations>
+        </generate>
+        <database>
+            <name>org.jooq.util.mysql.MySQLDatabase</name>
+            <includes>.*</includes>
+            <excludes></excludes>
+            <inputSchema>cms</inputSchema>
+        </database>
+        <target>
+            <packageName>diamond.cms.server.model.jooq</packageName>
+            <directory>src/main/java</directory>
+        </target>
+    </generator>
+</configuration>

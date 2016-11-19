@@ -14,7 +14,7 @@ import diamond.cms.server.interceptor.AuthorizationInterceptor;
 
 @Configuration
 @EnableWebMvc
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig extends WebMvcConfigurerAdapter{
 
     @Resource
     AuthorizationInterceptor authorizationInterceptor;
@@ -35,4 +35,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**");
     }
+
 }

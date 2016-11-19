@@ -17,6 +17,13 @@ public class Result {
 	    this.data = string;
 	    this.success = true;
     }
+    public Result(boolean success) {
+        this.success = success;
+    }
+    public Result(Object data) {
+        this.success = true;
+        this.data = data;
+    }
     public boolean isSuccess() {
 		return success;
 	}
