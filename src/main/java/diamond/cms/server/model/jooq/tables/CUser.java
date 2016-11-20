@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CUser extends TableImpl<CUserRecord> {
 
-	private static final long serialVersionUID = 1413285636;
+	private static final long serialVersionUID = 160884567;
 
 	/**
 	 * The reference instance of <code>cms.c_user</code>
@@ -52,12 +52,22 @@ public class CUser extends TableImpl<CUserRecord> {
 	/**
 	 * The column <code>cms.c_user.id</code>.
 	 */
-	public final TableField<CUserRecord, String> ID = createField("id", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
+	public final TableField<CUserRecord, String> ID = createField("id", org.jooq.impl.SQLDataType.VARCHAR.length(40).nullable(false), this, "");
 
 	/**
-	 * The column <code>cms.c_user.createTime</code>.
+	 * The column <code>cms.c_user.username</code>.
 	 */
-	public final TableField<CUserRecord, Timestamp> CREATETIME = createField("createTime", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final TableField<CUserRecord, String> USERNAME = createField("username", org.jooq.impl.SQLDataType.VARCHAR.length(80).nullable(false), this, "");
+
+	/**
+	 * The column <code>cms.c_user.password</code>.
+	 */
+	public final TableField<CUserRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(40).nullable(false), this, "");
+
+	/**
+	 * The column <code>cms.c_user.token</code>.
+	 */
+	public final TableField<CUserRecord, String> TOKEN = createField("token", org.jooq.impl.SQLDataType.VARCHAR.length(80), this, "");
 
 	/**
 	 * The column <code>cms.c_user.expired</code>.
@@ -65,24 +75,14 @@ public class CUser extends TableImpl<CUserRecord> {
 	public final TableField<CUserRecord, Long> EXPIRED = createField("expired", org.jooq.impl.SQLDataType.BIGINT, this, "");
 
 	/**
-	 * The column <code>cms.c_user.lastLoginTime</code>.
+	 * The column <code>cms.c_user.create_time</code>.
 	 */
-	public final TableField<CUserRecord, Timestamp> LASTLOGINTIME = createField("lastLoginTime", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final TableField<CUserRecord, Timestamp> CREATE_TIME = createField("create_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
-	 * The column <code>cms.c_user.password</code>.
+	 * The column <code>cms.c_user.last_login_time</code>.
 	 */
-	public final TableField<CUserRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
-
-	/**
-	 * The column <code>cms.c_user.token</code>.
-	 */
-	public final TableField<CUserRecord, String> TOKEN = createField("token", org.jooq.impl.SQLDataType.VARCHAR.length(255), this, "");
-
-	/**
-	 * The column <code>cms.c_user.username</code>.
-	 */
-	public final TableField<CUserRecord, String> USERNAME = createField("username", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
+	public final TableField<CUserRecord, Timestamp> LAST_LOGIN_TIME = createField("last_login_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>cms.c_user</code> table reference

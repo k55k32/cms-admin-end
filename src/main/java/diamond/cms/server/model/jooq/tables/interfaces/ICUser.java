@@ -34,19 +34,43 @@ public interface ICUser extends Serializable {
 	 * Getter for <code>cms.c_user.id</code>.
 	 */
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	public String getId();
 
 	/**
-	 * Setter for <code>cms.c_user.createTime</code>.
+	 * Setter for <code>cms.c_user.username</code>.
 	 */
-	public void setCreatetime(Timestamp value);
+	public void setUsername(String value);
 
 	/**
-	 * Getter for <code>cms.c_user.createTime</code>.
+	 * Getter for <code>cms.c_user.username</code>.
 	 */
 	@NotNull
-	public Timestamp getCreatetime();
+	@Size(max = 80)
+	public String getUsername();
+
+	/**
+	 * Setter for <code>cms.c_user.password</code>.
+	 */
+	public void setPassword(String value);
+
+	/**
+	 * Getter for <code>cms.c_user.password</code>.
+	 */
+	@NotNull
+	@Size(max = 40)
+	public String getPassword();
+
+	/**
+	 * Setter for <code>cms.c_user.token</code>.
+	 */
+	public void setToken(String value);
+
+	/**
+	 * Getter for <code>cms.c_user.token</code>.
+	 */
+	@Size(max = 80)
+	public String getToken();
 
 	/**
 	 * Setter for <code>cms.c_user.expired</code>.
@@ -59,50 +83,26 @@ public interface ICUser extends Serializable {
 	public Long getExpired();
 
 	/**
-	 * Setter for <code>cms.c_user.lastLoginTime</code>.
+	 * Setter for <code>cms.c_user.create_time</code>.
 	 */
-	public void setLastlogintime(Timestamp value);
+	public void setCreateTime(Timestamp value);
 
 	/**
-	 * Getter for <code>cms.c_user.lastLoginTime</code>.
+	 * Getter for <code>cms.c_user.create_time</code>.
 	 */
 	@NotNull
-	public Timestamp getLastlogintime();
+	public Timestamp getCreateTime();
 
 	/**
-	 * Setter for <code>cms.c_user.password</code>.
+	 * Setter for <code>cms.c_user.last_login_time</code>.
 	 */
-	public void setPassword(String value);
+	public void setLastLoginTime(Timestamp value);
 
 	/**
-	 * Getter for <code>cms.c_user.password</code>.
-	 */
-	@NotNull
-	@Size(max = 255)
-	public String getPassword();
-
-	/**
-	 * Setter for <code>cms.c_user.token</code>.
-	 */
-	public void setToken(String value);
-
-	/**
-	 * Getter for <code>cms.c_user.token</code>.
-	 */
-	@Size(max = 255)
-	public String getToken();
-
-	/**
-	 * Setter for <code>cms.c_user.username</code>.
-	 */
-	public void setUsername(String value);
-
-	/**
-	 * Getter for <code>cms.c_user.username</code>.
+	 * Getter for <code>cms.c_user.last_login_time</code>.
 	 */
 	@NotNull
-	@Size(max = 255)
-	public String getUsername();
+	public Timestamp getLastLoginTime();
 
 	// -------------------------------------------------------------------------
 	// FROM and INTO

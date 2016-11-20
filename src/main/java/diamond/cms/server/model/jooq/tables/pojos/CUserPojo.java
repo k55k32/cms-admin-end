@@ -26,48 +26,48 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CUserPojo implements ICUser {
 
-	private static final long serialVersionUID = -1663451599;
+	private static final long serialVersionUID = 1096483573;
 
 	private String    id;
-	private Timestamp createtime;
-	private Long      expired;
-	private Timestamp lastlogintime;
+	private String    username;
 	private String    password;
 	private String    token;
-	private String    username;
+	private Long      expired;
+	private Timestamp createTime;
+	private Timestamp lastLoginTime;
 
 	public CUserPojo() {}
 
 	public CUserPojo(CUserPojo value) {
 		this.id = value.id;
-		this.createtime = value.createtime;
-		this.expired = value.expired;
-		this.lastlogintime = value.lastlogintime;
+		this.username = value.username;
 		this.password = value.password;
 		this.token = value.token;
-		this.username = value.username;
+		this.expired = value.expired;
+		this.createTime = value.createTime;
+		this.lastLoginTime = value.lastLoginTime;
 	}
 
 	public CUserPojo(
 		String    id,
-		Timestamp createtime,
-		Long      expired,
-		Timestamp lastlogintime,
+		String    username,
 		String    password,
 		String    token,
-		String    username
+		Long      expired,
+		Timestamp createTime,
+		Timestamp lastLoginTime
 	) {
 		this.id = id;
-		this.createtime = createtime;
-		this.expired = expired;
-		this.lastlogintime = lastlogintime;
+		this.username = username;
 		this.password = password;
 		this.token = token;
-		this.username = username;
+		this.expired = expired;
+		this.createTime = createTime;
+		this.lastLoginTime = lastLoginTime;
 	}
 
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	@Override
 	public String getId() {
 		return this.id;
@@ -79,14 +79,38 @@ public class CUserPojo implements ICUser {
 	}
 
 	@NotNull
+	@Size(max = 80)
 	@Override
-	public Timestamp getCreatetime() {
-		return this.createtime;
+	public String getUsername() {
+		return this.username;
 	}
 
 	@Override
-	public void setCreatetime(Timestamp createtime) {
-		this.createtime = createtime;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@NotNull
+	@Size(max = 40)
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
+
+	@Override
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	@Size(max = 80)
+	@Override
+	public String getToken() {
+		return this.token;
+	}
+
+	@Override
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 	@Override
@@ -101,48 +125,24 @@ public class CUserPojo implements ICUser {
 
 	@NotNull
 	@Override
-	public Timestamp getLastlogintime() {
-		return this.lastlogintime;
+	public Timestamp getCreateTime() {
+		return this.createTime;
 	}
 
 	@Override
-	public void setLastlogintime(Timestamp lastlogintime) {
-		this.lastlogintime = lastlogintime;
-	}
-
-	@NotNull
-	@Size(max = 255)
-	@Override
-	public String getPassword() {
-		return this.password;
-	}
-
-	@Override
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	@Size(max = 255)
-	@Override
-	public String getToken() {
-		return this.token;
-	}
-
-	@Override
-	public void setToken(String token) {
-		this.token = token;
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 
 	@NotNull
-	@Size(max = 255)
 	@Override
-	public String getUsername() {
-		return this.username;
+	public Timestamp getLastLoginTime() {
+		return this.lastLoginTime;
 	}
 
 	@Override
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLastLoginTime(Timestamp lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
 	}
 
 	@Override
@@ -150,12 +150,12 @@ public class CUserPojo implements ICUser {
 		StringBuilder sb = new StringBuilder("CUserPojo (");
 
 		sb.append(id);
-		sb.append(", ").append(createtime);
-		sb.append(", ").append(expired);
-		sb.append(", ").append(lastlogintime);
+		sb.append(", ").append(username);
 		sb.append(", ").append(password);
 		sb.append(", ").append(token);
-		sb.append(", ").append(username);
+		sb.append(", ").append(expired);
+		sb.append(", ").append(createTime);
+		sb.append(", ").append(lastLoginTime);
 
 		sb.append(")");
 		return sb.toString();
@@ -171,12 +171,12 @@ public class CUserPojo implements ICUser {
 	@Override
 	public void from(ICUser from) {
 		setId(from.getId());
-		setCreatetime(from.getCreatetime());
-		setExpired(from.getExpired());
-		setLastlogintime(from.getLastlogintime());
+		setUsername(from.getUsername());
 		setPassword(from.getPassword());
 		setToken(from.getToken());
-		setUsername(from.getUsername());
+		setExpired(from.getExpired());
+		setCreateTime(from.getCreateTime());
+		setLastLoginTime(from.getLastLoginTime());
 	}
 
 	/**

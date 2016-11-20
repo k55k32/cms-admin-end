@@ -34,31 +34,8 @@ public interface ICArticle extends Serializable {
 	 * Getter for <code>cms.c_article.id</code>.
 	 */
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	public String getId();
-
-	/**
-	 * Setter for <code>cms.c_article.content</code>.
-	 */
-	public void setContent(String value);
-
-	/**
-	 * Getter for <code>cms.c_article.content</code>.
-	 */
-	@NotNull
-	@Size(max = 65535)
-	public String getContent();
-
-	/**
-	 * Setter for <code>cms.c_article.createTime</code>.
-	 */
-	public void setCreatetime(Timestamp value);
-
-	/**
-	 * Getter for <code>cms.c_article.createTime</code>.
-	 */
-	@NotNull
-	public Timestamp getCreatetime();
 
 	/**
 	 * Setter for <code>cms.c_article.title</code>.
@@ -73,15 +50,48 @@ public interface ICArticle extends Serializable {
 	public String getTitle();
 
 	/**
-	 * Setter for <code>cms.c_article.updateTime</code>.
+	 * Setter for <code>cms.c_article.content</code>.
 	 */
-	public void setUpdatetime(Timestamp value);
+	public void setContent(String value);
 
 	/**
-	 * Getter for <code>cms.c_article.updateTime</code>.
+	 * Getter for <code>cms.c_article.content</code>.
+	 */
+	@Size(max = 65535)
+	public String getContent();
+
+	/**
+	 * Setter for <code>cms.c_article.create_time</code>.
+	 */
+	public void setCreateTime(Timestamp value);
+
+	/**
+	 * Getter for <code>cms.c_article.create_time</code>.
 	 */
 	@NotNull
-	public Timestamp getUpdatetime();
+	public Timestamp getCreateTime();
+
+	/**
+	 * Setter for <code>cms.c_article.update_time</code>.
+	 */
+	public void setUpdateTime(Timestamp value);
+
+	/**
+	 * Getter for <code>cms.c_article.update_time</code>.
+	 */
+	@NotNull
+	public Timestamp getUpdateTime();
+
+	/**
+	 * Setter for <code>cms.c_article.catalog_id</code>.
+	 */
+	public void setCatalogId(String value);
+
+	/**
+	 * Getter for <code>cms.c_article.catalog_id</code>.
+	 */
+	@Size(max = 40)
+	public String getCatalogId();
 
 	// -------------------------------------------------------------------------
 	// FROM and INTO

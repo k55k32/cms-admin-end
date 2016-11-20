@@ -1,11 +1,14 @@
 package diamond.cms.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import diamond.cms.server.core.PageResult;
-import diamond.cms.server.core.Result;
 import diamond.cms.server.model.Article;
 import diamond.cms.server.services.ArticleService;
 
@@ -16,17 +19,39 @@ public class ArticleController {
     @Autowired
     ArticleService articleService;
 
-    @RequestMapping("page")
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @JsonIgnoreProperties("createTime, updateTime")
+    public Article get(@PathVariable String id) {
+        return articleService.get(id);
+    }
+    @RequestMapping(method = RequestMethod.GET)
     public PageResult<Article> list(PageResult<Article> page) {
-        return articleService.page(page);
+        PageResult<Article> list = articleService.page(page);
+        return list;
     }
 
-    @RequestMapping("save")
-    public Result save(Article article) {
+    @RequestMapping(method = RequestMethod.POST)
+    public boolean save(Article article) {
         articleService.save(article);
-        return new Result(true);
+        return true;
     }
 
+    @RequestMapping(value="{id}", method = RequestMethod.POST)
+    public boolean update(@PathVariable String id, String title, String content, String catalogId) {
+        Article article = new Article();
+        article.setId(id);
+        article.setTitle(title);
+        article.setContent(content);
+        article.setCatalogId(catalogId);
+        articleService.update(article);
+        return true;
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public boolean delete(String id) {
+        articleService.delete(id);
+        return true;
+    }
 
 
 }

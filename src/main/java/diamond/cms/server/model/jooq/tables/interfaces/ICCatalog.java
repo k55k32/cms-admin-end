@@ -34,19 +34,8 @@ public interface ICCatalog extends Serializable {
 	 * Getter for <code>cms.c_catalog.id</code>.
 	 */
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	public String getId();
-
-	/**
-	 * Setter for <code>cms.c_catalog.createTime</code>.
-	 */
-	public void setCreatetime(Timestamp value);
-
-	/**
-	 * Getter for <code>cms.c_catalog.createTime</code>.
-	 */
-	@NotNull
-	public Timestamp getCreatetime();
 
 	/**
 	 * Setter for <code>cms.c_catalog.name</code>.
@@ -57,19 +46,8 @@ public interface ICCatalog extends Serializable {
 	 * Getter for <code>cms.c_catalog.name</code>.
 	 */
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 30)
 	public String getName();
-
-	/**
-	 * Setter for <code>cms.c_catalog.updateTime</code>.
-	 */
-	public void setUpdatetime(Timestamp value);
-
-	/**
-	 * Getter for <code>cms.c_catalog.updateTime</code>.
-	 */
-	@NotNull
-	public Timestamp getUpdatetime();
 
 	/**
 	 * Setter for <code>cms.c_catalog.parent_id</code>.
@@ -79,8 +57,30 @@ public interface ICCatalog extends Serializable {
 	/**
 	 * Getter for <code>cms.c_catalog.parent_id</code>.
 	 */
-	@Size(max = 255)
+	@Size(max = 40)
 	public String getParentId();
+
+	/**
+	 * Setter for <code>cms.c_catalog.create_time</code>.
+	 */
+	public void setCreateTime(Timestamp value);
+
+	/**
+	 * Getter for <code>cms.c_catalog.create_time</code>.
+	 */
+	@NotNull
+	public Timestamp getCreateTime();
+
+	/**
+	 * Setter for <code>cms.c_catalog.update_time</code>.
+	 */
+	public void setUpdateTime(Timestamp value);
+
+	/**
+	 * Getter for <code>cms.c_catalog.update_time</code>.
+	 */
+	@NotNull
+	public Timestamp getUpdateTime();
 
 	// -------------------------------------------------------------------------
 	// FROM and INTO

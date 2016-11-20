@@ -26,40 +26,44 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticlePojo implements ICArticle {
 
-	private static final long serialVersionUID = -1279499745;
+	private static final long serialVersionUID = -127657622;
 
 	private String    id;
-	private String    content;
-	private Timestamp createtime;
 	private String    title;
-	private Timestamp updatetime;
+	private String    content;
+	private Timestamp createTime;
+	private Timestamp updateTime;
+	private String    catalogId;
 
 	public CArticlePojo() {}
 
 	public CArticlePojo(CArticlePojo value) {
 		this.id = value.id;
-		this.content = value.content;
-		this.createtime = value.createtime;
 		this.title = value.title;
-		this.updatetime = value.updatetime;
+		this.content = value.content;
+		this.createTime = value.createTime;
+		this.updateTime = value.updateTime;
+		this.catalogId = value.catalogId;
 	}
 
 	public CArticlePojo(
 		String    id,
-		String    content,
-		Timestamp createtime,
 		String    title,
-		Timestamp updatetime
+		String    content,
+		Timestamp createTime,
+		Timestamp updateTime,
+		String    catalogId
 	) {
 		this.id = id;
-		this.content = content;
-		this.createtime = createtime;
 		this.title = title;
-		this.updatetime = updatetime;
+		this.content = content;
+		this.createTime = createTime;
+		this.updateTime = updateTime;
+		this.catalogId = catalogId;
 	}
 
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	@Override
 	public String getId() {
 		return this.id;
@@ -68,29 +72,6 @@ public class CArticlePojo implements ICArticle {
 	@Override
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@NotNull
-	@Size(max = 65535)
-	@Override
-	public String getContent() {
-		return this.content;
-	}
-
-	@Override
-	public void setContent(String content) {
-		this.content = content;
-	}
-
-	@NotNull
-	@Override
-	public Timestamp getCreatetime() {
-		return this.createtime;
-	}
-
-	@Override
-	public void setCreatetime(Timestamp createtime) {
-		this.createtime = createtime;
 	}
 
 	@NotNull
@@ -105,15 +86,48 @@ public class CArticlePojo implements ICArticle {
 		this.title = title;
 	}
 
-	@NotNull
+	@Size(max = 65535)
 	@Override
-	public Timestamp getUpdatetime() {
-		return this.updatetime;
+	public String getContent() {
+		return this.content;
 	}
 
 	@Override
-	public void setUpdatetime(Timestamp updatetime) {
-		this.updatetime = updatetime;
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	@NotNull
+	@Override
+	public Timestamp getCreateTime() {
+		return this.createTime;
+	}
+
+	@Override
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+
+	@NotNull
+	@Override
+	public Timestamp getUpdateTime() {
+		return this.updateTime;
+	}
+
+	@Override
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	@Size(max = 40)
+	@Override
+	public String getCatalogId() {
+		return this.catalogId;
+	}
+
+	@Override
+	public void setCatalogId(String catalogId) {
+		this.catalogId = catalogId;
 	}
 
 	@Override
@@ -121,10 +135,11 @@ public class CArticlePojo implements ICArticle {
 		StringBuilder sb = new StringBuilder("CArticlePojo (");
 
 		sb.append(id);
-		sb.append(", ").append(content);
-		sb.append(", ").append(createtime);
 		sb.append(", ").append(title);
-		sb.append(", ").append(updatetime);
+		sb.append(", ").append(content);
+		sb.append(", ").append(createTime);
+		sb.append(", ").append(updateTime);
+		sb.append(", ").append(catalogId);
 
 		sb.append(")");
 		return sb.toString();
@@ -140,10 +155,11 @@ public class CArticlePojo implements ICArticle {
 	@Override
 	public void from(ICArticle from) {
 		setId(from.getId());
-		setContent(from.getContent());
-		setCreatetime(from.getCreatetime());
 		setTitle(from.getTitle());
-		setUpdatetime(from.getUpdatetime());
+		setContent(from.getContent());
+		setCreateTime(from.getCreateTime());
+		setUpdateTime(from.getUpdateTime());
+		setCatalogId(from.getCatalogId());
 	}
 
 	/**

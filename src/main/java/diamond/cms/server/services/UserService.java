@@ -29,7 +29,7 @@ public class UserService extends GenericService<User>{
                 .fetchOne(C_USER.USERNAME.eq(username).and(C_USER.PASSWORD.eq(PwdUtils.pwd(password))))
                 .orElseThrow(() -> new AppException(diamond.cms.server.exceptions.Error.USERNAME_OR_PASSWORD_ERROR));
         generateToken(user);
-        user.setLastlogintime(currentTime());
+        user.setLastLoginTime(currentTime());
         this.update(user);
         return user.getToken();
     }

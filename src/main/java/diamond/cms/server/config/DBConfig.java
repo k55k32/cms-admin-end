@@ -33,7 +33,6 @@ public class DBConfig{
         datasource.setUrl(env.getProperty("database.url"));
         datasource.setUsername(env.getProperty("database.user"));
         datasource.setPassword(env.getProperty("database.password"));
-        datasource.setValidationQuery("SELECT 'x'");
         try {
             datasource.init();
         } catch (SQLException e) {

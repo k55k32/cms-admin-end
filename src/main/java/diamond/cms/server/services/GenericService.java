@@ -48,6 +48,11 @@ public abstract class GenericService<E> {
         return getDao().fetch(page);
     }
 
+    public String delete(String id) {
+        getDao().delete(id);
+        return id;
+    }
+
     protected Timestamp currentTime() {
         return new Timestamp(System.currentTimeMillis());
     }

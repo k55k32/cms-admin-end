@@ -26,40 +26,40 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalogPojo implements ICCatalog {
 
-	private static final long serialVersionUID = -999747337;
+	private static final long serialVersionUID = -587848820;
 
 	private String    id;
-	private Timestamp createtime;
 	private String    name;
-	private Timestamp updatetime;
 	private String    parentId;
+	private Timestamp createTime;
+	private Timestamp updateTime;
 
 	public CCatalogPojo() {}
 
 	public CCatalogPojo(CCatalogPojo value) {
 		this.id = value.id;
-		this.createtime = value.createtime;
 		this.name = value.name;
-		this.updatetime = value.updatetime;
 		this.parentId = value.parentId;
+		this.createTime = value.createTime;
+		this.updateTime = value.updateTime;
 	}
 
 	public CCatalogPojo(
 		String    id,
-		Timestamp createtime,
 		String    name,
-		Timestamp updatetime,
-		String    parentId
+		String    parentId,
+		Timestamp createTime,
+		Timestamp updateTime
 	) {
 		this.id = id;
-		this.createtime = createtime;
 		this.name = name;
-		this.updatetime = updatetime;
 		this.parentId = parentId;
+		this.createTime = createTime;
+		this.updateTime = updateTime;
 	}
 
 	@NotNull
-	@Size(max = 255)
+	@Size(max = 40)
 	@Override
 	public String getId() {
 		return this.id;
@@ -71,18 +71,7 @@ public class CCatalogPojo implements ICCatalog {
 	}
 
 	@NotNull
-	@Override
-	public Timestamp getCreatetime() {
-		return this.createtime;
-	}
-
-	@Override
-	public void setCreatetime(Timestamp createtime) {
-		this.createtime = createtime;
-	}
-
-	@NotNull
-	@Size(max = 255)
+	@Size(max = 30)
 	@Override
 	public String getName() {
 		return this.name;
@@ -93,18 +82,7 @@ public class CCatalogPojo implements ICCatalog {
 		this.name = name;
 	}
 
-	@NotNull
-	@Override
-	public Timestamp getUpdatetime() {
-		return this.updatetime;
-	}
-
-	@Override
-	public void setUpdatetime(Timestamp updatetime) {
-		this.updatetime = updatetime;
-	}
-
-	@Size(max = 255)
+	@Size(max = 40)
 	@Override
 	public String getParentId() {
 		return this.parentId;
@@ -115,15 +93,37 @@ public class CCatalogPojo implements ICCatalog {
 		this.parentId = parentId;
 	}
 
+	@NotNull
+	@Override
+	public Timestamp getCreateTime() {
+		return this.createTime;
+	}
+
+	@Override
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
+	}
+
+	@NotNull
+	@Override
+	public Timestamp getUpdateTime() {
+		return this.updateTime;
+	}
+
+	@Override
+	public void setUpdateTime(Timestamp updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("CCatalogPojo (");
 
 		sb.append(id);
-		sb.append(", ").append(createtime);
 		sb.append(", ").append(name);
-		sb.append(", ").append(updatetime);
 		sb.append(", ").append(parentId);
+		sb.append(", ").append(createTime);
+		sb.append(", ").append(updateTime);
 
 		sb.append(")");
 		return sb.toString();
@@ -139,10 +139,10 @@ public class CCatalogPojo implements ICCatalog {
 	@Override
 	public void from(ICCatalog from) {
 		setId(from.getId());
-		setCreatetime(from.getCreatetime());
 		setName(from.getName());
-		setUpdatetime(from.getUpdatetime());
 		setParentId(from.getParentId());
+		setCreateTime(from.getCreateTime());
+		setUpdateTime(from.getUpdateTime());
 	}
 
 	/**

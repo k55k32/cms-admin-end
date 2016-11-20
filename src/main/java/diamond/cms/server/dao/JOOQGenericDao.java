@@ -224,17 +224,21 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         UpdatableRecord<?> r = (UpdatableRecord<?>)context.newRecord(table, object);
         if (forUpdate) {
             r.changed(primaryKey, false);
+
         }
 
         int size = r.size();
 
         for (int i = 0; i < size; i++) {
-            if (r.getValue(i) == null && !r.field(i).getDataType().nullable()) {
+            if (r.getValue(i) == null && r.field(i).getDataType().nullable()) {
                 r.changed(i, false);
             }
         }
         return r;
     }
+
+
+
 
     private Optional<Class<?>> findInterface(Class<?> clazz){
         if(Object.class == clazz){

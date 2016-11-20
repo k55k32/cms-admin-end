@@ -41,7 +41,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
                 }
                 String token = request.getHeader("Authorization");
                 Optional.ofNullable(token).orElseThrow(() -> new AuthorizationException());
-//                Optional.ofNullable(userService.getByToken(token)).orElseThrow(() -> new AuthorizationException());
+                Optional.ofNullable(userService.getByToken(token)).orElseThrow(() -> new AuthorizationException());
             }
         }
         return true;

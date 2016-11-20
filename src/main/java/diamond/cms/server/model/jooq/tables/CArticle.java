@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticle extends TableImpl<CArticleRecord> {
 
-	private static final long serialVersionUID = 1977899768;
+	private static final long serialVersionUID = -1102278579;
 
 	/**
 	 * The reference instance of <code>cms.c_article</code>
@@ -52,17 +52,7 @@ public class CArticle extends TableImpl<CArticleRecord> {
 	/**
 	 * The column <code>cms.c_article.id</code>.
 	 */
-	public final TableField<CArticleRecord, String> ID = createField("id", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
-
-	/**
-	 * The column <code>cms.c_article.content</code>.
-	 */
-	public final TableField<CArticleRecord, String> CONTENT = createField("content", org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
-
-	/**
-	 * The column <code>cms.c_article.createTime</code>.
-	 */
-	public final TableField<CArticleRecord, Timestamp> CREATETIME = createField("createTime", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final TableField<CArticleRecord, String> ID = createField("id", org.jooq.impl.SQLDataType.VARCHAR.length(40).nullable(false), this, "");
 
 	/**
 	 * The column <code>cms.c_article.title</code>.
@@ -70,9 +60,24 @@ public class CArticle extends TableImpl<CArticleRecord> {
 	public final TableField<CArticleRecord, String> TITLE = createField("title", org.jooq.impl.SQLDataType.VARCHAR.length(255).nullable(false), this, "");
 
 	/**
-	 * The column <code>cms.c_article.updateTime</code>.
+	 * The column <code>cms.c_article.content</code>.
 	 */
-	public final TableField<CArticleRecord, Timestamp> UPDATETIME = createField("updateTime", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+	public final TableField<CArticleRecord, String> CONTENT = createField("content", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+	/**
+	 * The column <code>cms.c_article.create_time</code>.
+	 */
+	public final TableField<CArticleRecord, Timestamp> CREATE_TIME = createField("create_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>cms.c_article.update_time</code>.
+	 */
+	public final TableField<CArticleRecord, Timestamp> UPDATE_TIME = createField("update_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>cms.c_article.catalog_id</code>.
+	 */
+	public final TableField<CArticleRecord, String> CATALOG_ID = createField("catalog_id", org.jooq.impl.SQLDataType.VARCHAR.length(40), this, "");
 
 	/**
 	 * Create a <code>cms.c_article</code> table reference
