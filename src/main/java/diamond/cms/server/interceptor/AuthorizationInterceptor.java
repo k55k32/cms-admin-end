@@ -39,7 +39,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
                 if (type.getAnnotation(IgnoreToken.class)!=null || methodHandler.getMethodAnnotation(IgnoreToken.class)!=null) {
                     return true;
                 }
-                String token = request.getHeader("Authorization");
+                String token = request.getHeader(AUTHORIZATION_HEADER);
                 Optional.ofNullable(token).orElseThrow(() -> new AuthorizationException());
                 Optional.ofNullable(userService.getByToken(token)).orElseThrow(() -> new AuthorizationException());
             }

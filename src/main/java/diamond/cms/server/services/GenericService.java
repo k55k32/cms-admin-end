@@ -20,8 +20,6 @@ public abstract class GenericService<E> {
     @Autowired
     CommonDao<E> dao;
 
-//    abstract GenericDao<E, Serializable> getDao();
-
     private GenericDao<E, Serializable> getDao() {
         return dao;
     }

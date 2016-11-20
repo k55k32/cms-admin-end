@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalog extends TableImpl<CCatalogRecord> {
 
-	private static final long serialVersionUID = 340249809;
+	private static final long serialVersionUID = 728720630;
 
 	/**
 	 * The reference instance of <code>cms.c_catalog</code>
@@ -73,7 +73,7 @@ public class CCatalog extends TableImpl<CCatalogRecord> {
 	/**
 	 * The column <code>cms.c_catalog.update_time</code>.
 	 */
-	public final TableField<CCatalogRecord, Timestamp> UPDATE_TIME = createField("update_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+	public final TableField<CCatalogRecord, Timestamp> UPDATE_TIME = createField("update_time", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaulted(true), this, "");
 
 	/**
 	 * Create a <code>cms.c_catalog</code> table reference

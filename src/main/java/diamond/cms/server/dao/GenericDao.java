@@ -8,6 +8,9 @@ import java.util.stream.Stream;
 
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.Record;
+import org.jooq.RecordMapper;
+import org.jooq.SelectOnConditionStep;
 import org.jooq.SortField;
 
 import diamond.cms.server.core.PageResult;
@@ -59,6 +62,8 @@ public interface GenericDao<T, ID extends Serializable> {
 
     PageResult<T> fetchWithOptional(PageResult<T> page, Stream<Optional<Condition>> conditions, SortField<?>...sorts);
 
+    PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec, RecordMapper<Record, T> mapper);
+
     Optional<T> fetchOne(Condition...conditions);
 
     Optional<T> fetchOne(Stream<Condition> conditions);
@@ -71,4 +76,6 @@ public interface GenericDao<T, ID extends Serializable> {
     interface Executor<E> {
         E execute(DSLContext context);
     }
+
+
 }

@@ -42,7 +42,7 @@ public class PageResult<T> {
     }
 
     public int getStart() {
-        return pageSize * currentPage;
+        return pageSize * (currentPage - 1);
     }
 
     public static <E>PageResult<E> create(int page, int count, List<E> data) {
