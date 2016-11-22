@@ -1,5 +1,7 @@
 package diamond.cms.server.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ public class CatalogController {
     public Catalog get(@PathVariable String id) {
         return catalogService.get(id);
     }
+
     @RequestMapping(method = RequestMethod.GET)
     public PageResult<Catalog> list(PageResult<Catalog> page) {
         PageResult<Catalog> list = catalogService.page(page);
@@ -51,4 +54,10 @@ public class CatalogController {
         catalogService.delete(id);
         return true;
     }
+
+    @RequestMapping(value="list", method = RequestMethod.GET)
+    public List<Catalog> findAll() {
+        return catalogService.findAll();
+    }
+
 }

@@ -3,6 +3,7 @@ package diamond.cms.server.services;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -49,6 +50,10 @@ public abstract class GenericService<E> {
     public String delete(String id) {
         getDao().delete(id);
         return id;
+    }
+
+    public List<E> findAll(){
+        return getDao().fetch();
     }
 
     protected Timestamp currentTime() {

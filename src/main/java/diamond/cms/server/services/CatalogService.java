@@ -17,7 +17,7 @@ public class CatalogService extends GenericService<Catalog>{
     @Override
     public Catalog get(String id) {
         return dao.get(id);
-    };
+    }
 
 //    private Catalog getCatalogMapper(Record m) {
 //        CCatalog cataTable = CCatalog.C_CATALOG;

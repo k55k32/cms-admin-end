@@ -1,6 +1,9 @@
 package diamond.cms.server;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -37,10 +41,13 @@ public abstract class BaseTestCase {
     @Autowired
     WebApplicationContext webApplicationConnect;
     MockMvc mvc;
-    String token;
+    String token = "";
     String url;
+
     abstract String getUrl();
+
     Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Before
     public void setUp() throws Exception {
         url = getUrl();
@@ -51,38 +58,52 @@ public abstract class BaseTestCase {
 
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect).build();
         String login = "/user/token";
-        String resultStr  = mvc.perform(post(login).param("username", "123123").param("password", "123123")).andReturn()
-        .getResponse().getContentAsString();
+        String resultStr = mvc.perform(post(login).param("username", "123123").param("password", "123123")).andReturn()
+                .getResponse().getContentAsString();
         ObjectMapper m = new ObjectMapper();
         Result r = m.readValue(resultStr, Result.class);
         token = (String) r.getData();
         log.info("init token:" + token);
     }
-     MockHttpServletRequestBuilder post(String url){
-        MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post(url);
-        if (token != null) {
-            builder = builder.header(AuthorizationInterceptor.AUTHORIZATION_HEADER, token);
-        }
-        return builder;
-    }
-     MockHttpServletRequestBuilder get(String uri) {
-        return MockMvcRequestBuilders.get(uri).header(AuthorizationInterceptor.AUTHORIZATION_HEADER, token).accept(MediaType.APPLICATION_JSON_UTF8);
-    }
-     MockHttpServletRequestBuilder delete(String url, String id) {
-        return MockMvcRequestBuilders.delete(url).param("id", id).header(AuthorizationInterceptor.AUTHORIZATION_HEADER, token).accept(MediaType.APPLICATION_JSON_UTF8);
-    }
-     MockHttpServletResponse perform(MockHttpServletRequestBuilder param) throws Exception {
-        return mvc.perform(param).andReturn().getResponse();
+
+    MockHttpServletRequestBuilder post(String url) {
+        return MockMvcRequestBuilders.post(url);
     }
 
-    Result asserts(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, IOException{
+    MockHttpServletRequestBuilder get(String uri) {
+        return MockMvcRequestBuilders.get(uri);
+    }
+
+    MockHttpServletRequestBuilder delete(String url, String id) {
+        return MockMvcRequestBuilders.delete(url).param("id", id);
+    }
+
+    MockHttpServletRequestBuilder upload(String url, File file) throws IOException {
+        return MockMvcRequestBuilders.fileUpload(url).file(new MockMultipartFile("file", new FileInputStream(file)));
+    }
+
+    MockHttpServletResponse perform(MockHttpServletRequestBuilder param) throws Exception {
+        return mvc.perform(param
+                .header(AuthorizationInterceptor.AUTHORIZATION_HEADER, token)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andReturn().getResponse();
+    }
+
+    Result asserts(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
         String result = response.getContentAsString();
         log.info("result: " + result);
-        Assert.assertTrue(response.getStatus()==200);
+        Assert.assertTrue(response.getStatus() == 200);
         Assert.assertTrue(result.length() > 0);
         ObjectMapper m = new ObjectMapper();
-        Result r = m.readValue(result,Result.class);
+        Result r = m.readValue(result, Result.class);
         Assert.assertTrue("result is not success", r.isSuccess());
         return r;
+    }
+
+    public void assertsString(MockHttpServletResponse response) throws UnsupportedEncodingException {
+        String result = response.getContentAsString();
+        Assert.assertTrue(response.getStatus() == 200);
+        Assert.assertTrue(result.length() > 0);
+        log.info("assert string:" + result);
     }
 }
