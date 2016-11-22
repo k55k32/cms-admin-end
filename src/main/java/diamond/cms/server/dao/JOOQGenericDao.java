@@ -3,6 +3,9 @@ package diamond.cms.server.dao;
 import static org.jooq.impl.DSL.using;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +28,6 @@ import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
 
 import diamond.cms.server.core.PageResult;
-
 
 public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T, ID> {
 
@@ -108,7 +110,8 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     @Override
     public void delete(Stream<Condition> conditions) {
         Optional<Condition> o = conditions.reduce((acc, item) -> acc.and(item));
-        Condition c = o.orElseThrow(() -> new IllegalArgumentException("At least one condition is needed to perform deletion"));
+        Condition c = o.orElseThrow(
+                () -> new IllegalArgumentException("At least one condition is needed to perform deletion"));
         using(configuration).delete(table).where(c).execute();
     }
 
@@ -150,12 +153,12 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
-    public List<T> fetchWithOptional(Stream<Optional<Condition>> conditions, SortField<?>...sorts) {
+    public List<T> fetchWithOptional(Stream<Optional<Condition>> conditions, SortField<?>... sorts) {
         return fetch(conditions.filter(Optional::isPresent).map(Optional::get), sorts);
     }
 
     @Override
-    public List<T> fetch(Stream<Condition> conditions, SortField<?>...sorts) {
+    public List<T> fetch(Stream<Condition> conditions, SortField<?>... sorts) {
         Condition c = conditions.reduce((acc, item) -> acc.and(item)).orElse(DSL.trueCondition());
         SelectSeekStepN<Record> step = using(configuration).select().from(table).where(c).orderBy(sorts);
         return step.fetchInto(entityClass);
@@ -167,15 +170,16 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
-    public PageResult<T> fetchWithOptional(PageResult<T> page, Stream<Optional<Condition>> conditions, SortField<?>...sorts) {
+    public PageResult<T> fetchWithOptional(PageResult<T> page, Stream<Optional<Condition>> conditions,
+            SortField<?>... sorts) {
         return fetch(page, conditions.filter(Optional::isPresent).map(Optional::get), sorts);
     }
 
     @Override
-    public PageResult<T> fetch(PageResult<T> page, Stream<Condition> conditions, SortField<?>...sorts) {
+    public PageResult<T> fetch(PageResult<T> page, Stream<Condition> conditions, SortField<?>... sorts) {
         Condition c = conditions.reduce((acc, item) -> acc.and(item)).orElse(DSL.trueCondition());
         SelectSeekStepN<Record> step = using(configuration).select().from(table).where(c).orderBy(sorts);
-        int firstResult = (page.getCurrentPage()- 1) * page.getPageSize();
+        int firstResult = (page.getCurrentPage() - 1) * page.getPageSize();
         List<T> items = step.limit(firstResult, page.getPageSize()).fetch().into(entityClass);
         page.setData(items);
         page.setTotal(count(c));
@@ -204,7 +208,8 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
-    public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec, RecordMapper<Record, T> mapper) {
+    public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec,
+            RecordMapper<Record, T> mapper) {
         DSLContext context = using(configuration);
         SelectOnConditionStep<?> r = ec.execute(context);
         List<T> list = r.limit(page.getStart(), page.getPageSize()).fetch(mapper);
@@ -215,9 +220,9 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     private void initTable(Schema schema) {
-        Class<?> is = findInterface(entityClass).orElseThrow(() -> new RuntimeException("Entity class must implements one interface at least."));
-        table = schema.getTables().stream()
-                .filter(t -> is.isAssignableFrom(t.getRecordType())).findFirst()
+        Class<?> is = findInterface(entityClass)
+                .orElseThrow(() -> new RuntimeException("Entity class must implements one interface at least."));
+        table = schema.getTables().stream().filter(t -> is.isAssignableFrom(t.getRecordType())).findFirst()
                 .orElseThrow(() -> new RuntimeException("Can't find a table for the entity."));
     }
 
@@ -225,7 +230,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     private Field<ID> pk() {
         UniqueKey<?> uk = table.getPrimaryKey();
         Field<?>[] fs = uk.getFieldsArray();
-        return (Field<ID>)fs[0];
+        return (Field<ID>) fs[0];
     }
 
     private List<UpdatableRecord<?>> records(Collection<T> objects, boolean forUpdate) {
@@ -234,7 +239,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     private UpdatableRecord<?> record(T object, boolean forUpdate, DSLContext context) {
-        UpdatableRecord<?> r = (UpdatableRecord<?>)context.newRecord(table, object);
+        UpdatableRecord<?> r = (UpdatableRecord<?>) context.newRecord(table, object);
         if (forUpdate) {
             r.changed(primaryKey, false);
 
@@ -250,19 +255,45 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return r;
     }
 
-
-
-
-    private Optional<Class<?>> findInterface(Class<?> clazz){
-        if(Object.class == clazz){
+    private Optional<Class<?>> findInterface(Class<?> clazz) {
+        if (Object.class == clazz) {
             return Optional.empty();
         }
         Class<?>[] is = clazz.getInterfaces();
-        for(Class<?> c : is){
-            if(c.getSimpleName().startsWith("I")){
+        for (Class<?> c : is) {
+            if (c.getSimpleName().startsWith("I")) {
                 return Optional.of(c);
             }
         }
         return findInterface(clazz.getSuperclass());
+    }
+
+    public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec, Class<T> clazz) {
+        this.fetch(page, ec, r -> {
+            try {
+                T entity = clazz.newInstance();
+                Arrays.asList(r.fields()).forEach(f -> {
+                    String name = f.getName();
+                    Object value = r.getValue(name);
+                    try {
+                        setObjectValue(name, value, entity);
+                    } catch (Exception e1) {
+                        // no method ignore--
+                    }
+                });
+                return entity;
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return null;
+        });
+        return page;
+    }
+
+    private <E> void setObjectValue(String name, Object value, E entity) throws NoSuchMethodException,
+            SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        String setMethodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        Method m = entity.getClass().getMethod(setMethodName, value.getClass());
+        m.invoke(entity, value);
     }
 }

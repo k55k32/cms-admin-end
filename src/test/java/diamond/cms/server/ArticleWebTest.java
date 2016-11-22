@@ -3,7 +3,7 @@ package diamond.cms.server;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-public class ArticleTest extends BaseTestCase{
+public class ArticleWebTest extends BaseWebTest{
 
     @Override
     String getUrl() {
@@ -15,4 +15,5 @@ public class ArticleTest extends BaseTestCase{
         MockHttpServletResponse response = perform(get(url).param("pageSize", "1").param("currentPage", "1"));
         asserts(response);
     }
+
 }

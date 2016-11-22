@@ -8,7 +8,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import diamond.cms.server.core.Result;
 
 
-public class CatalogTest extends BaseTestCase{
+public class CatalogTest extends BaseWebTest{
 
 
     @Test
