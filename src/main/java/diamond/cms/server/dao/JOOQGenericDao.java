@@ -7,7 +7,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,6 +28,8 @@ import org.jooq.Table;
 import org.jooq.UniqueKey;
 import org.jooq.UpdatableRecord;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import diamond.cms.server.core.PageResult;
 
@@ -35,6 +39,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     private Class<T> entityClass = null;
     private Configuration configuration = null;
     private Field<ID> primaryKey = null;
+    Logger log = LoggerFactory.getLogger(this.getClass());
 
     public JOOQGenericDao(Class<T> entityClass, Schema schema, Configuration configuration) {
         this.entityClass = entityClass;
@@ -270,30 +275,54 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec, Class<T> clazz) {
         this.fetch(page, ec, r -> {
-            try {
-                T entity = clazz.newInstance();
-                Arrays.asList(r.fields()).forEach(f -> {
-                    String name = f.getName();
-                    Object value = r.getValue(name);
-                    try {
-                        setObjectValue(name, value, entity);
-                    } catch (Exception e1) {
-                        // no method ignore--
-                    }
-                });
-                return entity;
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-            return null;
+            return mapperEntityEx(r, clazz);
         });
         return page;
     }
 
-    private <E> void setObjectValue(String name, Object value, E entity) throws NoSuchMethodException,
-            SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        String setMethodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
-        Method m = entity.getClass().getMethod(setMethodName, value.getClass());
-        m.invoke(entity, value);
+    private T mapperEntityEx(Record r, Class<T> clazz) {
+        try {
+            T entity = clazz.newInstance();
+            Map<String,Method> entityMethodMap = getSetMethods(clazz);
+            Arrays.asList(r.fields()).forEach(f -> {
+                String name = f.getName();
+                Object value = r.getValue(name);
+                setObjectValue(name, value, entity, entityMethodMap);
+            });
+            return entity;
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    private Map<String, Method> getSetMethods(Class<T> clazz) {
+        Map<String,Method> entityMethodMap = new HashMap<>();
+        Arrays.asList(clazz.getMethods()).forEach(m -> {
+            if (m.getName().startsWith("set")){
+                entityMethodMap.put(m.getName(), m);
+            }
+        });
+        return entityMethodMap;
+    }
+
+    private void setObjectValue(String name, Object value, T entity, Map<String, Method> entityMethodMap) {
+        String setMethodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        try {
+            Method m = entityMethodMap.get(setMethodName);
+            if (m != null) {
+                m.invoke(entity, value);
+            } else if (log.isDebugEnabled()) {
+                log.debug(setMethodName + " for entity " + entity.getClass().getName() + " not exists");
+            }
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "class: " + entity.getClass().getName() +
+                        " invok method " + setMethodName + " with " + value +" failed");
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

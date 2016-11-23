@@ -15,9 +15,6 @@ public class ArticleServiceTest extends BaseTestCase{
 
     @Test
     public void findTest(){
-        PageResult<Article> article = articleService.page(new PageResult<Article>());
-        article.getData().forEach(a -> {
-            System.out.println(a.getCatalogName());
-        });
+        articleService.page(new PageResult<Article>());
     }
 }
