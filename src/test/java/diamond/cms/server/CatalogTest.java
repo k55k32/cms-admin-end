@@ -8,7 +8,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import diamond.cms.server.core.Result;
 
 
-public class CatalogTest extends BaseWebTest{
+public class CatalogTest extends BasicWebTest{
 
 
     @Test
@@ -40,7 +40,7 @@ public class CatalogTest extends BaseWebTest{
 
 
     @Override
-    String getUrl() {
+    public String getUrl() {
         return "catalog";
     }
 }

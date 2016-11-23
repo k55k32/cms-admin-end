@@ -1,11 +1,8 @@
 package diamond.cms.server.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import diamond.cms.server.model.jooq.tables.pojos.CArticlePojo;
 
-@JsonInclude(Include.NON_EMPTY)
+//@JsonInclude(Include.NON_EMPTY)
 public class Article extends CArticlePojo{
     /**
      *

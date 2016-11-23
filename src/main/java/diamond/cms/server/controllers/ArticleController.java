@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import diamond.cms.server.core.PageResult;
+import diamond.cms.server.json.JSON;
 import diamond.cms.server.model.Article;
 import diamond.cms.server.services.ArticleService;
 
@@ -20,7 +19,7 @@ public class ArticleController {
     ArticleService articleService;
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @JsonIgnoreProperties("createTime, updateTime")
+    @JSON(type = Article.class, filter="createTime,updateTime")
     public Article get(@PathVariable String id) {
         return articleService.get(id);
     }

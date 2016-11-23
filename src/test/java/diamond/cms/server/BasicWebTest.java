@@ -7,8 +7,6 @@ import java.io.UnsupportedEncodingException;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -20,22 +18,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import diamond.cms.server.core.Result;
 import diamond.cms.server.interceptor.AuthorizationInterceptor;
 
-public abstract class BaseWebTest extends BaseTestCase{
+public abstract class BasicWebTest extends BasicTestCase{
     @Autowired
     WebApplicationContext webApplicationConnect;
     MockMvc mvc;
     String token = "";
     String url;
 
-    abstract String getUrl();
-
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    protected abstract String getUrl();
 
     @Before
     public void setUp() throws Exception {
@@ -55,30 +53,30 @@ public abstract class BaseWebTest extends BaseTestCase{
         log.info("init token:" + token);
     }
 
-    MockHttpServletRequestBuilder post(String url) {
+    public MockHttpServletRequestBuilder post(String url) {
         return MockMvcRequestBuilders.post(url);
     }
 
-    MockHttpServletRequestBuilder get(String uri) {
+    public MockHttpServletRequestBuilder get(String uri) {
         return MockMvcRequestBuilders.get(uri);
     }
 
-    MockHttpServletRequestBuilder delete(String url, String id) {
+    public MockHttpServletRequestBuilder delete(String url, String id) {
         return MockMvcRequestBuilders.delete(url).param("id", id);
     }
 
-    MockHttpServletRequestBuilder upload(String url, File file) throws IOException {
+    public MockHttpServletRequestBuilder upload(String url, File file) throws IOException {
         return MockMvcRequestBuilders.fileUpload(url).file(new MockMultipartFile("file", new FileInputStream(file)));
     }
 
-    MockHttpServletResponse perform(MockHttpServletRequestBuilder param) throws Exception {
+    public MockHttpServletResponse perform(MockHttpServletRequestBuilder param) throws Exception {
         return mvc.perform(param
                 .header(AuthorizationInterceptor.AUTHORIZATION_HEADER, token)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andReturn().getResponse();
     }
 
-    Result asserts(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
+    public Result asserts(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
         String result = response.getContentAsString();
         log.info("result: " + result);
         Assert.assertTrue(response.getStatus() == 200);
@@ -94,5 +92,11 @@ public abstract class BaseWebTest extends BaseTestCase{
         Assert.assertTrue(response.getStatus() == 200);
         Assert.assertTrue(result.length() > 0);
         log.info("assert string:" + result);
+    }
+
+    public boolean hasField(String str, String string) throws JsonProcessingException, IOException {
+        ObjectMapper om = new ObjectMapper();
+        JsonNode node = om.readTree(str);
+        return node.has(string) || node.get("data").has(string);
     }
 }

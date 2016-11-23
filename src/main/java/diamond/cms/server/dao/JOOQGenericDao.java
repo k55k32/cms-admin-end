@@ -287,7 +287,8 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
             Arrays.asList(r.fields()).forEach(f -> {
                 String name = f.getName();
                 Object value = r.getValue(name);
-                setObjectValue(name, value, entity, entityMethodMap);
+                if (value != null) //opt: when the field's value is null , don't do the set operator,
+                    setObjectValue(name, value, entity, entityMethodMap);
             });
             return entity;
         } catch (InstantiationException | IllegalAccessException e) {
