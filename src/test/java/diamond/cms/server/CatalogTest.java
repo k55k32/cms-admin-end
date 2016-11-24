@@ -30,7 +30,7 @@ public class CatalogTest extends BasicWebTest{
         String id = r.getData().toString();
         response = perform(post(url + "/" + id).param("name", updateName));
         asserts(response);
-        response = perform(get(url + "/" + r.getData()));
+        response = perform(get(url + "/" + id));
         asserts(response);
         r = asserts(response);
         Assert.assertTrue("is not update name", r.getData().toString().indexOf(updateName) > 0);
