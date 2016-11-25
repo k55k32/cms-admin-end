@@ -1,5 +1,5 @@
 database:
-    url: jdbc:mysql://localhost:3306/cms
+    url: jdbc:mysql://localhost:3306/cms?useUnicode=true&characterEncoding=utf8
     username: root
     password: root
 
