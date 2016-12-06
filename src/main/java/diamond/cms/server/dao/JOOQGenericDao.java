@@ -308,9 +308,17 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     private void setObjectValue(String name, Object value, T entity, Map<String, Method> entityMethodMap) {
-        String setMethodName = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+        StringBuffer setMethodName = new StringBuffer();
+        setMethodName.append("set");
+        if (name.indexOf("_") != -1) {
+            Arrays.asList(name.split("_")).forEach(n -> {
+                setMethodName.append(toCamelCase(n));
+            });
+        } else {
+            setMethodName.append(toCamelCase(name));
+        }
         try {
-            Method m = entityMethodMap.get(setMethodName);
+            Method m = entityMethodMap.get(setMethodName.toString());
             if (m != null) {
                 m.invoke(entity, value);
             } else if (log.isDebugEnabled()) {
@@ -324,6 +332,10 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
                 e.printStackTrace();
             }
         }
+    }
+
+    private String toCamelCase(String name) {
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 
 }
