@@ -15,7 +15,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.ForeignKey;
 import org.jooq.Table;
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -35,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalog extends TableImpl<CCatalogRecord> {
 
-	private static final long serialVersionUID = 728720630;
+	private static final long serialVersionUID = 1877377659;
 
 	/**
 	 * The reference instance of <code>cms.c_catalog</code>
@@ -59,11 +58,6 @@ public class CCatalog extends TableImpl<CCatalogRecord> {
 	 * The column <code>cms.c_catalog.name</code>.
 	 */
 	public final TableField<CCatalogRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(30).nullable(false), this, "");
-
-	/**
-	 * The column <code>cms.c_catalog.parent_id</code>.
-	 */
-	public final TableField<CCatalogRecord, String> PARENT_ID = createField("parent_id", org.jooq.impl.SQLDataType.VARCHAR.length(40), this, "");
 
 	/**
 	 * The column <code>cms.c_catalog.create_time</code>.
@@ -111,14 +105,6 @@ public class CCatalog extends TableImpl<CCatalogRecord> {
 	@Override
 	public List<UniqueKey<CCatalogRecord>> getKeys() {
 		return Arrays.<UniqueKey<CCatalogRecord>>asList(Keys.KEY_C_CATALOG_PRIMARY);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ForeignKey<CCatalogRecord, ?>> getReferences() {
-		return Arrays.<ForeignKey<CCatalogRecord, ?>>asList(Keys.FK_C6HY5PU5MCARTL5YWDWEHMXD3);
 	}
 
 	/**

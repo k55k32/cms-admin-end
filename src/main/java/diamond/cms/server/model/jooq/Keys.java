@@ -13,7 +13,6 @@ import diamond.cms.server.model.jooq.tables.records.CUserRecord;
 
 import javax.annotation.Generated;
 
-import org.jooq.ForeignKey;
 import org.jooq.UniqueKey;
 import org.jooq.impl.AbstractKeys;
 
@@ -50,7 +49,6 @@ public class Keys {
 	// FOREIGN KEY definitions
 	// -------------------------------------------------------------------------
 
-	public static final ForeignKey<CCatalogRecord, CCatalogRecord> FK_C6HY5PU5MCARTL5YWDWEHMXD3 = ForeignKeys0.FK_C6HY5PU5MCARTL5YWDWEHMXD3;
 
 	// -------------------------------------------------------------------------
 	// [#1459] distribute members to avoid static initialisers > 64kb
@@ -61,9 +59,5 @@ public class Keys {
 		public static final UniqueKey<CCatalogRecord> KEY_C_CATALOG_PRIMARY = createUniqueKey(CCatalog.C_CATALOG, CCatalog.C_CATALOG.ID);
 		public static final UniqueKey<CUserRecord> KEY_C_USER_PRIMARY = createUniqueKey(CUser.C_USER, CUser.C_USER.ID);
 		public static final UniqueKey<CUserRecord> KEY_C_USER_UK_E4YLW9V9NHRB2RJVY09B1Y7XS = createUniqueKey(CUser.C_USER, CUser.C_USER.USERNAME);
-	}
-
-	private static class ForeignKeys0 extends AbstractKeys {
-		public static final ForeignKey<CCatalogRecord, CCatalogRecord> FK_C6HY5PU5MCARTL5YWDWEHMXD3 = createForeignKey(diamond.cms.server.model.jooq.Keys.KEY_C_CATALOG_PRIMARY, CCatalog.C_CATALOG, CCatalog.C_CATALOG.PARENT_ID);
 	}
 }

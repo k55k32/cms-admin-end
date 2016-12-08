@@ -44,7 +44,6 @@ public class CatalogController {
         Catalog catalog = new Catalog();
         catalog.setId(id);
         catalog.setName(name);
-        catalog.setParentId(parentId);
         catalogService.update(catalog);
         return true;
     }

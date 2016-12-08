@@ -26,11 +26,10 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalogPojo implements ICCatalog {
 
-	private static final long serialVersionUID = -587848820;
+	private static final long serialVersionUID = -224564931;
 
 	private String    id;
 	private String    name;
-	private String    parentId;
 	private Timestamp createTime;
 	private Timestamp updateTime;
 
@@ -39,7 +38,6 @@ public class CCatalogPojo implements ICCatalog {
 	public CCatalogPojo(CCatalogPojo value) {
 		this.id = value.id;
 		this.name = value.name;
-		this.parentId = value.parentId;
 		this.createTime = value.createTime;
 		this.updateTime = value.updateTime;
 	}
@@ -47,13 +45,11 @@ public class CCatalogPojo implements ICCatalog {
 	public CCatalogPojo(
 		String    id,
 		String    name,
-		String    parentId,
 		Timestamp createTime,
 		Timestamp updateTime
 	) {
 		this.id = id;
 		this.name = name;
-		this.parentId = parentId;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 	}
@@ -80,17 +76,6 @@ public class CCatalogPojo implements ICCatalog {
 	@Override
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@Size(max = 40)
-	@Override
-	public String getParentId() {
-		return this.parentId;
-	}
-
-	@Override
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
 	}
 
 	@NotNull
@@ -121,7 +106,6 @@ public class CCatalogPojo implements ICCatalog {
 
 		sb.append(id);
 		sb.append(", ").append(name);
-		sb.append(", ").append(parentId);
 		sb.append(", ").append(createTime);
 		sb.append(", ").append(updateTime);
 
@@ -140,7 +124,6 @@ public class CCatalogPojo implements ICCatalog {
 	public void from(ICCatalog from) {
 		setId(from.getId());
 		setName(from.getName());
-		setParentId(from.getParentId());
 		setCreateTime(from.getCreateTime());
 		setUpdateTime(from.getUpdateTime());
 	}

@@ -50,17 +50,6 @@ public interface ICCatalog extends Serializable {
 	public String getName();
 
 	/**
-	 * Setter for <code>cms.c_catalog.parent_id</code>.
-	 */
-	public void setParentId(String value);
-
-	/**
-	 * Getter for <code>cms.c_catalog.parent_id</code>.
-	 */
-	@Size(max = 40)
-	public String getParentId();
-
-	/**
 	 * Setter for <code>cms.c_catalog.create_time</code>.
 	 */
 	public void setCreateTime(Timestamp value);
