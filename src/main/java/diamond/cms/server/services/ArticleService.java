@@ -23,7 +23,22 @@ public class ArticleService extends GenericService<Article>{
         return dao.fetch(page, e -> {
             return e.select(Fields.all(C_ARTICLE.fields(),C_CATALOG.NAME.as("catalogName")))
             .from(C_ARTICLE)
-            .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID));
+            .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID))
+            .where(C_ARTICLE.STATUS.ne(Article.STATUS_DELETE));
         }, Article.class);
+    }
+
+    @Override
+    public String delete(String id) {
+        updateStatus(id, Article.STATUS_DELETE);
+        return id;
+    }
+
+    public void updateStatus(String id, int status) {
+        dao.execute(e -> {
+           return e.update(C_ARTICLE).set(C_ARTICLE.STATUS, status)
+           .where(C_ARTICLE.ID.eq(id))
+           .execute();
+        });
     }
 }

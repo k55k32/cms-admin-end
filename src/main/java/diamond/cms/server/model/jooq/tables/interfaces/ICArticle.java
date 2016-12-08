@@ -61,6 +61,32 @@ public interface ICArticle extends Serializable {
 	public String getContent();
 
 	/**
+	 * Setter for <code>cms.c_article.summary</code>. 文章摘要
+	 */
+	public void setSummary(String value);
+
+	/**
+	 * Getter for <code>cms.c_article.summary</code>. 文章摘要
+	 */
+	@Size(max = 300)
+	public String getSummary();
+
+	/**
+	 * Setter for <code>cms.c_article.status</code>. 0: 删除状态
+1: 草稿状态
+2: 发布状态
+	 */
+	public void setStatus(Integer value);
+
+	/**
+	 * Getter for <code>cms.c_article.status</code>. 0: 删除状态
+1: 草稿状态
+2: 发布状态
+	 */
+	@NotNull
+	public Integer getStatus();
+
+	/**
 	 * Setter for <code>cms.c_article.create_time</code>.
 	 */
 	public void setCreateTime(Timestamp value);

@@ -36,14 +36,23 @@ public class ArticleController {
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.POST)
-    public boolean update(@PathVariable String id, String title, String content, String catalogId) {
+    public void update(@PathVariable String id, String title, String content, String catalogId) {
         Article article = new Article();
         article.setId(id);
         article.setTitle(title);
         article.setContent(content);
         article.setCatalogId(catalogId);
         articleService.update(article);
-        return true;
+    }
+
+    @RequestMapping(value="unpublish/{id}", method = RequestMethod.POST)
+    public void unpublish(@PathVariable String id) {
+        articleService.updateStatus(id, Article.STATUS_UNPUBLISH);
+    }
+
+    @RequestMapping(value="publish/{id}", method = RequestMethod.POST)
+    public void publish(@PathVariable String id) {
+        articleService.updateStatus(id, Article.STATUS_PUBLISH);
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

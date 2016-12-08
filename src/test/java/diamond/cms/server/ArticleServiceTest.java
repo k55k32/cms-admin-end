@@ -5,6 +5,7 @@ import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
 
 import javax.annotation.Resource;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import diamond.cms.server.core.PageResult;
@@ -52,5 +53,24 @@ public class ArticleServiceTest extends BasicTestCase{
         });
         long time = System.currentTimeMillis() - begin;
         log.info("findPerformanceTestInterface for :" + time +" ms");
+    }
+
+    @Test
+    public void testDelete() {
+        Article a = new Article();
+        a.setTitle("hello");
+        articleService.save(a);
+        boolean isUnpublish = articleService.get(a.getId()).getStatus().equals(Article.STATUS_UNPUBLISH);
+        Assert.assertTrue("default must be unpublish", isUnpublish);
+        articleService.delete(a.getId());
+        boolean isDelete = articleService.get(a.getId()).getStatus().equals(Article.STATUS_DELETE);
+        Assert.assertTrue("delete status error", isDelete);
+    }
+
+    @Test
+    public void statusTest() {
+        articleService.page(new PageResult<>()).getData().forEach(article -> {
+           Assert.assertTrue("article is delete", !article.getStatus().equals(Article.STATUS_DELETE));
+        });
     }
 }

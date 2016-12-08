@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticle extends TableImpl<CArticleRecord> {
 
-	private static final long serialVersionUID = -1102278579;
+	private static final long serialVersionUID = 1519892419;
 
 	/**
 	 * The reference instance of <code>cms.c_article</code>
@@ -63,6 +63,18 @@ public class CArticle extends TableImpl<CArticleRecord> {
 	 * The column <code>cms.c_article.content</code>.
 	 */
 	public final TableField<CArticleRecord, String> CONTENT = createField("content", org.jooq.impl.SQLDataType.CLOB, this, "");
+
+	/**
+	 * The column <code>cms.c_article.summary</code>. 文章摘要
+	 */
+	public final TableField<CArticleRecord, String> SUMMARY = createField("summary", org.jooq.impl.SQLDataType.VARCHAR.length(300), this, "文章摘要");
+
+	/**
+	 * The column <code>cms.c_article.status</code>. 0: 删除状态
+1: 草稿状态
+2: 发布状态
+	 */
+	public final TableField<CArticleRecord, Integer> STATUS = createField("status", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "0: 删除状态\n1: 草稿状态\n2: 发布状态");
 
 	/**
 	 * The column <code>cms.c_article.create_time</code>.

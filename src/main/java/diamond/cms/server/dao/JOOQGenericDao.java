@@ -21,7 +21,7 @@ import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.Schema;
-import org.jooq.SelectOnConditionStep;
+import org.jooq.SelectLimitStep;
 import org.jooq.SelectSeekStepN;
 import org.jooq.SortField;
 import org.jooq.Table;
@@ -213,10 +213,9 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
-    public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec,
-            RecordMapper<Record, T> mapper) {
+    public PageResult<T> fetch(PageResult<T> page, Executor<SelectLimitStep<?>> ec, RecordMapper<Record, T> mapper) {
         DSLContext context = using(configuration);
-        SelectOnConditionStep<?> r = ec.execute(context);
+        SelectLimitStep<?> r = ec.execute(context);
         List<T> list = r.limit(page.getStart(), page.getPageSize()).fetch(mapper);
         page.setData(list);
         int count = context.fetchCount(r);
@@ -273,7 +272,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return findInterface(clazz.getSuperclass());
     }
 
-    public PageResult<T> fetch(PageResult<T> page, Executor<SelectOnConditionStep<?>> ec, Class<T> clazz) {
+    public PageResult<T> fetch(PageResult<T> page, Executor<SelectLimitStep<?>> ec, Class<T> clazz) {
         this.fetch(page, ec, r -> {
             return mapperEntityEx(r, clazz);
         });

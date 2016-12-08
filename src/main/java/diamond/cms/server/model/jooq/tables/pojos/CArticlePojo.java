@@ -26,11 +26,13 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticlePojo implements ICArticle {
 
-	private static final long serialVersionUID = -127657622;
+	private static final long serialVersionUID = -2059305560;
 
 	private String    id;
 	private String    title;
 	private String    content;
+	private String    summary;
+	private Integer   status;
 	private Timestamp createTime;
 	private Timestamp updateTime;
 	private String    catalogId;
@@ -41,6 +43,8 @@ public class CArticlePojo implements ICArticle {
 		this.id = value.id;
 		this.title = value.title;
 		this.content = value.content;
+		this.summary = value.summary;
+		this.status = value.status;
 		this.createTime = value.createTime;
 		this.updateTime = value.updateTime;
 		this.catalogId = value.catalogId;
@@ -50,6 +54,8 @@ public class CArticlePojo implements ICArticle {
 		String    id,
 		String    title,
 		String    content,
+		String    summary,
+		Integer   status,
 		Timestamp createTime,
 		Timestamp updateTime,
 		String    catalogId
@@ -57,6 +63,8 @@ public class CArticlePojo implements ICArticle {
 		this.id = id;
 		this.title = title;
 		this.content = content;
+		this.summary = summary;
+		this.status = status;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 		this.catalogId = catalogId;
@@ -95,6 +103,28 @@ public class CArticlePojo implements ICArticle {
 	@Override
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	@Size(max = 300)
+	@Override
+	public String getSummary() {
+		return this.summary;
+	}
+
+	@Override
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	@NotNull
+	@Override
+	public Integer getStatus() {
+		return this.status;
+	}
+
+	@Override
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	@NotNull
@@ -137,6 +167,8 @@ public class CArticlePojo implements ICArticle {
 		sb.append(id);
 		sb.append(", ").append(title);
 		sb.append(", ").append(content);
+		sb.append(", ").append(summary);
+		sb.append(", ").append(status);
 		sb.append(", ").append(createTime);
 		sb.append(", ").append(updateTime);
 		sb.append(", ").append(catalogId);
@@ -157,6 +189,8 @@ public class CArticlePojo implements ICArticle {
 		setId(from.getId());
 		setTitle(from.getTitle());
 		setContent(from.getContent());
+		setSummary(from.getSummary());
+		setStatus(from.getStatus());
 		setCreateTime(from.getCreateTime());
 		setUpdateTime(from.getUpdateTime());
 		setCatalogId(from.getCatalogId());
