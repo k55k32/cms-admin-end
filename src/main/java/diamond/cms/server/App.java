@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan({ "diamond.cms.server.*" })
 public class App {
     public static void main(String[] args) {
-        // auto build
+        // auto build - 2016-12-8 13:58:57
         SpringApplication.run(App.class);
     }
 }
