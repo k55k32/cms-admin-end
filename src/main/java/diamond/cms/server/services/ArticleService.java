@@ -3,6 +3,8 @@ package diamond.cms.server.services;
 import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
 import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
 
+import java.util.Arrays;
+
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.core.PageResult;
@@ -20,12 +22,7 @@ public class ArticleService extends GenericService<Article>{
 
     @Override
     public PageResult<Article> page(PageResult<Article> page) {
-        return dao.fetch(page, e -> {
-            return e.select(Fields.all(C_ARTICLE.fields(),C_CATALOG.NAME.as("catalogName")))
-            .from(C_ARTICLE)
-            .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID))
-            .where(C_ARTICLE.STATUS.ne(Article.STATUS_DELETE));
-        }, Article.class);
+        return page(page, Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH);
     }
 
     @Override
@@ -40,5 +37,15 @@ public class ArticleService extends GenericService<Article>{
            .where(C_ARTICLE.ID.eq(id))
            .execute();
         });
+    }
+
+
+    public PageResult<Article> page(PageResult<Article> page, Integer...status) {
+        return dao.fetch(page, e -> {
+            return e.select(Fields.all(C_ARTICLE.fields(),C_CATALOG.NAME.as("catalogName")))
+            .from(C_ARTICLE)
+            .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID))
+            .where(C_ARTICLE.STATUS.in(Arrays.asList(status)));
+        }, Article.class);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.json.JSON;
 import diamond.cms.server.model.Article;
@@ -36,12 +37,13 @@ public class ArticleController {
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.POST)
-    public void update(@PathVariable String id, String title, String content, String catalogId) {
+    public void update(@PathVariable String id, String title, String content, String catalogId, String summary) {
         Article article = new Article();
         article.setId(id);
         article.setTitle(title);
         article.setContent(content);
         article.setCatalogId(catalogId);
+        article.setSummary(summary);
         articleService.update(article);
     }
 
@@ -61,5 +63,12 @@ public class ArticleController {
         return true;
     }
 
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @IgnoreToken
+    @JSON(type=Article.class, filter="status,content")
+    public PageResult<Article> listPage(PageResult<Article> page) {
+        PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH);
+        return articles;
+    }
 
 }
