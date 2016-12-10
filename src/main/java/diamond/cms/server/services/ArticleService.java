@@ -68,17 +68,17 @@ public class ArticleService extends GenericService<Article>{
         CArticle inner = C_ARTICLE.as("i");
         ArticleDetail a = dao.execute(e -> {
             return e.select(Fields.all(article.fields(),
-                    before.ID.as("beforeId"),
-                    before.TITLE.as("beforeTitle"),
-                    next.ID.as("nextId"),
-                    next.TITLE.as("nextTitle")
-                    )).from(article, before, next)
-                    .where(article.ID.eq(id))
-                    .and(before.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.ge(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME.desc()).limit(0, 1)))
-                    .and(next.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.le(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME).limit(0, 1)))
-                    .fetchOne(r -> {
-                        return dao.mapperEntityEx(r, ArticleDetail.class);
-                    });
+                before.ID.as("beforeId"),
+                before.TITLE.as("beforeTitle"),
+                next.ID.as("nextId"),
+                next.TITLE.as("nextTitle")
+                )).from(article)
+                .leftJoin(before).on(before.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.ge(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME.desc()).limit(0, 1)))
+                .leftJoin(next).on((next.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.le(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME).limit(0, 1))))
+                .where(article.ID.eq(id))
+                .fetchOne(r -> {
+                    return dao.mapperEntityEx(r, ArticleDetail.class);
+                });
         });
         return a;
     }

@@ -104,5 +104,9 @@ public class ArticleServiceTest extends BasicTestCase{
         ArticleDetail detail  = articleService.getDetail(now.getId());
         Assert.assertTrue("not find next" + detail.getNextId(), detail.getNextId().equals(next.getId()));
         Assert.assertTrue("not find before" + detail.getNextId(), detail.getBeforeId().equals(before.getId()));
+        detail = articleService.getDetail(next2.getId());
+        Assert.assertNotNull("must find detail", detail.getId());
+        Assert.assertEquals("not before eq", detail.getBeforeId(), next.getId());
+        Assert.assertNull("next must null now" + detail.getNextId(), detail.getNextId());
     }
 }
