@@ -48,4 +48,14 @@ public class ArticleService extends GenericService<Article>{
             .where(C_ARTICLE.STATUS.in(Arrays.asList(status)));
         }, Article.class);
     }
+
+    public Article saveDraft(Article article) {
+        if (article.getId() == null) {
+            article = save(article);
+        } else {
+            article = update(article);
+        }
+        return article;
+    }
+
 }

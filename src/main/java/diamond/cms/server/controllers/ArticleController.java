@@ -30,20 +30,23 @@ public class ArticleController {
         return list;
     }
 
+    @RequestMapping(value = "save/draft", method = RequestMethod.POST)
+    @JSON(type = Article.class, filter="createTime,updateTime")
+    public Article saveDraft(Article article) {
+        article = articleService.saveDraft(article);
+        return article;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
-    public boolean save(Article article) {
+    public String save(Article article) {
+        article.setStatus(Article.STATUS_PUBLISH);
         articleService.save(article);
-        return true;
+        return article.getId();
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.POST)
-    public void update(@PathVariable String id, String title, String content, String catalogId, String summary) {
-        Article article = new Article();
-        article.setId(id);
-        article.setTitle(title);
-        article.setContent(content);
-        article.setCatalogId(catalogId);
-        article.setSummary(summary);
+    public void update(Article article) {
+        article.setStatus(Article.STATUS_PUBLISH);
         articleService.update(article);
     }
 
