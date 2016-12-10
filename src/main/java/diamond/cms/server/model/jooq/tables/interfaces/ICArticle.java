@@ -119,6 +119,17 @@ public interface ICArticle extends Serializable {
 	@Size(max = 40)
 	public String getCatalogId();
 
+	/**
+	 * Setter for <code>cms.c_article.banner</code>.
+	 */
+	public void setBanner(String value);
+
+	/**
+	 * Getter for <code>cms.c_article.banner</code>.
+	 */
+	@Size(max = 150)
+	public String getBanner();
+
 	// -------------------------------------------------------------------------
 	// FROM and INTO
 	// -------------------------------------------------------------------------

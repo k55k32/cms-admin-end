@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticlePojo implements ICArticle {
 
-	private static final long serialVersionUID = -2059305560;
+	private static final long serialVersionUID = -180128316;
 
 	private String    id;
 	private String    title;
@@ -36,6 +36,7 @@ public class CArticlePojo implements ICArticle {
 	private Timestamp createTime;
 	private Timestamp updateTime;
 	private String    catalogId;
+	private String    banner;
 
 	public CArticlePojo() {}
 
@@ -48,6 +49,7 @@ public class CArticlePojo implements ICArticle {
 		this.createTime = value.createTime;
 		this.updateTime = value.updateTime;
 		this.catalogId = value.catalogId;
+		this.banner = value.banner;
 	}
 
 	public CArticlePojo(
@@ -58,7 +60,8 @@ public class CArticlePojo implements ICArticle {
 		Integer   status,
 		Timestamp createTime,
 		Timestamp updateTime,
-		String    catalogId
+		String    catalogId,
+		String    banner
 	) {
 		this.id = id;
 		this.title = title;
@@ -68,6 +71,7 @@ public class CArticlePojo implements ICArticle {
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 		this.catalogId = catalogId;
+		this.banner = banner;
 	}
 
 	@NotNull
@@ -160,6 +164,17 @@ public class CArticlePojo implements ICArticle {
 		this.catalogId = catalogId;
 	}
 
+	@Size(max = 150)
+	@Override
+	public String getBanner() {
+		return this.banner;
+	}
+
+	@Override
+	public void setBanner(String banner) {
+		this.banner = banner;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("CArticlePojo (");
@@ -172,6 +187,7 @@ public class CArticlePojo implements ICArticle {
 		sb.append(", ").append(createTime);
 		sb.append(", ").append(updateTime);
 		sb.append(", ").append(catalogId);
+		sb.append(", ").append(banner);
 
 		sb.append(")");
 		return sb.toString();
@@ -194,6 +210,7 @@ public class CArticlePojo implements ICArticle {
 		setCreateTime(from.getCreateTime());
 		setUpdateTime(from.getUpdateTime());
 		setCatalogId(from.getCatalogId());
+		setBanner(from.getBanner());
 	}
 
 	/**

@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticle extends TableImpl<CArticleRecord> {
 
-	private static final long serialVersionUID = 1519892419;
+	private static final long serialVersionUID = 311246106;
 
 	/**
 	 * The reference instance of <code>cms.c_article</code>
@@ -90,6 +90,11 @@ public class CArticle extends TableImpl<CArticleRecord> {
 	 * The column <code>cms.c_article.catalog_id</code>.
 	 */
 	public final TableField<CArticleRecord, String> CATALOG_ID = createField("catalog_id", org.jooq.impl.SQLDataType.VARCHAR.length(40), this, "");
+
+	/**
+	 * The column <code>cms.c_article.banner</code>.
+	 */
+	public final TableField<CArticleRecord, String> BANNER = createField("banner", org.jooq.impl.SQLDataType.VARCHAR.length(150), this, "");
 
 	/**
 	 * Create a <code>cms.c_article</code> table reference
