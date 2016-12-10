@@ -23,6 +23,7 @@ public class Article extends CArticlePojo{
 
     private String catalogName;
 
+
     public String getCatalogName() {
         return catalogName;
     }

@@ -3,6 +3,8 @@ package diamond.cms.server;
 import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
 import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
 
+import java.sql.Timestamp;
+
 import javax.annotation.Resource;
 
 import org.junit.Assert;
@@ -12,6 +14,7 @@ import diamond.cms.server.core.PageResult;
 import diamond.cms.server.dao.CommonDao;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Article;
+import diamond.cms.server.model.ArticleDetail;
 import diamond.cms.server.services.ArticleService;
 
 public class ArticleServiceTest extends BasicTestCase{
@@ -72,5 +75,34 @@ public class ArticleServiceTest extends BasicTestCase{
         articleService.page(new PageResult<>()).getData().forEach(article -> {
            Assert.assertTrue("article is delete", !article.getStatus().equals(Article.STATUS_DELETE));
         });
+    }
+
+    @Test
+    public void getDetail() {
+
+        Article before = new Article();
+        before.setTitle("before art1");
+        before.setCreateTime(new Timestamp(System.currentTimeMillis() - 10000));
+
+        Article now = new Article();
+        now.setTitle("art1");
+        now.setCreateTime(new Timestamp(System.currentTimeMillis()));
+
+        Article next = new Article();
+        next.setTitle("next art1");
+        next.setCreateTime(new Timestamp(System.currentTimeMillis() + 10000));
+
+        Article next2 = new Article();
+        next2.setTitle("next 222 art1");
+        next2.setCreateTime(new Timestamp(System.currentTimeMillis() + 50000));
+
+        articleService.save(before);
+        articleService.save(now);
+        articleService.save(next);
+        articleService.save(next2);
+
+        ArticleDetail detail  = articleService.getDetail(now.getId());
+        Assert.assertTrue("not find next" + detail.getNextId(), detail.getNextId().equals(next.getId()));
+        Assert.assertTrue("not find before" + detail.getNextId(), detail.getBeforeId().equals(before.getId()));
     }
 }

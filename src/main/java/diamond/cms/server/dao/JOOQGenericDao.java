@@ -279,9 +279,9 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return page;
     }
 
-    private T mapperEntityEx(Record r, Class<T> clazz) {
+    public  <E> E mapperEntityEx(Record r, Class<E> clazz) {
         try {
-            T entity = clazz.newInstance();
+            E entity = clazz.newInstance();
             Map<String,Method> entityMethodMap = getSetMethods(clazz);
             Arrays.asList(r.fields()).forEach(f -> {
                 String name = f.getName();
@@ -296,7 +296,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return null;
     }
 
-    private Map<String, Method> getSetMethods(Class<T> clazz) {
+    private <E> Map<String, Method> getSetMethods(Class<E> clazz) {
         Map<String,Method> entityMethodMap = new HashMap<>();
         Arrays.asList(clazz.getMethods()).forEach(m -> {
             if (m.getName().startsWith("set")){
@@ -306,7 +306,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return entityMethodMap;
     }
 
-    private void setObjectValue(String name, Object value, T entity, Map<String, Method> entityMethodMap) {
+    private <E> void setObjectValue(String name, Object value, E entity, Map<String, Method> entityMethodMap) {
         StringBuffer setMethodName = new StringBuffer();
         setMethodName.append("set");
         if (name.indexOf("_") != -1) {

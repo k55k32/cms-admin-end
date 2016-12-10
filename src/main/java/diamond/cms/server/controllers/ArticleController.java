@@ -10,6 +10,7 @@ import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.json.JSON;
 import diamond.cms.server.model.Article;
+import diamond.cms.server.model.ArticleDetail;
 import diamond.cms.server.services.ArticleService;
 
 @RestController
@@ -74,4 +75,9 @@ public class ArticleController {
         return articles;
     }
 
+    @RequestMapping(value="detail/{id}", method = RequestMethod.GET)
+    @IgnoreToken
+    public ArticleDetail detail(@PathVariable String id) {
+        return articleService.getDetail(id);
+    }
 }
