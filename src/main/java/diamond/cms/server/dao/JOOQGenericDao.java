@@ -93,12 +93,12 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
-    public int delete(ID id) {
+    public int deleteById(ID id) {
         return using(configuration).delete(table).where(primaryKey.equal(id)).execute();
     }
 
     @Override
-    public void delete(Collection<ID> ids) {
+    public void deleteByIds(Collection<ID> ids) {
         using(configuration).delete(table).where(primaryKey.in(ids)).execute();
     }
 

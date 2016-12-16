@@ -15,5 +15,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @WebAppConfiguration
 public abstract class BasicTestCase {
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    public Logger log = LoggerFactory.getLogger(this.getClass());
 }

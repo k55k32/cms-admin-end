@@ -1,5 +1,7 @@
 package diamond.cms.server.model;
 
+import java.util.List;
+
 import diamond.cms.server.model.jooq.tables.pojos.CArticlePojo;
 
 public class Article extends CArticlePojo{
@@ -23,6 +25,25 @@ public class Article extends CArticlePojo{
 
     private String catalogName;
 
+    private String [] tagIds;
+
+    private List<Tag> tags;
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public String[] getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(String[] tagIds) {
+        this.tagIds = tagIds;
+    }
 
     public String getCatalogName() {
         return catalogName;

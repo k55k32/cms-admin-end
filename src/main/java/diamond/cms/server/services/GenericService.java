@@ -26,6 +26,11 @@ public abstract class GenericService<E> {
     }
 
 
+    public String generateID() {
+        return UUID.randomUUID().toString();
+    }
+
+
     public E get(String id) {
         return getDao().get(id);
     }
@@ -33,7 +38,7 @@ public abstract class GenericService<E> {
     public E save(E entity) {
         try {
             Method method = entity.getClass().getMethod("setId", String.class);
-            method.invoke(entity, UUID.randomUUID().toString());
+            method.invoke(entity, generateID());
         } catch (Exception e) {
         }
         return getDao().insert(entity);
@@ -48,7 +53,7 @@ public abstract class GenericService<E> {
     }
 
     public String delete(String id) {
-        getDao().delete(id);
+        getDao().deleteById(id);
         return id;
     }
 

@@ -2,6 +2,7 @@ package diamond.cms.server.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,14 +40,14 @@ public class ArticleController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String save(Article article) {
+    public String save(@RequestBody Article article) {
         article.setStatus(Article.STATUS_PUBLISH);
         articleService.save(article);
         return article.getId();
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.POST)
-    public void update(Article article) {
+    public void update(@RequestBody Article article) {
         article.setStatus(Article.STATUS_PUBLISH);
         articleService.update(article);
     }

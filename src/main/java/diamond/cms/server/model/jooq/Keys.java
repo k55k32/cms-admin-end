@@ -5,10 +5,14 @@ package diamond.cms.server.model.jooq;
 
 
 import diamond.cms.server.model.jooq.tables.CArticle;
+import diamond.cms.server.model.jooq.tables.CArticleTag;
 import diamond.cms.server.model.jooq.tables.CCatalog;
+import diamond.cms.server.model.jooq.tables.CTag;
 import diamond.cms.server.model.jooq.tables.CUser;
 import diamond.cms.server.model.jooq.tables.records.CArticleRecord;
+import diamond.cms.server.model.jooq.tables.records.CArticleTagRecord;
 import diamond.cms.server.model.jooq.tables.records.CCatalogRecord;
+import diamond.cms.server.model.jooq.tables.records.CTagRecord;
 import diamond.cms.server.model.jooq.tables.records.CUserRecord;
 
 import javax.annotation.Generated;
@@ -41,7 +45,10 @@ public class Keys {
 	// -------------------------------------------------------------------------
 
 	public static final UniqueKey<CArticleRecord> KEY_C_ARTICLE_PRIMARY = UniqueKeys0.KEY_C_ARTICLE_PRIMARY;
+	public static final UniqueKey<CArticleTagRecord> KEY_C_ARTICLE_TAG_PRIMARY = UniqueKeys0.KEY_C_ARTICLE_TAG_PRIMARY;
 	public static final UniqueKey<CCatalogRecord> KEY_C_CATALOG_PRIMARY = UniqueKeys0.KEY_C_CATALOG_PRIMARY;
+	public static final UniqueKey<CTagRecord> KEY_C_TAG_PRIMARY = UniqueKeys0.KEY_C_TAG_PRIMARY;
+	public static final UniqueKey<CTagRecord> KEY_C_TAG_NAME_UNIQUE = UniqueKeys0.KEY_C_TAG_NAME_UNIQUE;
 	public static final UniqueKey<CUserRecord> KEY_C_USER_PRIMARY = UniqueKeys0.KEY_C_USER_PRIMARY;
 	public static final UniqueKey<CUserRecord> KEY_C_USER_UK_E4YLW9V9NHRB2RJVY09B1Y7XS = UniqueKeys0.KEY_C_USER_UK_E4YLW9V9NHRB2RJVY09B1Y7XS;
 
@@ -56,7 +63,10 @@ public class Keys {
 
 	private static class UniqueKeys0 extends AbstractKeys {
 		public static final UniqueKey<CArticleRecord> KEY_C_ARTICLE_PRIMARY = createUniqueKey(CArticle.C_ARTICLE, CArticle.C_ARTICLE.ID);
+		public static final UniqueKey<CArticleTagRecord> KEY_C_ARTICLE_TAG_PRIMARY = createUniqueKey(CArticleTag.C_ARTICLE_TAG, CArticleTag.C_ARTICLE_TAG.ARTICLE_ID, CArticleTag.C_ARTICLE_TAG.TAG_ID);
 		public static final UniqueKey<CCatalogRecord> KEY_C_CATALOG_PRIMARY = createUniqueKey(CCatalog.C_CATALOG, CCatalog.C_CATALOG.ID);
+		public static final UniqueKey<CTagRecord> KEY_C_TAG_PRIMARY = createUniqueKey(CTag.C_TAG, CTag.C_TAG.ID);
+		public static final UniqueKey<CTagRecord> KEY_C_TAG_NAME_UNIQUE = createUniqueKey(CTag.C_TAG, CTag.C_TAG.NAME);
 		public static final UniqueKey<CUserRecord> KEY_C_USER_PRIMARY = createUniqueKey(CUser.C_USER, CUser.C_USER.ID);
 		public static final UniqueKey<CUserRecord> KEY_C_USER_UK_E4YLW9V9NHRB2RJVY09B1Y7XS = createUniqueKey(CUser.C_USER, CUser.C_USER.USERNAME);
 	}

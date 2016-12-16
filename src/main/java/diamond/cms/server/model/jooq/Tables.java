@@ -5,7 +5,9 @@ package diamond.cms.server.model.jooq;
 
 
 import diamond.cms.server.model.jooq.tables.CArticle;
+import diamond.cms.server.model.jooq.tables.CArticleTag;
 import diamond.cms.server.model.jooq.tables.CCatalog;
+import diamond.cms.server.model.jooq.tables.CTag;
 import diamond.cms.server.model.jooq.tables.CUser;
 
 import javax.annotation.Generated;
@@ -30,9 +32,19 @@ public class Tables {
 	public static final CArticle C_ARTICLE = diamond.cms.server.model.jooq.tables.CArticle.C_ARTICLE;
 
 	/**
+	 * The table cms.c_article_tag
+	 */
+	public static final CArticleTag C_ARTICLE_TAG = diamond.cms.server.model.jooq.tables.CArticleTag.C_ARTICLE_TAG;
+
+	/**
 	 * The table cms.c_catalog
 	 */
 	public static final CCatalog C_CATALOG = diamond.cms.server.model.jooq.tables.CCatalog.C_CATALOG;
+
+	/**
+	 * The table cms.c_tag
+	 */
+	public static final CTag C_TAG = diamond.cms.server.model.jooq.tables.CTag.C_TAG;
 
 	/**
 	 * The table cms.c_user

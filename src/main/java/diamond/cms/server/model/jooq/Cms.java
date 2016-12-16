@@ -5,7 +5,9 @@ package diamond.cms.server.model.jooq;
 
 
 import diamond.cms.server.model.jooq.tables.CArticle;
+import diamond.cms.server.model.jooq.tables.CArticleTag;
 import diamond.cms.server.model.jooq.tables.CCatalog;
+import diamond.cms.server.model.jooq.tables.CTag;
 import diamond.cms.server.model.jooq.tables.CUser;
 
 import java.util.ArrayList;
@@ -31,7 +33,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cms extends SchemaImpl {
 
-	private static final long serialVersionUID = 1080556804;
+	private static final long serialVersionUID = 363785501;
 
 	/**
 	 * The reference instance of <code>cms</code>
@@ -55,7 +57,9 @@ public class Cms extends SchemaImpl {
 	private final List<Table<?>> getTables0() {
 		return Arrays.<Table<?>>asList(
 			CArticle.C_ARTICLE,
+			CArticleTag.C_ARTICLE_TAG,
 			CCatalog.C_CATALOG,
+			CTag.C_TAG,
 			CUser.C_USER);
 	}
 }

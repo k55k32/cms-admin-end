@@ -1,4 +1,4 @@
-package diamond.cms.server;
+package diamond.cms.server.services;
 
 import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
 import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
@@ -10,12 +10,12 @@ import javax.annotation.Resource;
 import org.junit.Assert;
 import org.junit.Test;
 
+import diamond.cms.server.BasicTestCase;
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.dao.CommonDao;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Article;
 import diamond.cms.server.model.ArticleDetail;
-import diamond.cms.server.services.ArticleService;
 
 public class ArticleServiceTest extends BasicTestCase{
 
@@ -108,5 +108,10 @@ public class ArticleServiceTest extends BasicTestCase{
         Assert.assertNotNull("must find detail", detail.getId());
         Assert.assertEquals("not before eq", detail.getBeforeId(), next.getId());
         Assert.assertNull("next must null now" + detail.getNextId(), detail.getNextId());
+    }
+
+    @Test
+    public void page() {
+        articleService.page(new PageResult<>());
     }
 }
