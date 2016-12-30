@@ -1,5 +1,8 @@
 package diamond.cms.server.services;
 
+import static diamond.cms.server.model.jooq.Tables.C_ARTICLE_TAG;
+import static diamond.cms.server.model.jooq.Tables.C_TAG;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,8 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
+import diamond.cms.server.core.PageResult;
+import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Tag;
 import diamond.cms.server.model.jooq.Tables;
 
@@ -30,5 +36,14 @@ public class TagService extends GenericService<Tag>{
         });
         if (!newTags.isEmpty()) dao.insert(newTags);
         return tags;
+    }
+
+    @Override
+    public PageResult<Tag> page(PageResult<Tag> page) {
+        return dao.fetch(page, e -> {
+            return e.select(Fields.all(C_TAG.fields(), DSL.count(C_ARTICLE_TAG.ARTICLE_ID).as("articleCount"))).from(C_TAG,C_ARTICLE_TAG)
+            .where(C_TAG.ID.eq(C_ARTICLE_TAG.TAG_ID))
+            .groupBy(C_ARTICLE_TAG.TAG_ID);
+        }, Tag.class);
     }
 }
