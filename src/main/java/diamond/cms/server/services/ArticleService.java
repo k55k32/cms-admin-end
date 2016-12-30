@@ -137,6 +137,8 @@ public class ArticleService extends GenericService<Article>{
                     return dao.mapperEntityEx(r, ArticleDetail.class);
                 });
         });
+        List<Tag> tags = articleTagService.findTags(a.getId());
+        a.setTags(tags);
         return a;
     }
 

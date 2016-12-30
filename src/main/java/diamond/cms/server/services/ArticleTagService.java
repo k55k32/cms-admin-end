@@ -47,4 +47,13 @@ public class ArticleTagService {
         return tags;
     }
 
+    public List<Tag> findTags(String articleId) {
+        return dao.execute(e -> {
+            return e.select(C_TAG.fields()).from(C_TAG)
+            .leftJoin(C_ARTICLE_TAG).on(C_ARTICLE_TAG.TAG_ID.eq(C_TAG.ID))
+            .where(C_ARTICLE_TAG.ARTICLE_ID.eq(articleId))
+            .fetchInto(Tag.class);
+        });
+    }
+
 }
