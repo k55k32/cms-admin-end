@@ -45,6 +45,13 @@ public class UserService extends GenericService<User>{
         User user = dao.fetchOne(C_USER.TOKEN.eq(token).and(C_USER.EXPIRED.ge(System.currentTimeMillis()))).orElse(null);
         return user;
     }
-//
+
+    public void logout(String token) {
+        dao.execute(e -> {
+            return e.update(C_USER).set(C_USER.TOKEN, "")
+            .where(C_USER.TOKEN.eq(token))
+            .execute();
+        });
+    }
 
 }

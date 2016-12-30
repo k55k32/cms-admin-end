@@ -44,4 +44,9 @@ public class UserController {
         }
         return user;
     }
+    @RequestMapping(value="logout/{token}", method = RequestMethod.GET)
+    @IgnoreToken
+    public void logout(@PathVariable String token){
+        userService.logout(token);
+    }
 }
