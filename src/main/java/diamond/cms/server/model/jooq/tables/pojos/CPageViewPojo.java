@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CPageViewPojo implements ICPageView {
 
-	private static final long serialVersionUID = 133474324;
+	private static final long serialVersionUID = -1778294622;
 
 	private String    id;
 	private String    name;
@@ -35,6 +35,7 @@ public class CPageViewPojo implements ICPageView {
 	private String    fullPath;
 	private String    query;
 	private Timestamp createTime;
+	private String    ip;
 
 	public CPageViewPojo() {}
 
@@ -46,6 +47,7 @@ public class CPageViewPojo implements ICPageView {
 		this.fullPath = value.fullPath;
 		this.query = value.query;
 		this.createTime = value.createTime;
+		this.ip = value.ip;
 	}
 
 	public CPageViewPojo(
@@ -55,7 +57,8 @@ public class CPageViewPojo implements ICPageView {
 		String    params,
 		String    fullPath,
 		String    query,
-		Timestamp createTime
+		Timestamp createTime,
+		String    ip
 	) {
 		this.id = id;
 		this.name = name;
@@ -64,6 +67,7 @@ public class CPageViewPojo implements ICPageView {
 		this.fullPath = fullPath;
 		this.query = query;
 		this.createTime = createTime;
+		this.ip = ip;
 	}
 
 	@NotNull
@@ -144,6 +148,17 @@ public class CPageViewPojo implements ICPageView {
 		this.createTime = createTime;
 	}
 
+	@Size(max = 45)
+	@Override
+	public String getIp() {
+		return this.ip;
+	}
+
+	@Override
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("CPageViewPojo (");
@@ -155,6 +170,7 @@ public class CPageViewPojo implements ICPageView {
 		sb.append(", ").append(fullPath);
 		sb.append(", ").append(query);
 		sb.append(", ").append(createTime);
+		sb.append(", ").append(ip);
 
 		sb.append(")");
 		return sb.toString();
@@ -176,6 +192,7 @@ public class CPageViewPojo implements ICPageView {
 		setFullPath(from.getFullPath());
 		setQuery(from.getQuery());
 		setCreateTime(from.getCreateTime());
+		setIp(from.getIp());
 	}
 
 	/**

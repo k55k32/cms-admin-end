@@ -103,6 +103,17 @@ public interface ICPageView extends Serializable {
 	@NotNull
 	public Timestamp getCreateTime();
 
+	/**
+	 * Setter for <code>cms.c_page_view.ip</code>.
+	 */
+	public void setIp(String value);
+
+	/**
+	 * Getter for <code>cms.c_page_view.ip</code>.
+	 */
+	@Size(max = 45)
+	public String getIp();
+
 	// -------------------------------------------------------------------------
 	// FROM and INTO
 	// -------------------------------------------------------------------------
