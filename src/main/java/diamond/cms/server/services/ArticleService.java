@@ -130,8 +130,8 @@ public class ArticleService extends GenericService<Article>{
                 next.ID.as("nextId"),
                 next.TITLE.as("nextTitle")
                 )).from(article)
-                .leftJoin(before).on(before.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.ge(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME.desc()).limit(0, 1)))
-                .leftJoin(next).on((next.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.le(inner.CREATE_TIME)).and(inner.ID.ne(article.ID)).orderBy(inner.CREATE_TIME).limit(0, 1))))
+                .leftJoin(before).on(before.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.ge(inner.CREATE_TIME)).and(inner.ID.ne(article.ID).and(inner.STATUS.eq(Article.STATUS_PUBLISH))).orderBy(inner.CREATE_TIME.desc()).limit(0, 1)))
+                .leftJoin(next).on((next.ID.eq(e.select(inner.ID).from(inner).where(article.CREATE_TIME.le(inner.CREATE_TIME)).and(inner.ID.ne(article.ID).and(inner.STATUS.eq(Article.STATUS_PUBLISH))).orderBy(inner.CREATE_TIME).limit(0, 1))))
                 .where(article.ID.eq(id))
                 .fetchOne(r -> {
                     return dao.mapperEntityEx(r, ArticleDetail.class);

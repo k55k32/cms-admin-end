@@ -81,20 +81,25 @@ public class ArticleServiceTest extends BasicTestCase{
     public void getDetail() {
 
         Article before = new Article();
+        before.setStatus(Article.STATUS_PUBLISH);
         before.setTitle("before art1");
         before.setCreateTime(new Timestamp(System.currentTimeMillis() - 10000));
 
         Article now = new Article();
+        now.setStatus(Article.STATUS_PUBLISH);
         now.setTitle("art1");
         now.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         Article next = new Article();
+        next.setStatus(Article.STATUS_PUBLISH);
         next.setTitle("next art1");
         next.setCreateTime(new Timestamp(System.currentTimeMillis() + 10000));
 
         Article next2 = new Article();
         next2.setTitle("next 222 art1");
+        next2.setStatus(Article.STATUS_PUBLISH);
         next2.setCreateTime(new Timestamp(System.currentTimeMillis() + 50000));
+
 
         articleService.save(before);
         articleService.save(now);
