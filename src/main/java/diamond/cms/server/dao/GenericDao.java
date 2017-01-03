@@ -58,6 +58,8 @@ public interface GenericDao<T, ID extends Serializable> {
 
     PageResult<T> fetch(PageResult<T> page, Condition...conditions);
 
+    PageResult<T> fetch(PageResult<T> page, SortField<?> sort);
+
     PageResult<T> fetch(PageResult<T> page, Stream<Condition> conditions, SortField<?>...sorts);
 
     PageResult<T> fetchWithOptional(PageResult<T> page, Stream<Optional<Condition>> conditions, SortField<?>...sorts);
@@ -76,5 +78,6 @@ public interface GenericDao<T, ID extends Serializable> {
     interface Executor<E> {
         E execute(DSLContext context);
     }
+
 
 }

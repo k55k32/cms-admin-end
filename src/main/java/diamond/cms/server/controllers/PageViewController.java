@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.annotations.IgnoreToken;
+import diamond.cms.server.core.PageResult;
 import diamond.cms.server.model.PageView;
 import diamond.cms.server.services.PageViewService;
 
@@ -21,6 +22,12 @@ public class PageViewController {
 
     @Autowired
     PageViewService pageViewService;
+
+
+    @RequestMapping(method = RequestMethod.GET)
+    public PageResult<PageView> pageview (PageResult<PageView> page) {
+        return pageViewService.page(page);
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     @IgnoreToken

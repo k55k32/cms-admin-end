@@ -175,6 +175,11 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     @Override
+    public PageResult<T> fetch(PageResult<T> page, SortField<?> sort) {
+        return fetch(page, Stream.empty(), sort);
+    }
+
+    @Override
     public PageResult<T> fetchWithOptional(PageResult<T> page, Stream<Optional<Condition>> conditions,
             SortField<?>... sorts) {
         return fetch(page, conditions.filter(Optional::isPresent).map(Optional::get), sorts);
