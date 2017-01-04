@@ -34,7 +34,7 @@ public class ArticleController {
 
     @RequestMapping(value = "save/draft", method = RequestMethod.POST)
     @JSON(type = Article.class, filter="createTime,updateTime")
-    public Article saveDraft(Article article) {
+    public Article saveDraft(@RequestBody Article article) {
         article = articleService.saveDraft(article);
         return article;
     }
