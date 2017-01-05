@@ -1,6 +1,7 @@
 package diamond.cms.server.controllers;
 
 import java.sql.Timestamp;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,8 +26,13 @@ public class PageViewController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    public PageResult<PageView> pageview (PageResult<PageView> page) {
-        return pageViewService.page(page);
+    public PageResult<PageView> pageview (PageResult<PageView> page, Long start, Long end) {
+        return pageViewService.page(page, start, end);
+    }
+
+    @RequestMapping(value = "range-count", method = RequestMethod.GET)
+    public Map<String,Long> rangeCount(Long start, Long end) {
+        return pageViewService.pvRangeCount(start, end);
     }
 
     @RequestMapping(method = RequestMethod.POST)

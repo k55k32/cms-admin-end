@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import diamond.cms.server.interceptor.AuthorizationInterceptor;
-import diamond.cms.server.interceptor.CROSInterceptor;
+import diamond.cms.server.interceptor.CORSInterceptor;
 import diamond.cms.server.json.spring.JsonReturnHandler;
 
 @Configuration
@@ -24,7 +24,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     AuthorizationInterceptor authorizationInterceptor;
 
     @Resource
-    CROSInterceptor crosInterceptor;
+    CORSInterceptor crosInterceptor;
 
     @Bean
     public JsonReturnHandler JsonReturnHandler(){
