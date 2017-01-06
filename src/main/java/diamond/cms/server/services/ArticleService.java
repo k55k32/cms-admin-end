@@ -47,7 +47,7 @@ public class ArticleService extends GenericService<Article>{
     }
 
     private void saveArticleTags(String articleId, String[] tagIds) {
-        if (tagIds != null && tagIds.length > 0) {
+        if (tagIds != null) {
             List<Tag> tags = tagService.saveTagIfNotExists(tagIds);
             List<ArticleTag> tagList = new ArrayList<>();
             tags.stream().map(Tag::getId).forEach(tagid -> {
