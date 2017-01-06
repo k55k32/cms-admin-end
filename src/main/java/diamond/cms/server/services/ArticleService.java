@@ -3,6 +3,7 @@ package diamond.cms.server.services;
 import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
 import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -140,6 +141,15 @@ public class ArticleService extends GenericService<Article>{
         List<Tag> tags = articleTagService.findTags(a.getId());
         a.setTags(tags);
         return a;
+    }
+
+    public Integer updateCreateTime(String id, Long time) {
+        return dao.execute(e -> {
+            return e.update(C_ARTICLE)
+            .set(C_ARTICLE.CREATE_TIME, new Timestamp(time))
+            .where(C_ARTICLE.ID.eq(id))
+            .execute();
+        });
     }
 
 }

@@ -76,6 +76,11 @@ public class ArticleController {
         return articles;
     }
 
+    @RequestMapping(value = "createtime/{id}", method = RequestMethod.POST)
+    public void changeCreateTime(@PathVariable String id, Long time) {
+        articleService.updateCreateTime(id, time);
+    }
+
     @RequestMapping(value="detail/{id}", method = RequestMethod.GET)
     @IgnoreToken
     public ArticleDetail detail(@PathVariable String id) {
