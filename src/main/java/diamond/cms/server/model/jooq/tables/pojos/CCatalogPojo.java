@@ -26,10 +26,12 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalogPojo implements ICCatalog {
 
-	private static final long serialVersionUID = -224564931;
+	private static final long serialVersionUID = 351140095;
 
 	private String    id;
 	private String    name;
+	private Integer   sort;
+	private String    description;
 	private Timestamp createTime;
 	private Timestamp updateTime;
 
@@ -38,6 +40,8 @@ public class CCatalogPojo implements ICCatalog {
 	public CCatalogPojo(CCatalogPojo value) {
 		this.id = value.id;
 		this.name = value.name;
+		this.sort = value.sort;
+		this.description = value.description;
 		this.createTime = value.createTime;
 		this.updateTime = value.updateTime;
 	}
@@ -45,11 +49,15 @@ public class CCatalogPojo implements ICCatalog {
 	public CCatalogPojo(
 		String    id,
 		String    name,
+		Integer   sort,
+		String    description,
 		Timestamp createTime,
 		Timestamp updateTime
 	) {
 		this.id = id;
 		this.name = name;
+		this.sort = sort;
+		this.description = description;
 		this.createTime = createTime;
 		this.updateTime = updateTime;
 	}
@@ -80,6 +88,28 @@ public class CCatalogPojo implements ICCatalog {
 
 	@NotNull
 	@Override
+	public Integer getSort() {
+		return this.sort;
+	}
+
+	@Override
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	@Size(max = 500)
+	@Override
+	public String getDescription() {
+		return this.description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@NotNull
+	@Override
 	public Timestamp getCreateTime() {
 		return this.createTime;
 	}
@@ -106,6 +136,8 @@ public class CCatalogPojo implements ICCatalog {
 
 		sb.append(id);
 		sb.append(", ").append(name);
+		sb.append(", ").append(sort);
+		sb.append(", ").append(description);
 		sb.append(", ").append(createTime);
 		sb.append(", ").append(updateTime);
 
@@ -124,6 +156,8 @@ public class CCatalogPojo implements ICCatalog {
 	public void from(ICCatalog from) {
 		setId(from.getId());
 		setName(from.getName());
+		setSort(from.getSort());
+		setDescription(from.getDescription());
 		setCreateTime(from.getCreateTime());
 		setUpdateTime(from.getUpdateTime());
 	}

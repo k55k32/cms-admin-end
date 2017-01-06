@@ -50,6 +50,28 @@ public interface ICCatalog extends Serializable {
 	public String getName();
 
 	/**
+	 * Setter for <code>cms.c_catalog.sort</code>.
+	 */
+	public void setSort(Integer value);
+
+	/**
+	 * Getter for <code>cms.c_catalog.sort</code>.
+	 */
+	@NotNull
+	public Integer getSort();
+
+	/**
+	 * Setter for <code>cms.c_catalog.description</code>.
+	 */
+	public void setDescription(String value);
+
+	/**
+	 * Getter for <code>cms.c_catalog.description</code>.
+	 */
+	@Size(max = 500)
+	public String getDescription();
+
+	/**
 	 * Setter for <code>cms.c_catalog.create_time</code>.
 	 */
 	public void setCreateTime(Timestamp value);

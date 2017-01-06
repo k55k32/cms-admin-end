@@ -1,5 +1,7 @@
 package diamond.cms.server.controllers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,8 +73,8 @@ public class ArticleController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @IgnoreToken
     @JSON(type=Article.class, filter="status,content")
-    public PageResult<Article> listPage(PageResult<Article> page) {
-        PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH);
+    public PageResult<Article> listPage(PageResult<Article> page, String catalogId) {
+        PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH, Optional.ofNullable(catalogId));
         return articles;
     }
 

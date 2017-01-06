@@ -329,10 +329,10 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
                 log.debug(setMethodName + " for entity " + entity.getClass().getName() + " not exists");
             }
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            if (log.isDebugEnabled()) {
-                log.debug(
+            if (log.isWarnEnabled()) {
+                log.warn(
                         "class: " + entity.getClass().getName() +
-                        " invok method " + setMethodName + " with " + value +" failed");
+                        " invok method " + setMethodName + " with " + value +" failed:" + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -8,8 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.jooq.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +73,7 @@ public class ArticleService extends GenericService<Article>{
 
     @Override
     public PageResult<Article> page(PageResult<Article> page) {
-        return page(page, Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH);
+        return searchPageByCondition(page, Stream.of(C_ARTICLE.ID.in(Arrays.asList(new Integer[]{Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH}))));
     }
 
     @Override
@@ -88,12 +91,25 @@ public class ArticleService extends GenericService<Article>{
     }
 
 
-    public PageResult<Article> page(PageResult<Article> page, Integer...status) {
+    public PageResult<Article> page(PageResult<Article> page, Integer status, Optional<String> catalogId) {
+        Condition cond = C_ARTICLE.STATUS.eq(status);
+        if (catalogId.isPresent()) {
+            String cid = catalogId.get();
+            if ("-1".equals(cid)) {
+                cond = cond.and(C_ARTICLE.CATALOG_ID.isNull().or(C_ARTICLE.CATALOG_ID.eq("")));
+            } else if (!"0".equals(cid)) {
+                cond = cond.and(C_ARTICLE.CATALOG_ID.eq(cid));
+            }
+        }
+        return searchPageByCondition(page, Stream.of(cond));
+    }
+
+    private PageResult<Article> searchPageByCondition(PageResult<Article> page, Stream<Condition> cond) {
         page = dao.fetch(page, e -> {
             return e.select(Fields.all(C_ARTICLE.fields(),C_CATALOG.NAME.as("catalogName")))
             .from(C_ARTICLE)
             .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID))
-            .where(C_ARTICLE.STATUS.in(Arrays.asList(status)))
+            .where(cond.collect(Collectors.toList()))
             .orderBy(C_ARTICLE.CREATE_TIME.desc());
         }, Article.class);
         List<Article> articles = page.getData();

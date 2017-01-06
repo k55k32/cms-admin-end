@@ -1,9 +1,18 @@
 package diamond.cms.server.services;
 
+import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
+import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
+
+import java.util.List;
+
+import org.jooq.impl.DSL;
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.core.PageResult;
+import diamond.cms.server.dao.Fields;
+import diamond.cms.server.model.Article;
 import diamond.cms.server.model.Catalog;
+
 
 @Service
 public class CatalogService extends GenericService<Catalog>{
@@ -19,19 +28,15 @@ public class CatalogService extends GenericService<Catalog>{
         return dao.get(id);
     }
 
-//    private Catalog getCatalogMapper(Record m) {
-//        CCatalog cataTable = CCatalog.C_CATALOG;
-//        CCatalog parent = cataTable.as("parent");
-//        String parentName = m.into(parent.NAME.as("parentName")).into(String.class);
-//        Catalog cata = m.into(Catalog.class);
-//        cata.setParentName(parentName);
-//        return cata;
-//    }
-//
-//    private SelectOnConditionStep<?> getCatalog(DSLContext e) {
-//        CCatalog cataTable = CCatalog.C_CATALOG;
-//        CCatalog parent = cataTable.as("parent");
-//        return e.select(Fields.all(cataTable.fields(), parent.NAME.as("parentName"))).from(cataTable)
-//        .leftJoin(parent).on(parent.ID.eq(cataTable.PARENT_ID));
-//    }
+    public List<Catalog> findAllDetail() {
+        return dao.execute(e -> {
+            return e.select(Fields.all(C_CATALOG.fields(), DSL.count(C_ARTICLE.ID).as("articleCount"))).from(C_ARTICLE)
+            .leftJoin(C_CATALOG).on(C_CATALOG.ID.eq(C_ARTICLE.CATALOG_ID))
+            .where(C_ARTICLE.STATUS.eq(Article.STATUS_PUBLISH))
+            .groupBy(C_CATALOG.ID)
+            .orderBy(C_CATALOG.SORT).fetch(r -> {
+                return dao.mapperEntityEx(r, Catalog.class);
+            });
+        });
+    }
 }

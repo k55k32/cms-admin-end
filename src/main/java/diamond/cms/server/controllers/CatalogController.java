@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.core.Result;
+import diamond.cms.server.json.JSON;
 import diamond.cms.server.model.Catalog;
 import diamond.cms.server.services.CatalogService;
 
@@ -55,8 +57,14 @@ public class CatalogController {
     }
 
     @RequestMapping(value="list", method = RequestMethod.GET)
+    @JSON(type = Catalog.class  , include="id,name")
     public List<Catalog> findAll() {
         return catalogService.findAll();
     }
 
+    @RequestMapping(value = "list-detail", method = RequestMethod.GET)
+    @IgnoreToken
+    public List<Catalog> findAllDetail () {
+        return catalogService.findAllDetail();
+    }
 }

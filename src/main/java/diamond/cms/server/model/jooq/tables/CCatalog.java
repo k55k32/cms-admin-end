@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCatalog extends TableImpl<CCatalogRecord> {
 
-	private static final long serialVersionUID = 1877377659;
+	private static final long serialVersionUID = 491897839;
 
 	/**
 	 * The reference instance of <code>cms.c_catalog</code>
@@ -58,6 +58,16 @@ public class CCatalog extends TableImpl<CCatalogRecord> {
 	 * The column <code>cms.c_catalog.name</code>.
 	 */
 	public final TableField<CCatalogRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(30).nullable(false), this, "");
+
+	/**
+	 * The column <code>cms.c_catalog.sort</code>.
+	 */
+	public final TableField<CCatalogRecord, Integer> SORT = createField("sort", org.jooq.impl.SQLDataType.INTEGER.nullable(false).defaulted(true), this, "");
+
+	/**
+	 * The column <code>cms.c_catalog.description</code>.
+	 */
+	public final TableField<CCatalogRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR.length(500), this, "");
 
 	/**
 	 * The column <code>cms.c_catalog.create_time</code>.
