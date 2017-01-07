@@ -1,5 +1,6 @@
 package diamond.cms.server.controllers;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.PageResult;
@@ -24,7 +23,7 @@ public class CatalogController {
     CatalogService catalogService;
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    @JsonIgnoreProperties("createTime, updateTime")
+    @JSON(type = Catalog.class, filter="createTime,updateTime")
     public Catalog get(@PathVariable String id) {
         return catalogService.get(id);
     }
@@ -42,18 +41,14 @@ public class CatalogController {
     }
 
     @RequestMapping(value="{id}", method = RequestMethod.POST)
-    public boolean update(@PathVariable String id, String name, String parentId) {
-        Catalog catalog = new Catalog();
-        catalog.setId(id);
-        catalog.setName(name);
+    public void update(Catalog catalog) {
+        catalog.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         catalogService.update(catalog);
-        return true;
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public boolean delete(String id) {
+    public void delete(String id) {
         catalogService.delete(id);
-        return true;
     }
 
     @RequestMapping(value="list", method = RequestMethod.GET)
