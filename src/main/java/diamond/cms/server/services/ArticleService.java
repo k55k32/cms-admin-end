@@ -73,7 +73,7 @@ public class ArticleService extends GenericService<Article>{
 
     @Override
     public PageResult<Article> page(PageResult<Article> page) {
-        return searchPageByCondition(page, Stream.of(C_ARTICLE.ID.in(Arrays.asList(new Integer[]{Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH}))));
+        return searchPageByCondition(page, Stream.of(C_ARTICLE.STATUS.in(Arrays.asList(new Integer[]{Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH}))));
     }
 
     @Override
