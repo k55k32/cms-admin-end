@@ -7,6 +7,7 @@ package diamond.cms.server.model.jooq;
 import diamond.cms.server.model.jooq.tables.CArticle;
 import diamond.cms.server.model.jooq.tables.CArticleTag;
 import diamond.cms.server.model.jooq.tables.CCatalog;
+import diamond.cms.server.model.jooq.tables.CComment;
 import diamond.cms.server.model.jooq.tables.CPageView;
 import diamond.cms.server.model.jooq.tables.CSetting;
 import diamond.cms.server.model.jooq.tables.CTag;
@@ -42,6 +43,11 @@ public class Tables {
 	 * The table cms.c_catalog
 	 */
 	public static final CCatalog C_CATALOG = diamond.cms.server.model.jooq.tables.CCatalog.C_CATALOG;
+
+	/**
+	 * The table cms.c_comment
+	 */
+	public static final CComment C_COMMENT = diamond.cms.server.model.jooq.tables.CComment.C_COMMENT;
 
 	/**
 	 * The table cms.c_page_view
