@@ -1,5 +1,6 @@
 package diamond.cms.server.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +88,11 @@ public class ArticleController {
     @IgnoreToken
     public ArticleDetail detail(@PathVariable String id) {
         return articleService.getDetail(id);
+    }
+
+    @RequestMapping(value="id-title", method = RequestMethod.GET)
+    @JSON(type=Article.class, include="id,title")
+    public List<Article> idTitle() {
+        return articleService.findIdTitle();
     }
 }

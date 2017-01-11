@@ -53,8 +53,8 @@ public class CommentController {
         return commentService.page(page, state, articleId);
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable String id){
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void delete(String id){
         commentService.delete(id);
     }
 }

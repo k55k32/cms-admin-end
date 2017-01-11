@@ -53,6 +53,7 @@ public class CommentService extends GenericService<Comment>{
         return dao.execute(e -> {
             return e.update(comment)
             .set(comment.STATE, Const.STATE_DELETE)
+            .where(comment.ID.eq(id))
             .execute();
         });
     }

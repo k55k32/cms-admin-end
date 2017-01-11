@@ -167,4 +167,12 @@ public class ArticleService extends GenericService<Article>{
         });
     }
 
+    public List<Article> findIdTitle() {
+        return dao.execute(e -> {
+            return e.select(Fields.all(C_ARTICLE.ID, C_ARTICLE.TITLE))
+            .from(C_ARTICLE)
+            .fetchInto(Article.class);
+        });
+    }
+
 }
