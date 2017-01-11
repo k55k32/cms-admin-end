@@ -40,6 +40,13 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     private Configuration configuration = null;
     private Field<ID> primaryKey = null;
     Logger log = LoggerFactory.getLogger(this.getClass());
+    private DSLContext dslContext = null;
+    public DSLContext getDSLContext() {
+        if (dslContext == null) {
+            dslContext = using(configuration);
+        }
+        return dslContext;
+    }
 
     public JOOQGenericDao(Class<T> entityClass, Schema schema, Configuration configuration) {
         this.entityClass = entityClass;
@@ -50,7 +57,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     @Override
     public T insert(T entity) {
-        record(entity, false, using(configuration)).store();
+        record(entity, false, getDSLContext()).store();
         return entity;
     }
 
@@ -63,7 +70,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         List<UpdatableRecord<?>> rs = records(entities, false);
 
         if (rs.size() > 1) {
-            using(configuration).batchInsert(rs).execute();
+            getDSLContext().batchInsert(rs).execute();
             return;
         }
 
@@ -72,7 +79,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     @Override
     public T update(T entity) {
-        record(entity, true, using(configuration)).update();
+        record(entity, true, getDSLContext()).update();
         return entity;
     }
 
@@ -85,7 +92,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         List<UpdatableRecord<?>> rs = records(entities, false);
 
         if (rs.size() > 1) {
-            using(configuration).batchUpdate(rs).execute();
+            getDSLContext().batchUpdate(rs).execute();
             return;
         }
 
@@ -94,12 +101,12 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     @Override
     public int deleteById(ID id) {
-        return using(configuration).delete(table).where(primaryKey.equal(id)).execute();
+        return getDSLContext().delete(table).where(primaryKey.equal(id)).execute();
     }
 
     @Override
     public void deleteByIds(Collection<ID> ids) {
-        using(configuration).delete(table).where(primaryKey.in(ids)).execute();
+        getDSLContext().delete(table).where(primaryKey.in(ids)).execute();
     }
 
     @Override
@@ -117,7 +124,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         Optional<Condition> o = conditions.reduce((acc, item) -> acc.and(item));
         Condition c = o.orElseThrow(
                 () -> new IllegalArgumentException("At least one condition is needed to perform deletion"));
-        using(configuration).delete(table).where(c).execute();
+        getDSLContext().delete(table).where(c).execute();
     }
 
     @Override
@@ -127,13 +134,13 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     @Override
     public Optional<T> getOptional(ID id) {
-        Record record = using(configuration).select().from(table).where(primaryKey.eq(id)).fetchOne();
+        Record record = getDSLContext().select().from(table).where(primaryKey.eq(id)).fetchOne();
         return Optional.ofNullable(record).map(r -> r.into(entityClass));
     }
 
     @Override
     public List<T> get(Collection<ID> ids) {
-        return using(configuration).select().from(table).where(primaryKey.in(ids)).fetch().into(entityClass);
+        return getDSLContext().select().from(table).where(primaryKey.in(ids)).fetch().into(entityClass);
     }
 
     @Override
@@ -149,7 +156,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     @Override
     public int count(Stream<Condition> conditions) {
         Condition c = conditions.reduce((acc, item) -> acc.and(item)).orElse(DSL.trueCondition());
-        return using(configuration).fetchCount(table, c);
+        return getDSLContext().fetchCount(table, c);
     }
 
     @Override
@@ -165,7 +172,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     @Override
     public List<T> fetch(Stream<Condition> conditions, SortField<?>... sorts) {
         Condition c = conditions.reduce((acc, item) -> acc.and(item)).orElse(DSL.trueCondition());
-        SelectSeekStepN<Record> step = using(configuration).select().from(table).where(c).orderBy(sorts);
+        SelectSeekStepN<Record> step = getDSLContext().select().from(table).where(c).orderBy(sorts);
         return step.fetchInto(entityClass);
     }
 
@@ -188,12 +195,9 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     @Override
     public PageResult<T> fetch(PageResult<T> page, Stream<Condition> conditions, SortField<?>... sorts) {
         Condition c = conditions.reduce((acc, item) -> acc.and(item)).orElse(DSL.trueCondition());
-        SelectSeekStepN<Record> step = using(configuration).select().from(table).where(c).orderBy(sorts);
-        int firstResult = (page.getCurrentPage() - 1) * page.getPageSize();
-        List<T> items = step.limit(firstResult, page.getPageSize()).fetch().into(entityClass);
-        page.setData(items);
-        page.setTotal(count(c));
-        return page;
+        return fetch(page, e -> {
+            return e.select(table.fields()).from(table).where(c).orderBy(sorts);
+        }, entityClass);
     }
 
     @Override
@@ -214,17 +218,17 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     @Override
     public <O> O execute(Executor<O> cb) {
-        return cb.execute(using(configuration));
+        return cb.execute(getDSLContext());
     }
 
     @Override
     public PageResult<T> fetch(PageResult<T> page, Executor<SelectLimitStep<?>> ec, RecordMapper<Record, T> mapper) {
-        DSLContext context = using(configuration);
+        DSLContext context = getDSLContext();
         SelectLimitStep<?> r = ec.execute(context);
+        int count = context.fetchCount(r);
+        page.setTotal(count);
         List<T> list = r.limit(page.getStart(), page.getPageSize()).fetch(mapper);
         page.setData(list);
-        int count = context.fetchCount(r);
-        page.setPageCount(count);
         return page;
     }
 
@@ -243,7 +247,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     private List<UpdatableRecord<?>> records(Collection<T> objects, boolean forUpdate) {
-        DSLContext context = using(configuration);
+        DSLContext context = getDSLContext();
         return objects.stream().map(obj -> record(obj, forUpdate, context)).collect(Collectors.toList());
     }
 

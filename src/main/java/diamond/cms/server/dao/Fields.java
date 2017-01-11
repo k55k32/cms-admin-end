@@ -15,4 +15,8 @@ public class Fields {
         list.addAll(Arrays.asList(fields2));
         return list ;
     }
+
+    public static Collection<? extends Field<?>> all(Field<?> ... fields) {
+        return Arrays.asList(fields);
+    }
 }
