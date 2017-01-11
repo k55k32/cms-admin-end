@@ -49,7 +49,12 @@ public class CommentController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public PageResult<Comment> commentList(PageResult<Comment> page){
-        return commentService.page(page);
+    public PageResult<Comment> commentList(PageResult<Comment> page, Optional<Integer> state, Optional<String> articleId){
+        return commentService.page(page, state, articleId);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable String id){
+        commentService.delete(id);
     }
 }

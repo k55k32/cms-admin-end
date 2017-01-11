@@ -77,13 +77,12 @@ public class ArticleService extends GenericService<Article>{
     }
 
     @Override
-    public String delete(String id) {
-        updateStatus(id, Article.STATUS_DELETE);
-        return id;
+    public int delete(String id) {
+        return updateStatus(id, Article.STATUS_DELETE);
     }
 
-    public void updateStatus(String id, int status) {
-        dao.execute(e -> {
+    public Integer updateStatus(String id, int status) {
+        return dao.execute(e -> {
            return e.update(C_ARTICLE).set(C_ARTICLE.STATUS, status)
            .where(C_ARTICLE.ID.eq(id))
            .execute();

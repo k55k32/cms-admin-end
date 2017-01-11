@@ -52,9 +52,8 @@ public abstract class GenericService<E> {
         return getDao().fetch(page);
     }
 
-    public String delete(String id) {
-        getDao().deleteById(id);
-        return id;
+    public int delete(String id) {
+        return getDao().deleteById(id);
     }
 
     public List<E> findAll(){
