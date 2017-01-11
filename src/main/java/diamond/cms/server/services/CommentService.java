@@ -1,8 +1,11 @@
 package diamond.cms.server.services;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
+import org.jooq.Condition;
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.core.PageResult;
@@ -13,9 +16,15 @@ import diamond.cms.server.model.jooq.tables.CComment;
 @Service
 public class CommentService extends GenericService<Comment>{
 
-    public List<Comment> list(String articleId, Integer state) {
+    public List<Comment> list(String articleId, Integer state, Optional<Long> lastTime) {
         CComment comment = Tables.C_COMMENT;
-        return dao.fetch(Stream.of(comment.ARTICLE_ID.eq(articleId).and(comment.STATE.eq(state))), comment.CREATE_TIME.asc());
+        List<Condition> conditions = new ArrayList<>();
+        conditions.add(comment.ARTICLE_ID.eq(articleId));
+        conditions.add(comment.STATE.eq(state));
+        lastTime.ifPresent(time -> {
+            conditions.add(comment.CREATE_TIME.gt(new Timestamp(time)));
+        });
+        return dao.fetch(conditions.stream(), comment.CREATE_TIME.desc());
     }
 
     @Override

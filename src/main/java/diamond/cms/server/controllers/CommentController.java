@@ -2,6 +2,7 @@ package diamond.cms.server.controllers;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -43,8 +44,8 @@ public class CommentController {
     @RequestMapping(value = "{articleId}", method = RequestMethod.GET)
     @IgnoreToken
     @JSON(type = Comment.class, include = "id,nickname,createTime,content")
-    public List<Comment> frontList(@PathVariable String articleId){
-        return commentService.list(articleId, Const.STATE_NORMAL);
+    public List<Comment> frontList(@PathVariable String articleId, Optional<Long> lastTime){
+        return commentService.list(articleId, Const.STATE_NORMAL, lastTime);
     }
 
     @RequestMapping(method = RequestMethod.GET)
