@@ -14,7 +14,9 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import diamond.cms.server.annotations.IgnoreToken;
+import diamond.cms.server.controllers.ControllerUtils;
 import diamond.cms.server.exceptions.AuthorizationException;
+import diamond.cms.server.model.User;
 import diamond.cms.server.services.UserService;
 
 @Component
@@ -30,7 +32,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        System.out.println(request.getMethod() + ":" + request.getRequestURL());
+        log.info(request.getMethod() + ":" + request.getRequestURL());
         if (handler instanceof HandlerMethod && !request.getMethod().equals("OPTIONS")) {
             HandlerMethod methodHandler = (HandlerMethod) handler;
             Object bean = methodHandler.getBean();
@@ -41,7 +43,9 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
                 }
                 String token = request.getHeader(AUTHORIZATION_HEADER);
                 Optional.ofNullable(token).orElseThrow(() -> new AuthorizationException());
-                Optional.ofNullable(userService.getByToken(token)).orElseThrow(() -> new AuthorizationException());
+                User user = userService.getByToken(token);
+                Optional.ofNullable(user).orElseThrow(() -> new AuthorizationException());
+                ControllerUtils.setCurrentUser(user);
             }
         }
         return true;

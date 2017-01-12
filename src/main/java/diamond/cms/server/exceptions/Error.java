@@ -6,7 +6,8 @@ public enum Error {
     PARAMS_ERROR(10002, "parasm valid %s"),
     INVALID_TOKEN(10003, "invaild token"),
     USERNAME_OR_PASSWORD_ERROR(10004, "username or password error"),
-    PAGE_NO_FOUND(10005)
+    PAGE_NO_FOUND(10005),
+    SINGLE_USER_ERROR(10006, "has user, can't add more"),
     ;
 
     private int code;
