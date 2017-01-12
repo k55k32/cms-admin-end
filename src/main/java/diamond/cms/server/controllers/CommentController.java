@@ -57,4 +57,9 @@ public class CommentController {
     public void delete(String id){
         commentService.delete(id);
     }
+
+    @RequestMapping(value = "recovery/{id}", method = RequestMethod.GET)
+    public void recovery(@PathVariable String id) {
+        commentService.recovery(id);
+    }
 }

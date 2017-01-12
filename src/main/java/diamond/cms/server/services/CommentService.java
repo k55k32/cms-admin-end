@@ -50,11 +50,20 @@ public class CommentService extends GenericService<Comment>{
 
     @Override
     public int delete(String id) {
+        return updateState(id, Const.STATE_DELETE);
+    }
+
+    private Integer updateState(String id, int state) {
         return dao.execute(e -> {
             return e.update(comment)
-            .set(comment.STATE, Const.STATE_DELETE)
+            .set(comment.STATE, state)
             .where(comment.ID.eq(id))
             .execute();
         });
+
+    }
+
+    public Integer recovery(String id) {
+        return updateState(id, Const.STATE_NORMAL);
     }
 }
