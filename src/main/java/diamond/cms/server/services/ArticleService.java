@@ -68,6 +68,10 @@ public class ArticleService extends GenericService<Article>{
     public Article update(Article entity) {
         saveArticleTags(entity.getId(), entity.getTagIds());
         entity.setUpdateTime(currentTime());
+        entity.setCreateTime(null);
+        if (entity.getBanner() == null) {
+           entity.setBanner("");
+        }
         return super.update(entity);
     }
 

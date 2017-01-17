@@ -37,22 +37,19 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     private Table<? extends Record> table = null;
     private Class<T> entityClass = null;
-    private Configuration configuration = null;
     private Field<ID> primaryKey = null;
     Logger log = LoggerFactory.getLogger(this.getClass());
-    private DSLContext dslContext = null;
+    private final DSLContext dslContext;
+
     public DSLContext getDSLContext() {
-        if (dslContext == null) {
-            dslContext = using(configuration);
-        }
         return dslContext;
     }
 
     public JOOQGenericDao(Class<T> entityClass, Schema schema, Configuration configuration) {
         this.entityClass = entityClass;
-        this.configuration = configuration;
         initTable(schema);
         primaryKey = pk();
+        dslContext = using(configuration);
     }
 
     @Override
@@ -252,17 +249,22 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
     }
 
     private UpdatableRecord<?> record(T object, boolean forUpdate, DSLContext context) {
+        return record(object, forUpdate, context, true);
+    }
+
+    private UpdatableRecord<?> record(T object, boolean forUpdate, DSLContext context, boolean ignoreNull) {
         UpdatableRecord<?> r = (UpdatableRecord<?>) context.newRecord(table, object);
         if (forUpdate) {
             r.changed(primaryKey, false);
-
         }
 
         int size = r.size();
 
-        for (int i = 0; i < size; i++) {
-            if (r.getValue(i) == null && r.field(i).getDataType().nullable()) {
-                r.changed(i, false);
+        if (ignoreNull) {
+            for (int i = 0; i < size; i++) {
+                if (r.getValue(i) == null) {
+                    r.changed(i, false);
+                }
             }
         }
         return r;
