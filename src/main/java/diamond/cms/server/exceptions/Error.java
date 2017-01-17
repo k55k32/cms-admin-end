@@ -8,6 +8,7 @@ public enum Error {
     USERNAME_OR_PASSWORD_ERROR(10004, "username or password error"),
     PAGE_NO_FOUND(10005),
     SINGLE_USER_ERROR(10006, "has user, can't add more"),
+    USER_ACCESS_NOT_INIT(10007, "用户账户未初始化"),
     ;
 
     private int code;

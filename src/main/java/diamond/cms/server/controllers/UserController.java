@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import diamond.cms.server.annotations.IgnoreToken;
 import diamond.cms.server.core.Result;
 import diamond.cms.server.exceptions.AuthorizationException;
+import diamond.cms.server.exceptions.UserNotInitException;
 import diamond.cms.server.model.User;
 import diamond.cms.server.services.UserService;
 import diamond.cms.server.utils.PwdUtils;
@@ -50,5 +51,13 @@ public class UserController {
     @RequestMapping(value="modify")
     public User modify(String password, HttpServletRequest request){
         return userService.modify(ControllerUtils.currentUser().getId(), PwdUtils.pwd(password));
+    }
+
+    @RequestMapping(value="need-init")
+    @IgnoreToken
+    public void needInit() throws UserNotInitException{
+//        if (userService.findAll().isEmpty()) {
+            throw new UserNotInitException();
+//        }
     }
 }
