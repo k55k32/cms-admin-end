@@ -64,4 +64,12 @@ public class UserService extends GenericService<User>{
         return user;
     }
 
+    public boolean isInit() {
+        return false;
+    }
+
+    public void checkoutInit() {
+        if (isInit()) throw new AppException(Error.USER_INIT_API_REFUSE);
+    }
+
 }
