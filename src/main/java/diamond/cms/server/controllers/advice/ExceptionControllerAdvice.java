@@ -10,6 +10,7 @@ import diamond.cms.server.core.Result;
 import diamond.cms.server.exceptions.AppException;
 import diamond.cms.server.exceptions.AuthorizationException;
 import diamond.cms.server.exceptions.Error;
+import diamond.cms.server.exceptions.UserNotInitException;
 
 @ControllerAdvice
 @ResponseBody
@@ -25,6 +26,13 @@ public class ExceptionControllerAdvice{
         response.setStatus(401);
         return appExceptionToResult(new AppException(Error.UN_AUTHORIZATION));
     }
+
+    @ExceptionHandler(UserNotInitException.class)
+    public Result usernotinit(HttpServletResponse response) {
+        response.setStatus(402);
+        return appExceptionToResult(new AppException(Error.USER_ACCESS_NOT_INIT));
+    }
+
 
 
     @ExceptionHandler(Exception.class)

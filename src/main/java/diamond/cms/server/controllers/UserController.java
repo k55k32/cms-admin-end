@@ -1,6 +1,7 @@
 package diamond.cms.server.controllers;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +12,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.annotations.IgnoreToken;
+import diamond.cms.server.cache.CacheManager;
 import diamond.cms.server.core.Result;
+import diamond.cms.server.exceptions.AppException;
 import diamond.cms.server.exceptions.AuthorizationException;
+import diamond.cms.server.exceptions.Error;
+import diamond.cms.server.exceptions.UserNotInitException;
+import diamond.cms.server.model.EmailConfig;
 import diamond.cms.server.model.User;
+import diamond.cms.server.services.EmailConfigService;
+import diamond.cms.server.services.EmailSendService;
 import diamond.cms.server.services.UserService;
 import diamond.cms.server.utils.PwdUtils;
 
@@ -23,6 +31,15 @@ public class UserController {
 
     @Resource
     UserService userService;
+
+    @Resource
+    EmailConfigService emailConfigService;
+
+    @Resource
+    EmailSendService emailSendService;
+
+    @Resource
+    CacheManager cacheManager;
 
     @RequestMapping(value = "token", method = RequestMethod.POST)
     @IgnoreToken
@@ -47,8 +64,54 @@ public class UserController {
         userService.logout(token);
     }
 
-    @RequestMapping(value="modify")
+    @RequestMapping(value="modify", method = RequestMethod.POST)
     public User modify(String password, HttpServletRequest request){
         return userService.modify(ControllerUtils.currentUser().getId(), PwdUtils.pwd(password));
+    }
+
+    @RequestMapping(value="need-init")
+    @IgnoreToken
+    public void needInit() throws UserNotInitException{
+        if (!userService.isInit()){
+            throw new UserNotInitException(emailConfigService.getEnbale());
+        }
+    }
+
+    @RequestMapping(value="init-email-config", method = RequestMethod.GET)
+    @IgnoreToken
+    public EmailConfig enableConfig(){
+        userService.checkoutInit();
+        return emailConfigService.getEnbale().orElse(null);
+    }
+
+    @RequestMapping(value="init-step-email-config", method = RequestMethod.POST)
+    @IgnoreToken
+    public EmailConfig step1(EmailConfig emailConfig){
+        userService.checkoutInit();
+
+        emailConfig.setEnable(true);
+        if (emailConfig.getId() != null) {
+            return emailConfigService.update(emailConfig);
+        }
+        return emailConfigService.save(emailConfig);
+    }
+
+    @RequestMapping(value="init-send-email", method = RequestMethod.POST)
+    @IgnoreToken
+    public void initEmail(String email){
+        userService.checkoutInit();
+        String key = UUID.randomUUID().toString();
+        cacheManager.set(email + key, key, 1000 * 60 * 60 * 2);
+        emailSendService.sendEmail(email, "Init Blog Verification Code", key, key);
+    }
+
+    @RequestMapping(value="init-register", method = RequestMethod.POST)
+    @IgnoreToken
+    public void register (String username, String password, String code) {
+        userService.checkoutInit();
+        if (cacheManager.get(username + code) == null) {
+            throw new AppException(Error.INVALID_EMAIL_CODE);
+        }
+        userService.register(username, PwdUtils.pwd(password));
     }
 }
