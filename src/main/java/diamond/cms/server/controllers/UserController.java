@@ -1,6 +1,7 @@
 package diamond.cms.server.controllers;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.annotations.IgnoreToken;
+import diamond.cms.server.cache.CacheManager;
 import diamond.cms.server.core.Result;
+import diamond.cms.server.exceptions.AppException;
 import diamond.cms.server.exceptions.AuthorizationException;
+import diamond.cms.server.exceptions.Error;
 import diamond.cms.server.exceptions.UserNotInitException;
 import diamond.cms.server.model.EmailConfig;
 import diamond.cms.server.model.User;
@@ -33,6 +37,9 @@ public class UserController {
 
     @Resource
     EmailSendService emailSendService;
+
+    @Resource
+    CacheManager cacheManager;
 
     @RequestMapping(value = "token", method = RequestMethod.POST)
     @IgnoreToken
@@ -93,16 +100,18 @@ public class UserController {
     @IgnoreToken
     public void initEmail(String email){
         userService.checkoutInit();
-        // 发送邮件，并保存跟邮件关联的验证码
+        String key = UUID.randomUUID().toString();
+        cacheManager.set(email + key, key, 1000 * 60 * 60 * 2);
+        emailSendService.sendEmail(email, "Init Blog Verification Code", key, key);
     }
 
     @RequestMapping(value="init-register", method = RequestMethod.POST)
-    public Result register (String username, String password) {
+    @IgnoreToken
+    public void register (String username, String password, String code) {
         userService.checkoutInit();
-        // 验证邮件，验证成功后保存
-        Result r = new Result();
-        String token = userService.register(username, password);
-        r.setData(token);
-        return r;
+        if (cacheManager.get(username + code) == null) {
+            throw new AppException(Error.INVALID_EMAIL_CODE);
+        }
+        userService.register(username, PwdUtils.pwd(password));
     }
 }

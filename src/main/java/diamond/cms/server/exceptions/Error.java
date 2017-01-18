@@ -12,6 +12,7 @@ public enum Error {
     NO_ENABLE_EMAIL_CONFIG(10008, "no enable email-config"),
     SEND_EMAIL_FAILD(10009, "send email faild: %s"),
     USER_INIT_API_REFUSE(10010, "this api user init use only"),
+    INVALID_EMAIL_CODE(10011, "invalid email code"),
     ;
 
     private int code;

@@ -20,8 +20,12 @@ public class EmailConfigService extends GenericService<EmailConfig>{
         dao.execute(e -> {
             return e.update(table).set(table.ENABLE, Const.DISABLE).execute();
         });
+        enableChange(id, Const.ENABLE);
+    }
+
+    private void enableChange(String id, boolean isEnable) {
         dao.execute(e -> {
-            return e.update(table).set(table.ENABLE, Const.ENABLE)
+            return e.update(table).set(table.ENABLE, isEnable)
                     .where(table.ID.eq(id)).execute();
         });
     }
@@ -34,5 +38,13 @@ public class EmailConfigService extends GenericService<EmailConfig>{
             enable(config.getId());
         }
         return config;
+    }
+
+    public void changeEnable(String id, Boolean enable) {
+        if (enable) {
+            this.enable(id);
+        } else {
+            enableChange(id, enable);
+        }
     }
 }

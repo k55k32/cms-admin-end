@@ -17,9 +17,9 @@ public class UserService extends GenericService<User>{
 
     public String register(String username, String password) {
         User user = new User();
-        if (!dao.fetch().isEmpty()) {
-            throw new AppException(Error.SINGLE_USER_ERROR);
-        }
+//        if (!dao.fetch().isEmpty()) {
+//            throw new AppException(Error.SINGLE_USER_ERROR);
+//        }
         user.setUsername(username);
         user.setPassword(password);
         generateToken(user);
@@ -65,7 +65,7 @@ public class UserService extends GenericService<User>{
     }
 
     public boolean isInit() {
-        return false;
+        return !dao.fetch().isEmpty();
     }
 
     public void checkoutInit() {
