@@ -4,8 +4,11 @@ import static diamond.cms.server.model.jooq.Tables.C_USER;
 
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import diamond.cms.server.Const;
+import diamond.cms.server.cache.CacheManager;
 import diamond.cms.server.exceptions.AppException;
 import diamond.cms.server.exceptions.Error;
 import diamond.cms.server.model.User;
@@ -13,48 +16,60 @@ import diamond.cms.server.model.User;
 @Service
 public class UserService extends GenericService<User>{
 
+    @Autowired
+    CacheManager cacheManager;
+
     public static final long EXPIRED_TIME = 1000 * 60 * 60 * 2;
 
     public String register(String username, String password) {
         User user = new User();
-//        if (!dao.fetch().isEmpty()) {
-//            throw new AppException(Error.SINGLE_USER_ERROR);
-//        }
         user.setUsername(username);
         user.setPassword(password);
-        generateToken(user);
         this.save(user);
-        return user.getToken();
+        return generateToken(user);
     }
 
     public String login(String username,String password) {
         User user = dao
                 .fetchOne(C_USER.USERNAME.eq(username).and(C_USER.PASSWORD.eq(password)))
                 .orElseThrow(() -> new AppException(diamond.cms.server.exceptions.Error.USERNAME_OR_PASSWORD_ERROR));
-        generateToken(user);
         user.setLastLoginTime(currentTime());
         this.update(user);
-        return user.getToken();
+        return generateToken(user);
     }
 
 
 
-    private void generateToken(User user) {
-        user.setToken(UUID.randomUUID().toString());
-        user.setExpired(System.currentTimeMillis() + EXPIRED_TIME);
+    private String generateToken(User user) {
+        String userKey = userCacheKey(user.getId());
+        cacheManager.getOptional(userKey, String.class).ifPresent(tokenKey -> {
+            cacheManager.del(tokenKey);
+        });
+        String token = UUID.randomUUID().toString();
+        String tokenKey = tokenCacheKey(token);
+        cacheManager.set(userKey, tokenKey);
+        cacheManager.set(tokenKey, user, Const.TOKEN_EXPIRE);
+        return token;
+    }
+
+    private String tokenCacheKey(String token) {
+        return Const.CACHE_PREFIX_TOKEN + token;
+    }
+    private String userCacheKey(String id) {
+        return Const.CACHE_PREFIX_USER_TOKEN + id;
     }
 
     public User getByToken(String token) {
-        User user = dao.fetchOne(C_USER.TOKEN.eq(token).and(C_USER.EXPIRED.ge(System.currentTimeMillis()))).orElse(null);
+        User user = cacheManager.get(tokenCacheKey(token), User.class, Const.TOKEN_EXPIRE);
         return user;
     }
 
     public void logout(String token) {
-        dao.execute(e -> {
-            return e.update(C_USER).set(C_USER.TOKEN, "")
-            .where(C_USER.TOKEN.eq(token))
-            .execute();
-        });
+        User user = getByToken(token);
+        cacheManager.del(tokenCacheKey(token));
+        if (user != null) {
+            cacheManager.del(userCacheKey(user.getId()));
+        }
     }
 
     public User modify(String id, String password) {

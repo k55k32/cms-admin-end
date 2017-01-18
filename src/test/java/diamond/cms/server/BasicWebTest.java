@@ -25,10 +25,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import diamond.cms.server.core.Result;
 import diamond.cms.server.interceptor.AuthorizationInterceptor;
+import diamond.cms.server.services.UserService;
+import diamond.cms.server.utils.PwdUtils;
 
 public abstract class BasicWebTest extends BasicTestCase{
     @Autowired
     WebApplicationContext webApplicationConnect;
+    @Autowired
+    UserService userService;
     MockMvc mvc;
     String token = "";
     String url;
@@ -45,7 +49,10 @@ public abstract class BasicWebTest extends BasicTestCase{
 
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect).build();
         String login = "/user/token";
-        String resultStr = mvc.perform(post(login).param("username", "123123").param("password", "123123")).andReturn()
+        String username = "test_user" + System.currentTimeMillis();
+        String password = "test_password";
+        userService.register(username, PwdUtils.pwd(password));
+        String resultStr = mvc.perform(post(login).param("username", username).param("password", password)).andReturn()
                 .getResponse().getContentAsString();
         ObjectMapper m = new ObjectMapper();
         Result r = m.readValue(resultStr, Result.class);

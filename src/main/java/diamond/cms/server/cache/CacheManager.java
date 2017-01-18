@@ -1,5 +1,7 @@
 package diamond.cms.server.cache;
 
+import java.util.Optional;
+
 public interface CacheManager {
 
     /**
@@ -19,4 +21,11 @@ public interface CacheManager {
     Object get(String key, long expire);
 
     Object get(String key);
+
+    Optional<Object> getOptional(String key);
+
+    void del(String key);
+
+    <T>Optional<T> getOptional(String key, Class<T> type);
+
 }

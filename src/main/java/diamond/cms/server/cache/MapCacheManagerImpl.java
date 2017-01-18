@@ -3,6 +3,7 @@ package diamond.cms.server.cache;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -100,6 +101,26 @@ public class MapCacheManagerImpl implements CacheManager{
 
     private void setExpiress(String key, long changeExpire) {
         CACHE_EXPIRE.put(key, System.currentTimeMillis() + changeExpire);
+    }
+
+
+    @Override
+    public void del(String key) {
+        CACHE_MAP.remove(key);
+        CACHE_EXPIRE.remove(key);
+    }
+
+
+
+    @Override
+    public Optional<Object> getOptional(String key) {
+        return Optional.ofNullable(this.get(key));
+    }
+
+
+    @Override
+    public <T> Optional<T> getOptional(String key, Class<T> type) {
+        return Optional.ofNullable(this.get(key, type));
     }
 
 }
