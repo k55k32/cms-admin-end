@@ -179,4 +179,14 @@ public class ArticleService extends GenericService<Article>{
         });
     }
 
+    public List<Article> findArticleSite() {
+        CArticle t = C_ARTICLE;
+        return dao.execute(e -> {
+            return e.select(Fields.all(t.ID, t.TITLE, t.UPDATE_TIME))
+            .from(t)
+            .where(t.STATUS.eq(Article.STATUS_PUBLISH))
+            .fetchInto(Article.class);
+        });
+    }
+
 }

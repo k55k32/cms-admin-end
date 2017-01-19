@@ -95,4 +95,10 @@ public class ArticleController {
     public List<Article> idTitle() {
         return articleService.findIdTitle();
     }
+
+    @RequestMapping(value="article-map", method = RequestMethod.GET)
+    @IgnoreToken
+    public List<Article> articleMap(){
+        return articleService.findArticleSite();
+    }
 }
