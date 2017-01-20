@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CPageView extends TableImpl<CPageViewRecord> {
 
-    private static final long serialVersionUID = -967531486;
+    private static final long serialVersionUID = -966138218;
 
     /**
      * The reference instance of <code>cms.c_page_view</code>
@@ -89,6 +89,11 @@ public class CPageView extends TableImpl<CPageViewRecord> {
      * The column <code>cms.c_page_view.ip</code>.
      */
     public final TableField<CPageViewRecord, String> IP = createField("ip", org.jooq.impl.SQLDataType.VARCHAR.length(45), this, "");
+
+    /**
+     * The column <code>cms.c_page_view.user_agent</code>.
+     */
+    public final TableField<CPageViewRecord, String> USER_AGENT = createField("user_agent", org.jooq.impl.SQLDataType.VARCHAR.length(300), this, "");
 
     /**
      * Create a <code>cms.c_page_view</code> table reference

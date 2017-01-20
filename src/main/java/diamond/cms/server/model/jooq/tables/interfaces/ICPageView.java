@@ -113,6 +113,17 @@ public interface ICPageView extends Serializable {
     @Size(max = 45)
     public String getIp();
 
+    /**
+     * Setter for <code>cms.c_page_view.user_agent</code>.
+     */
+    public void setUserAgent(String value);
+
+    /**
+     * Getter for <code>cms.c_page_view.user_agent</code>.
+     */
+    @Size(max = 300)
+    public String getUserAgent();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

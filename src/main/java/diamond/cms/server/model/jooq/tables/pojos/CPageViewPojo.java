@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CPageViewPojo implements ICPageView {
 
-    private static final long serialVersionUID = -149373110;
+    private static final long serialVersionUID = -969836153;
 
     private String    id;
     private String    name;
@@ -36,6 +36,7 @@ public class CPageViewPojo implements ICPageView {
     private String    query;
     private Timestamp createTime;
     private String    ip;
+    private String    userAgent;
 
     public CPageViewPojo() {}
 
@@ -48,6 +49,7 @@ public class CPageViewPojo implements ICPageView {
         this.query = value.query;
         this.createTime = value.createTime;
         this.ip = value.ip;
+        this.userAgent = value.userAgent;
     }
 
     public CPageViewPojo(
@@ -58,7 +60,8 @@ public class CPageViewPojo implements ICPageView {
         String    fullPath,
         String    query,
         Timestamp createTime,
-        String    ip
+        String    ip,
+        String    userAgent
     ) {
         this.id = id;
         this.name = name;
@@ -68,6 +71,7 @@ public class CPageViewPojo implements ICPageView {
         this.query = query;
         this.createTime = createTime;
         this.ip = ip;
+        this.userAgent = userAgent;
     }
 
     @NotNull
@@ -158,6 +162,17 @@ public class CPageViewPojo implements ICPageView {
         this.ip = ip;
     }
 
+    @Size(max = 300)
+    @Override
+    public String getUserAgent() {
+        return this.userAgent;
+    }
+
+    @Override
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CPageViewPojo (");
@@ -170,6 +185,7 @@ public class CPageViewPojo implements ICPageView {
         sb.append(", ").append(query);
         sb.append(", ").append(createTime);
         sb.append(", ").append(ip);
+        sb.append(", ").append(userAgent);
 
         sb.append(")");
         return sb.toString();
@@ -192,6 +208,7 @@ public class CPageViewPojo implements ICPageView {
         setQuery(from.getQuery());
         setCreateTime(from.getCreateTime());
         setIp(from.getIp());
+        setUserAgent(from.getUserAgent());
     }
 
     /**
