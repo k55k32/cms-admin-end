@@ -10,6 +10,7 @@ import diamond.cms.server.model.jooq.tables.CCatalog;
 import diamond.cms.server.model.jooq.tables.CComment;
 import diamond.cms.server.model.jooq.tables.CEmailConfig;
 import diamond.cms.server.model.jooq.tables.CEmailSend;
+import diamond.cms.server.model.jooq.tables.CIpLocation;
 import diamond.cms.server.model.jooq.tables.CKeyword;
 import diamond.cms.server.model.jooq.tables.CPageView;
 import diamond.cms.server.model.jooq.tables.CSetting;
@@ -40,7 +41,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Cms extends SchemaImpl {
 
-    private static final long serialVersionUID = 1044796775;
+    private static final long serialVersionUID = 1500816071;
 
     /**
      * The reference instance of <code>cms</code>
@@ -76,6 +77,11 @@ public class Cms extends SchemaImpl {
      * The table <code>cms.c_email_send</code>.
      */
     public final CEmailSend C_EMAIL_SEND = diamond.cms.server.model.jooq.tables.CEmailSend.C_EMAIL_SEND;
+
+    /**
+     * The table <code>cms.c_ip_location</code>.
+     */
+    public final CIpLocation C_IP_LOCATION = diamond.cms.server.model.jooq.tables.CIpLocation.C_IP_LOCATION;
 
     /**
      * The table <code>cms.c_keyword</code>.
@@ -133,6 +139,7 @@ public class Cms extends SchemaImpl {
             CComment.C_COMMENT,
             CEmailConfig.C_EMAIL_CONFIG,
             CEmailSend.C_EMAIL_SEND,
+            CIpLocation.C_IP_LOCATION,
             CKeyword.C_KEYWORD,
             CPageView.C_PAGE_VIEW,
             CSetting.C_SETTING,

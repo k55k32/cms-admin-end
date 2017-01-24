@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.core.PageResult;
@@ -15,8 +16,12 @@ import diamond.cms.server.model.PageView;
 @Service
 public class PageViewService extends GenericService<PageView>{
 
+    @Autowired
+    IpLocationService ipLocationService;
+
     public PageResult<PageView> page(PageResult<PageView> page, Long start, Long end) {
-        return dao.fetch(page,getCondition(start, end), C_PAGE_VIEW.CREATE_TIME.desc());
+        page = dao.fetch(page,getCondition(start, end), C_PAGE_VIEW.CREATE_TIME.desc());
+        return page;
     }
 
     private Stream<Condition> getCondition(Long start, Long end) {
