@@ -17,6 +17,8 @@ import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.ImmutableList;
+
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Article;
@@ -65,7 +67,9 @@ public class ArticleService extends GenericService<Article>{
             });
             articleTagService.deleteByArticleId(articleId);
             articleTagService.insert(tagList);
-            return tagNames.substring(0, tagNames.length() - 1);
+            if (tagNames.length() > 0) {
+                return tagNames.substring(0, tagNames.length() - 1);
+            }
         }
         return "";
     }
@@ -82,9 +86,12 @@ public class ArticleService extends GenericService<Article>{
         return super.update(entity);
     }
 
-    public PageResult<Article> page(PageResult<Article> page, Optional<Integer> status) {
-        Condition c = status.map(s -> C_ARTICLE.STATUS.eq(s)).orElse(DSL.trueCondition());
-        return searchPageByCondition(page, Stream.of(c));
+    public PageResult<Article> page(PageResult<Article> page, Optional<Integer> status, Optional<String> catalog) {
+        List<Optional<Condition>> conds = ImmutableList.of(
+                status.map(C_ARTICLE.STATUS::eq),
+                catalog.map(C_ARTICLE.CATALOG_ID::eq)
+                );
+        return searchPageByCondition(page, conds.stream().filter(Optional::isPresent).map(Optional::get));
     }
 
     @Override

@@ -86,7 +86,7 @@ public class ArticleServiceTest extends BasicTestCase{
 
     @Test
     public void statusTest() {
-        articleService.page(new PageResult<>(), Optional.of(Article.STATUS_PUBLISH)).getData().forEach(article -> {
+        articleService.page(new PageResult<>(), Optional.of(Article.STATUS_PUBLISH), Optional.empty()).getData().forEach(article -> {
            Assert.assertTrue("article is delete", !article.getStatus().equals(Article.STATUS_DELETE));
         });
     }

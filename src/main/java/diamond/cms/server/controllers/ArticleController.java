@@ -30,8 +30,8 @@ public class ArticleController {
         return articleService.get(id);
     }
     @RequestMapping(method = RequestMethod.GET)
-    public PageResult<Article> list(PageResult<Article> page, Optional<Integer> status) {
-        PageResult<Article> list = articleService.page(page, status);
+    public PageResult<Article> list(PageResult<Article> page, Optional<Integer> status, Optional<String> catalog) {
+        PageResult<Article> list = articleService.page(page, status, catalog);
         return list;
     }
 
