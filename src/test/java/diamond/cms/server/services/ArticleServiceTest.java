@@ -4,6 +4,8 @@ import static diamond.cms.server.model.jooq.Tables.C_ARTICLE;
 import static diamond.cms.server.model.jooq.Tables.C_CATALOG;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 
@@ -24,6 +26,18 @@ public class ArticleServiceTest extends BasicTestCase{
 
     @Resource
     CommonDao<Article> articleDao;
+
+    @Test
+    public void buildTagNames () {
+        articleService.buildTagNames();
+    }
+
+    @Test
+    public void search() {
+        String kw1 = "的";
+        articleService.page(new PageResult<>(), Article.STATUS_PUBLISH, Optional.empty(), kw1);
+    }
+
     @Test
     public void findTest(){
         articleService.page(new PageResult<Article>());
@@ -72,10 +86,40 @@ public class ArticleServiceTest extends BasicTestCase{
 
     @Test
     public void statusTest() {
-        articleService.page(new PageResult<>()).getData().forEach(article -> {
+        articleService.page(new PageResult<>(), Optional.of(Article.STATUS_PUBLISH)).getData().forEach(article -> {
            Assert.assertTrue("article is delete", !article.getStatus().equals(Article.STATUS_DELETE));
         });
     }
+
+    @Test
+    public void saveTest() {
+        Article art = new Article();
+        art.setTitle("test");
+        art.setSummary("");
+        art.setContent("test1");
+        String [] tagIds = new String [10];
+        for(int i = 0; i < tagIds.length; i ++){
+            tagIds[i] = "testtag" + i;
+        }
+        art.setTagIds(tagIds);
+        art = articleService.save(art);
+        String tagNames = tagsToNames(tagIds);
+        log.info(art.getTagNames());
+        log.info(tagNames);
+        Assert.assertEquals("save tagNames must build: " + tagNames, art.getTagNames().length(), tagNames.length());
+        tagIds = Arrays.copyOf(tagIds, 4);
+        art.setTagIds(tagIds);
+        art = articleService.update(art);
+        tagNames = tagsToNames(tagIds);
+        log.info(art.getTagNames());
+        log.info(tagNames);
+        Assert.assertEquals("update tagNames must build: " + tagNames, art.getTagNames().length(), tagNames.length());
+    }
+
+    private String tagsToNames(String[] tagIds) {
+        return String.join(",", tagIds);
+    }
+
 
     @Test
     public void getDetail() {

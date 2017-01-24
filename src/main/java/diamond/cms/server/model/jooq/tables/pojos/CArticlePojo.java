@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CArticlePojo implements ICArticle {
 
-    private static final long serialVersionUID = -694466121;
+    private static final long serialVersionUID = 1448540362;
 
     private String    id;
     private String    title;
@@ -37,6 +37,7 @@ public class CArticlePojo implements ICArticle {
     private Timestamp updateTime;
     private String    catalogId;
     private String    banner;
+    private String    tagNames;
 
     public CArticlePojo() {}
 
@@ -50,6 +51,7 @@ public class CArticlePojo implements ICArticle {
         this.updateTime = value.updateTime;
         this.catalogId = value.catalogId;
         this.banner = value.banner;
+        this.tagNames = value.tagNames;
     }
 
     public CArticlePojo(
@@ -61,7 +63,8 @@ public class CArticlePojo implements ICArticle {
         Timestamp createTime,
         Timestamp updateTime,
         String    catalogId,
-        String    banner
+        String    banner,
+        String    tagNames
     ) {
         this.id = id;
         this.title = title;
@@ -72,6 +75,7 @@ public class CArticlePojo implements ICArticle {
         this.updateTime = updateTime;
         this.catalogId = catalogId;
         this.banner = banner;
+        this.tagNames = tagNames;
     }
 
     @NotNull
@@ -172,6 +176,17 @@ public class CArticlePojo implements ICArticle {
         this.banner = banner;
     }
 
+    @Size(max = 300)
+    @Override
+    public String getTagNames() {
+        return this.tagNames;
+    }
+
+    @Override
+    public void setTagNames(String tagNames) {
+        this.tagNames = tagNames;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CArticlePojo (");
@@ -185,6 +200,7 @@ public class CArticlePojo implements ICArticle {
         sb.append(", ").append(updateTime);
         sb.append(", ").append(catalogId);
         sb.append(", ").append(banner);
+        sb.append(", ").append(tagNames);
 
         sb.append(")");
         return sb.toString();
@@ -208,6 +224,7 @@ public class CArticlePojo implements ICArticle {
         setUpdateTime(from.getUpdateTime());
         setCatalogId(from.getCatalogId());
         setBanner(from.getBanner());
+        setTagNames(from.getTagNames());
     }
 
     /**

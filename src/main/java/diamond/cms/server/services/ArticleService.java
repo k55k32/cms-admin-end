@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,30 +44,36 @@ public class ArticleService extends GenericService<Article>{
 
     @Override
     public Article save(Article article) {
-        String [] tagIds = article.getTagIds();
+//        String [] tagIds = article.getTagIds();
         article = super.save(article);
-        saveArticleTags(article.getId(), tagIds);
+        this.update(article);
+//        String tagNames = saveArticleTags(article.getId(), tagIds);
         return article;
     }
 
-    private void saveArticleTags(String articleId, String[] tagIds) {
+    private String saveArticleTags(String articleId, String[] tagIds) {
+        StringBuffer tagNames = new StringBuffer();
         if (tagIds != null) {
             List<Tag> tags = tagService.saveTagIfNotExists(tagIds);
             List<ArticleTag> tagList = new ArrayList<>();
-            tags.stream().map(Tag::getId).forEach(tagid -> {
+            tags.forEach(tag -> {
                 ArticleTag artTag = new ArticleTag();
                 artTag.setArticleId(articleId);
-                artTag.setTagId(tagid);
+                artTag.setTagId(tag.getId());
                 tagList.add(artTag);
+                tagNames.append(tag.getName() + ",");
             });
             articleTagService.deleteByArticleId(articleId);
             articleTagService.insert(tagList);
+            return tagNames.substring(0, tagNames.length() - 1);
         }
+        return "";
     }
 
     @Override
     public Article update(Article entity) {
-        saveArticleTags(entity.getId(), entity.getTagIds());
+        String tagNames = saveArticleTags(entity.getId(), entity.getTagIds());
+        entity.setTagNames(tagNames);
         entity.setUpdateTime(currentTime());
         entity.setCreateTime(null);
         if (entity.getBanner() == null) {
@@ -75,9 +82,9 @@ public class ArticleService extends GenericService<Article>{
         return super.update(entity);
     }
 
-    @Override
-    public PageResult<Article> page(PageResult<Article> page) {
-        return searchPageByCondition(page, Stream.of(C_ARTICLE.STATUS.in(Arrays.asList(new Integer[]{Article.STATUS_PUBLISH, Article.STATUS_UNPUBLISH}))));
+    public PageResult<Article> page(PageResult<Article> page, Optional<Integer> status) {
+        Condition c = status.map(s -> C_ARTICLE.STATUS.eq(s)).orElse(DSL.trueCondition());
+        return searchPageByCondition(page, Stream.of(c));
     }
 
     @Override
@@ -94,17 +101,28 @@ public class ArticleService extends GenericService<Article>{
     }
 
 
-    public PageResult<Article> page(PageResult<Article> page, Integer status, Optional<String> catalogId) {
-        Condition cond = C_ARTICLE.STATUS.eq(status);
-        if (catalogId.isPresent()) {
-            String cid = catalogId.get();
+    public PageResult<Article> page(PageResult<Article> page, Integer status, Optional<String> catalogId, String ...keywords) {
+        CArticle table = C_ARTICLE;
+        List<Condition> cons = new ArrayList<>();
+        cons.add(table.STATUS.eq(Article.STATUS_PUBLISH));
+        catalogId.ifPresent(cid -> {
             if ("-1".equals(cid)) {
-                cond = cond.and(C_ARTICLE.CATALOG_ID.isNull().or(C_ARTICLE.CATALOG_ID.eq("")));
+                cons.add(table.CATALOG_ID.isNull().or(table.CATALOG_ID.eq("")));
             } else if (!"0".equals(cid)) {
-                cond = cond.and(C_ARTICLE.CATALOG_ID.eq(cid));
+                cons.add(table.CATALOG_ID.eq(cid));
             }
-        }
-        return searchPageByCondition(page, Stream.of(cond));
+        });
+        List<Condition> kwCons = new ArrayList<>();
+        Arrays.asList(keywords).forEach(k -> {
+            if (k.trim().length() > 0) {
+                String kwLike = "%" + k + "%";
+                kwCons.add(table.TITLE.like(kwLike));
+                kwCons.add(table.CONTENT.like(kwLike));
+                kwCons.add(table.TAG_NAMES.like(kwLike));
+            }
+        });
+        cons.add(kwCons.stream().reduce((a, b) -> a.or(b)).orElse(DSL.trueCondition()));
+        return searchPageByCondition(page, cons.stream());
     }
 
     private PageResult<Article> searchPageByCondition(PageResult<Article> page, Stream<Condition> cond) {
@@ -187,6 +205,30 @@ public class ArticleService extends GenericService<Article>{
             .where(t.STATUS.eq(Article.STATUS_PUBLISH))
             .fetchInto(Article.class);
         });
+    }
+
+    public void recovery(String id) {
+        updateStatus(id, Article.STATUS_UNPUBLISH);
+    }
+
+    public void buildTagNames() {
+        List<Article> articles = findAll();
+        List<ArticleTag> tags = articleTagService.findTags(articles.stream().map(Article::getId).collect(Collectors.toList()));
+        Map<String,Article> articleMap = articles.stream().collect(Collectors.toMap(Article::getId, a -> {
+            a.setTags(new ArrayList<>());
+            return a;
+        }));
+        tags.forEach(t -> {
+            Article art = articleMap.get(t.getArticleId());
+            if (art != null) {
+                art.getTags().add(t.getTag());
+            }
+        });
+        articles.forEach(a -> {
+            List<String> tagNames = a.getTags().stream().map(Tag::getName).collect(Collectors.toList());
+            a.setTagNames(String.join(",", tagNames));
+        });
+        dao.update(articles);
     }
 
 }

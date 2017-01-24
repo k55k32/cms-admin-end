@@ -30,8 +30,8 @@ public class ArticleController {
         return articleService.get(id);
     }
     @RequestMapping(method = RequestMethod.GET)
-    public PageResult<Article> list(PageResult<Article> page) {
-        PageResult<Article> list = articleService.page(page);
+    public PageResult<Article> list(PageResult<Article> page, Optional<Integer> status) {
+        PageResult<Article> list = articleService.page(page, status);
         return list;
     }
 
@@ -40,6 +40,11 @@ public class ArticleController {
     public Article saveDraft(@RequestBody Article article) {
         article = articleService.saveDraft(article);
         return article;
+    }
+
+    @RequestMapping(value = "build/tag-names", method = RequestMethod.POST)
+    public void buildTagNames(){
+        articleService.buildTagNames();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -74,8 +79,8 @@ public class ArticleController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @IgnoreToken
     @JSON(type=Article.class, filter="status,content")
-    public PageResult<Article> listPage(PageResult<Article> page, String catalogId) {
-        PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH, Optional.ofNullable(catalogId));
+    public PageResult<Article> listPage(PageResult<Article > page, Optional<String> catalogId, Optional<String> keyword) {
+        PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH, catalogId, keyword.orElse("").split(" "));
         return articles;
     }
 
@@ -84,6 +89,10 @@ public class ArticleController {
         articleService.updateCreateTime(id, time);
     }
 
+    @RequestMapping(value = "recovery/{id}", method = RequestMethod.POST)
+    public void recovery(@PathVariable String id) {
+        articleService.recovery(id);
+    }
     @RequestMapping(value="detail/{id}", method = RequestMethod.GET)
     @IgnoreToken
     public ArticleDetail detail(@PathVariable String id) {

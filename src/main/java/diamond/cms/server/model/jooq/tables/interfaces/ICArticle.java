@@ -127,6 +127,17 @@ public interface ICArticle extends Serializable {
     @Size(max = 150)
     public String getBanner();
 
+    /**
+     * Setter for <code>cms.c_article.tag_names</code>.
+     */
+    public void setTagNames(String value);
+
+    /**
+     * Getter for <code>cms.c_article.tag_names</code>.
+     */
+    @Size(max = 300)
+    public String getTagNames();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

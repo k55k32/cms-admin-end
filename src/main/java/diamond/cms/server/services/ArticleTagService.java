@@ -6,19 +6,15 @@ import static diamond.cms.server.model.jooq.Tables.C_TAG;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import diamond.cms.server.dao.CommonDao;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.ArticleTag;
 import diamond.cms.server.model.Tag;
 import diamond.cms.server.model.jooq.Tables;
 @Service
-public class ArticleTagService {
+public class ArticleTagService extends GenericService<ArticleTag>{
 
-    @Autowired
-    CommonDao<ArticleTag> dao;
 
     public List<ArticleTag> findTagIds(String articleId) {
         return dao.fetch(Tables.C_ARTICLE_TAG.ARTICLE_ID.eq(articleId));
@@ -55,5 +51,4 @@ public class ArticleTagService {
             .fetchInto(Tag.class);
         });
     }
-
 }
