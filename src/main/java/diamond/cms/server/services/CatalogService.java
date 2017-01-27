@@ -12,6 +12,7 @@ import diamond.cms.server.core.PageResult;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Article;
 import diamond.cms.server.model.Catalog;
+import diamond.cms.server.model.jooq.Tables;
 
 
 @Service
@@ -19,7 +20,7 @@ public class CatalogService extends GenericService<Catalog>{
 
     @Override
     public PageResult<Catalog> page(PageResult<Catalog> page) {
-        dao.fetch(page);
+        dao.fetch(page, Tables.C_CATALOG.SORT.asc());
         return page;
     }
 

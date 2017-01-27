@@ -66,4 +66,12 @@ public class CommentService extends GenericService<Comment>{
     public Integer recovery(String id) {
         return updateState(id, Const.STATE_NORMAL);
     }
+
+    public Comment saveNewComment(Comment comment) {
+        comment.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        comment.setState(Const.STATE_NORMAL);
+        super.save(comment);
+        return comment;
+    }
 }

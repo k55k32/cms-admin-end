@@ -1,6 +1,5 @@
 package diamond.cms.server.controllers;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +32,8 @@ public class CommentController {
     @IgnoreToken
     @JSON(type = Comment.class, filter = "ip,state,updateTime")
     public Comment saveComment(@RequestBody Comment comment, HttpServletRequest request){
-        comment.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-        comment.setCreateTime(new Timestamp(System.currentTimeMillis()));
         comment.setIp(ControllerUtils.getIpAddr(request));
-        comment.setState(Const.STATE_NORMAL);
-        return commentService.save(comment);
+        return commentService.saveNewComment(comment);
     }
 
 
