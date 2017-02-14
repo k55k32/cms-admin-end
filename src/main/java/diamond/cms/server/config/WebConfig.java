@@ -40,9 +40,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
-        returnValueHandlers.add(0, JsonReturnHandler());
-        super.addReturnValueHandlers(returnValueHandlers);
+        returnValueHandlers.add(JsonReturnHandler());
     }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(crosInterceptor);

@@ -110,4 +110,12 @@ public class ArticleController {
     public List<Article> articleMap(){
         return articleService.findArticleSite();
     }
+
+    @RequestMapping(value = "list-all", method = RequestMethod.GET)
+    @IgnoreToken
+    @JSON(type = Article.class, include = "id,title,summary,createTime,updateTime,catalogName,banner")
+    public List<Article> articleListAll(){
+        return articleService.findAll(Article.STATUS_PUBLISH);
+    }
+
 }

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
+import org.jooq.Field;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -236,6 +237,22 @@ public class ArticleService extends GenericService<Article>{
             a.setTagNames(String.join(",", tagNames));
         });
         dao.update(articles);
+    }
+
+    public List<Article> findAll(int status) {
+        final Field<?> catalogName = C_CATALOG.NAME.as("catalogName");
+        List<Article> list = dao.execute(e -> {
+            return e.select(Fields.all(C_ARTICLE.fields(),catalogName))
+            .from(C_ARTICLE)
+            .leftJoin(C_CATALOG).on(C_ARTICLE.CATALOG_ID.eq(C_CATALOG.ID))
+            .where(C_ARTICLE.STATUS.eq(status))
+            .orderBy(C_ARTICLE.CREATE_TIME.desc());
+        }).fetch(r -> {
+            Article art = r.into(Article.class);
+            art.setCatalogName(r.get(catalogName, String.class));
+            return art;
+        });
+        return list;
     }
 
 }
