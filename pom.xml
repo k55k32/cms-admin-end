@@ -86,11 +86,6 @@
 		  <artifactId>http-request</artifactId>
 		  <version>6.0</version>
 		</dependency>
-		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>fastjson</artifactId>
-		    <version>1.2.24</version>
-		</dependency>
 	</dependencies>
 
 	<build>
