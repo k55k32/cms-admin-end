@@ -2,6 +2,8 @@ package diamond.cms.server.json;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import diamond.cms.server.model.Article;
+import diamond.cms.server.model.Tag;
 
 public class CustomerJsonSerializerTest {
 
@@ -26,6 +29,16 @@ public class CustomerJsonSerializerTest {
         article.setCreateTime(new Timestamp(System.currentTimeMillis()));
         article.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         article.setCatalogName("hello");
+        List<Tag> tags = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Tag t = new Tag();
+            t.setId("ID-" + i);
+            t.setName("NAME-" + i);
+            t.setArticleCount(i);
+            tags.add(t);
+        }
+        article.setTags(tags);
+
     }
 
     @Test
@@ -47,6 +60,15 @@ public class CustomerJsonSerializerTest {
         Assert.assertFalse("filter id failed", hasField(str, "id"));
         Assert.assertFalse("filter title failed", hasField(str, "title"));
         Assert.assertTrue(hasField(str, "catalogId"));
+    }
+
+    @Test
+    public void jsonsFilter() throws JsonProcessingException {
+        String filter = "id,title";
+        CustomerJsonSerializer ser = new CustomerJsonSerializer();
+        ser.filter(Article.class, null, filter);
+        ser.filter(Tag.class, "id", null);
+        System.out.println(ser.toJson(article));
     }
 
     private boolean hasField(String str, String string) throws JsonProcessingException, IOException {

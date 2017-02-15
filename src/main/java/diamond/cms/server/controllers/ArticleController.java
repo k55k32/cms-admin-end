@@ -15,6 +15,7 @@ import diamond.cms.server.core.PageResult;
 import diamond.cms.server.json.JSON;
 import diamond.cms.server.model.Article;
 import diamond.cms.server.model.ArticleDetail;
+import diamond.cms.server.model.Tag;
 import diamond.cms.server.services.ArticleService;
 
 @RestController
@@ -78,7 +79,8 @@ public class ArticleController {
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     @IgnoreToken
-    @JSON(type=Article.class, filter="status,content")
+    @JSON(type = Article.class, filter="status,content")
+    @JSON(type = Tag.class, filter = "id")
     public PageResult<Article> listPage(PageResult<Article > page, Optional<String> catalogId, Optional<String> keyword) {
         PageResult<Article> articles = articleService.page(page, Article.STATUS_PUBLISH, catalogId, keyword.orElse("").split(" "));
         return articles;
