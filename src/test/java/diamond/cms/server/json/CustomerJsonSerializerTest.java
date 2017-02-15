@@ -50,6 +50,7 @@ public class CustomerJsonSerializerTest {
         String str = ser.toJson(article);
         Assert.assertTrue("include id failed", hasField(str, "id"));
         Assert.assertFalse("should not include catalogId", hasField(str, "catalogId"));
+        Assert.assertNull(om.readValue(str, Article.class).getTags());
     }
 
     @Test
@@ -61,6 +62,7 @@ public class CustomerJsonSerializerTest {
         Assert.assertFalse("filter id failed", hasField(str, "id"));
         Assert.assertFalse("filter title failed", hasField(str, "title"));
         Assert.assertTrue(hasField(str, "catalogId"));
+        Assert.assertNotNull(om.readValue(str, Article.class).getTags());
     }
 
     @Test
