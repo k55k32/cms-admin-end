@@ -19,6 +19,7 @@ import diamond.cms.server.model.Tag;
 public class CustomerJsonSerializerTest {
 
     Article article;
+    ObjectMapper om = new ObjectMapper();
 
     @Before
     public void setArticle(){
@@ -63,16 +64,21 @@ public class CustomerJsonSerializerTest {
     }
 
     @Test
-    public void jsonsFilter() throws JsonProcessingException {
-        String filter = "id,title";
+    public void jsonsFilter() throws IOException {
+        String filter = "id,title,tags";
         CustomerJsonSerializer ser = new CustomerJsonSerializer();
-        ser.filter(Article.class, null, filter);
+        ser.filter(Article.class, filter, null);
         ser.filter(Tag.class, "id", null);
-        System.out.println(ser.toJson(article));
+        String str = ser.toJson(article);
+        Assert.assertTrue(hasField(str, "id"));
+        Article a = om.readValue(str, Article.class);
+        a.getTags().forEach(t -> {
+            Assert.assertNotNull(t.getId());
+            Assert.assertNull(t.getName());
+        });
     }
 
     private boolean hasField(String str, String string) throws JsonProcessingException, IOException {
-        ObjectMapper om = new ObjectMapper();
         JsonNode node = om.readTree(str);
         return node.has(string);
     }
