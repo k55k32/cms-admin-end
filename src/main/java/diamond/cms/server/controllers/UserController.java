@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +45,7 @@ public class UserController {
 
     @RequestMapping(value = "token", method = RequestMethod.POST)
     @IgnoreToken
-    public Result token(String username, String password) throws IOException {
+    public Result token(@Valid @NotNull String username, String password) throws IOException {
         String token = userService.login(username, PwdUtils.pwd(password));
         Result result = new Result(token);
         return result;

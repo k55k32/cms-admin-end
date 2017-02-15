@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import diamond.cms.server.json.CustomerJsonSerializer;
 import diamond.cms.server.json.JSON;
+import diamond.cms.server.json.JSONS;
 
 public class JsonReturnHandler implements HandlerMethodReturnValueHandler, BeanPostProcessor {
 
@@ -29,8 +30,8 @@ public class JsonReturnHandler implements HandlerMethodReturnValueHandler, BeanP
 
     @Override
     public boolean supportsReturnType(MethodParameter returnType) {
-        boolean flag = returnType.getMethodAnnotation(JSON.class) != null;
-        return flag;
+        boolean hasJSONAnno = returnType.getMethodAnnotation(JSON.class) != null || returnType.getMethodAnnotation(JSONS.class) != null;
+        return hasJSONAnno;
     }
 
     @Override
@@ -52,7 +53,12 @@ public class JsonReturnHandler implements HandlerMethodReturnValueHandler, BeanP
         Arrays.asList(annos).forEach(a -> {
             if (a instanceof JSON) {
                 JSON json = (JSON) a;
-                jsonSerializer.filter(json.type(), json.include(), json.filter());
+                jsonSerializer.filter(json);
+            } else if (a instanceof JSONS) {
+                JSONS jsons = (JSONS) a;
+                Arrays.asList(jsons.value()).forEach(json -> {
+                    jsonSerializer.filter(json);
+                });
             }
         });
 
