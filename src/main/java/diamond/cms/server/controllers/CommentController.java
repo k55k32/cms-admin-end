@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.Const;
@@ -28,7 +27,6 @@ public class CommentController {
     CommentService commentService;
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     @IgnoreToken
     @JSON(type = Comment.class, filter = "ip,state,updateTime")
     public Comment saveComment(@RequestBody Comment comment, HttpServletRequest request){

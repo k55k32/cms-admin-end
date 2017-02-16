@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import diamond.cms.server.aspect.RequestParamValidAspect;
 import diamond.cms.server.interceptor.AuthorizationInterceptor;
 import diamond.cms.server.interceptor.CORSInterceptor;
 import diamond.cms.server.json.spring.JsonReturnHandler;
@@ -25,6 +26,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Resource
     CORSInterceptor crosInterceptor;
+
+    @Resource
+    RequestParamValidAspect requestParamValidAspect;
 
     @Bean
     public JsonReturnHandler JsonReturnHandler(){
@@ -47,6 +51,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(crosInterceptor);
         registry.addInterceptor(authorizationInterceptor);
+        registry.addInterceptor(requestParamValidAspect);
     }
 
 }

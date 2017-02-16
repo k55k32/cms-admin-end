@@ -22,17 +22,14 @@ public class CustomerResponseBodyAdvice implements ResponseBodyAdvice<Object>{
 	@Override
 	public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
 	    Type type = returnType.getGenericParameterType();
-		boolean flag = type.equals(Result.class) || type.equals(String.class);
-		return !flag;
+		boolean noAware = Result.class.equals(type) || String.class.equals(type);
+		return !noAware;
 	}
 
 	@Override
 	public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
 			Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 			ServerHttpResponse response) {
-	    if (body instanceof Result || body instanceof String) { // 不处理Result 和 String
-	        return body;
-	    }
 		Result result = new Result();
 		result.setSuccess(true);
 		result.setData(body);

@@ -2,6 +2,7 @@ package diamond.cms.server.controllers;
 
 import java.util.Optional;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,17 +50,17 @@ public class EmailConfigController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public void delete(String id) {
+    public void delete(@NotBlank String id) {
         emailConfigService.delete(id);
     }
 
     @RequestMapping(value="change-enable", method = RequestMethod.POST)
-    public void enable(String id, Boolean enable){
+    public void enable(@NotBlank String id, @NotBlank Boolean enable){
         emailConfigService.changeEnable(id, enable);
     }
 
     @RequestMapping(value="send", method = RequestMethod.POST)
-    public void send(String toEmail, String title, String content, Optional<String> configId) {
+    public void send(@NotBlank String toEmail, String title, String content, Optional<String> configId) {
         emailSendService.sendEmail(toEmail, title, content, configId, "send-test");
     }
 

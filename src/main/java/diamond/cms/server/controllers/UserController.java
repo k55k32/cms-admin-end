@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +46,7 @@ public class UserController {
 
     @RequestMapping(value = "token", method = RequestMethod.POST)
     @IgnoreToken
-    public Result token(@Valid @NotNull String username, String password) throws IOException {
+    public Result token(@NotBlank String username, @NotBlank String password) throws IOException {
         String token = userService.login(username, PwdUtils.pwd(password));
         Result result = new Result(token);
         return result;
@@ -67,7 +68,7 @@ public class UserController {
     }
 
     @RequestMapping(value="modify", method = RequestMethod.POST)
-    public User modify(String password, HttpServletRequest request){
+    public User modify(@NotNull String password, HttpServletRequest request){
         return userService.modify(ControllerUtils.currentUser().getId(), PwdUtils.pwd(password));
     }
 
@@ -88,7 +89,7 @@ public class UserController {
 
     @RequestMapping(value="init-step-email-config", method = RequestMethod.POST)
     @IgnoreToken
-    public EmailConfig step1(EmailConfig emailConfig){
+    public EmailConfig step1(@Valid EmailConfig emailConfig){
         userService.checkoutInit();
 
         emailConfig.setEnable(true);
@@ -100,7 +101,7 @@ public class UserController {
 
     @RequestMapping(value="init-send-email", method = RequestMethod.POST)
     @IgnoreToken
-    public void initEmail(String email){
+    public void initEmail(@NotBlank String email){
         userService.checkoutInit();
         String key = UUID.randomUUID().toString();
         cacheManager.set(email + key, key, 1000 * 60 * 60 * 2);
@@ -109,7 +110,7 @@ public class UserController {
 
     @RequestMapping(value="init-register", method = RequestMethod.POST)
     @IgnoreToken
-    public void register (String username, String password, String code) {
+    public void register (@NotBlank String username, @NotBlank String password, @NotBlank String code) {
         userService.checkoutInit();
         if (cacheManager.get(username + code) == null) {
             throw new AppException(Error.INVALID_EMAIL_CODE);

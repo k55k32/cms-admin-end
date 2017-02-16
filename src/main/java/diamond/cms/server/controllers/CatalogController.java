@@ -3,6 +3,7 @@ package diamond.cms.server.controllers;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class CatalogController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public void delete(String id) {
+    public void delete(@NotBlank String id) {
         catalogService.delete(id);
     }
 

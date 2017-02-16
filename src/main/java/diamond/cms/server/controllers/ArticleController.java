@@ -3,6 +3,9 @@ package diamond.cms.server.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -72,7 +75,7 @@ public class ArticleController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public boolean delete(String id) {
+    public boolean delete(@NotBlank String id) {
         articleService.delete(id);
         return true;
     }
@@ -87,7 +90,7 @@ public class ArticleController {
     }
 
     @RequestMapping(value = "createtime/{id}", method = RequestMethod.POST)
-    public void changeCreateTime(@PathVariable String id, Long time) {
+    public void changeCreateTime(@PathVariable String id, @NotNull Long time) {
         articleService.updateCreateTime(id, time);
     }
 
