@@ -8,13 +8,13 @@ import java.util.Optional;
 import org.jooq.Condition;
 import org.springframework.stereotype.Service;
 
-import diamond.cms.server.Const;
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.dao.Fields;
 import diamond.cms.server.model.Comment;
 import diamond.cms.server.model.jooq.Tables;
 import diamond.cms.server.model.jooq.tables.CArticle;
 import diamond.cms.server.model.jooq.tables.CComment;
+import diamond.cms.server.mvc.Const;
 
 @Service
 public class CommentService extends GenericService<Comment>{

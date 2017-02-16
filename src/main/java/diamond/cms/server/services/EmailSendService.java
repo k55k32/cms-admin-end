@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import diamond.cms.server.core.PageResult;
-import diamond.cms.server.exceptions.AppException;
-import diamond.cms.server.exceptions.Error;
+import diamond.cms.server.core.exceptions.AppException;
+import diamond.cms.server.core.exceptions.Error;
 import diamond.cms.server.model.EmailConfig;
 import diamond.cms.server.model.EmailSend;
 import diamond.cms.server.model.jooq.Tables;

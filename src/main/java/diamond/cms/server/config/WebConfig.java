@@ -12,10 +12,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import diamond.cms.server.aspect.RequestParamValidAspect;
-import diamond.cms.server.interceptor.AuthorizationInterceptor;
-import diamond.cms.server.interceptor.CORSInterceptor;
-import diamond.cms.server.json.spring.JsonReturnHandler;
+import diamond.cms.server.mvc.interceptor.AuthorizationInterceptor;
+import diamond.cms.server.mvc.interceptor.CORSInterceptor;
+import diamond.cms.server.mvc.json.spring.JsonReturnHandler;
+import diamond.cms.server.mvc.valid.aspect.RequestParamValidAspect;
 
 @Configuration
 @EnableWebMvc

@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import diamond.cms.server.Const;
 import diamond.cms.server.model.EmailConfig;
 import diamond.cms.server.model.jooq.Tables;
 import diamond.cms.server.model.jooq.tables.CEmailConfig;
+import diamond.cms.server.mvc.Const;
 
 @Service
 public class EmailConfigService extends GenericService<EmailConfig>{

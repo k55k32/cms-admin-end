@@ -7,11 +7,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import diamond.cms.server.Const;
-import diamond.cms.server.cache.CacheManager;
-import diamond.cms.server.exceptions.AppException;
-import diamond.cms.server.exceptions.Error;
+import diamond.cms.server.core.cache.CacheManager;
+import diamond.cms.server.core.exceptions.AppException;
+import diamond.cms.server.core.exceptions.Error;
 import diamond.cms.server.model.User;
+import diamond.cms.server.mvc.Const;
 
 @Service
 public class UserService extends GenericService<User>{
@@ -32,7 +32,7 @@ public class UserService extends GenericService<User>{
     public String login(String username,String password) {
         User user = dao
                 .fetchOne(C_USER.USERNAME.eq(username).and(C_USER.PASSWORD.eq(password)))
-                .orElseThrow(() -> new AppException(diamond.cms.server.exceptions.Error.USERNAME_OR_PASSWORD_ERROR));
+                .orElseThrow(() -> new AppException(diamond.cms.server.core.exceptions.Error.USERNAME_OR_PASSWORD_ERROR));
         user.setLastLoginTime(currentTime());
         this.update(user);
         return generateToken(user);
