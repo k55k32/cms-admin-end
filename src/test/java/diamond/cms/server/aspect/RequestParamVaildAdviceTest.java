@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.junit.Assert;
 import org.junit.Test;
+
+import diamond.cms.server.mvc.valid.aspect.RequestParamValidAspect;
 public class RequestParamVaildAdviceTest {
 
     @Test

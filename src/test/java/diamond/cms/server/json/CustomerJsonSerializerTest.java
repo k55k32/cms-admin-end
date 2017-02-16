@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import diamond.cms.server.model.Article;
 import diamond.cms.server.model.Tag;
+import diamond.cms.server.mvc.json.CustomerJsonSerializer;
 
 public class CustomerJsonSerializerTest {
 

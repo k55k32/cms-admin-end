@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import diamond.cms.server.core.Result;
-import diamond.cms.server.interceptor.AuthorizationInterceptor;
+import diamond.cms.server.mvc.interceptor.AuthorizationInterceptor;
 import diamond.cms.server.services.UserService;
 import diamond.cms.server.utils.PwdUtils;
 

@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import diamond.cms.server.BasicTestCase;
+import diamond.cms.server.core.cache.CacheManager;
 
 public class CacheManagerTest extends BasicTestCase{
 
