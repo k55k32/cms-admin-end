@@ -26,7 +26,11 @@ public interface GenericDao<T, ID extends Serializable> {
 
     T update(T entity);
 
+    T update(T entiry, boolean ignoreNull);
+
     void update(Collection<T> entities);
+
+    void update(Collection<T> entities, boolean ignoreNull);
 
     int deleteById(ID id);
 

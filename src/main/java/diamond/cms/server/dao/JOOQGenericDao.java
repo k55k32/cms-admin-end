@@ -64,7 +64,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
             return;
         }
 
-        List<UpdatableRecord<?>> rs = records(entities, false);
+        List<UpdatableRecord<?>> rs = records(entities, false, true);
 
         if (rs.size() > 1) {
             getDSLContext().batchInsert(rs).execute();
@@ -86,7 +86,7 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
             return;
         }
 
-        List<UpdatableRecord<?>> rs = records(entities, false);
+        List<UpdatableRecord<?>> rs = records(entities, true, true);
 
         if (rs.size() > 1) {
             getDSLContext().batchUpdate(rs).execute();
@@ -243,9 +243,9 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
         return (Field<ID>) fs[0];
     }
 
-    private List<UpdatableRecord<?>> records(Collection<T> objects, boolean forUpdate) {
+    private List<UpdatableRecord<?>> records(Collection<T> objects, boolean forUpdate, boolean ignoreNull) {
         DSLContext context = getDSLContext();
-        return objects.stream().map(obj -> record(obj, forUpdate, context)).collect(Collectors.toList());
+        return objects.stream().map(obj -> record(obj, forUpdate, context, ignoreNull)).collect(Collectors.toList());
     }
 
     private UpdatableRecord<?> record(T object, boolean forUpdate, DSLContext context) {
@@ -346,6 +346,28 @@ public class JOOQGenericDao<T, ID extends Serializable> implements GenericDao<T,
 
     private String toCamelCase(String name) {
         return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
+    @Override
+    public T update(T entiry, boolean ignoreNull) {
+        record(entiry, true, getDSLContext(),ignoreNull).update();
+        return entiry;
+    }
+
+    @Override
+    public void update(Collection<T> entities, boolean ignoreNull) {
+        if (entities.isEmpty()) {
+            return;
+        }
+
+        List<UpdatableRecord<?>> rs = records(entities, true, ignoreNull);
+
+        if (rs.size() > 1) {
+            getDSLContext().batchUpdate(rs).execute();
+            return;
+        }
+
+        rs.get(0).update();
     }
 
 }
