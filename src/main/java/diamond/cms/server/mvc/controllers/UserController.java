@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,7 +67,7 @@ public class UserController {
     }
 
     @RequestMapping(value="modify", method = RequestMethod.POST)
-    public User modify(@NotNull String password, HttpServletRequest request){
+    public User modify(@NotBlank String password, HttpServletRequest request){
         return userService.modify(ControllerUtils.currentUser().getId(), PwdUtils.pwd(password));
     }
 
