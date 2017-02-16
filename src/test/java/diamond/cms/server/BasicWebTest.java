@@ -36,6 +36,7 @@ public abstract class BasicWebTest extends BasicTestCase{
     MockMvc mvc;
     String token = "";
     String url;
+    protected final ObjectMapper objectMapper = new ObjectMapper();
 
     protected abstract String getUrl();
 
@@ -54,8 +55,7 @@ public abstract class BasicWebTest extends BasicTestCase{
         userService.register(username, PwdUtils.pwd(password));
         String resultStr = mvc.perform(post(login).param("username", username).param("password", password)).andReturn()
                 .getResponse().getContentAsString();
-        ObjectMapper m = new ObjectMapper();
-        Result r = m.readValue(resultStr, Result.class);
+        Result r = objectMapper.readValue(resultStr, Result.class);
         token = (String) r.getData();
         log.info("init token:" + token);
     }
@@ -83,13 +83,16 @@ public abstract class BasicWebTest extends BasicTestCase{
                 .andReturn().getResponse();
     }
 
+    public Result getResult(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, UnsupportedEncodingException, IOException {
+        return objectMapper.readValue(response.getContentAsString(), Result.class);
+    }
+
     public Result asserts(MockHttpServletResponse response) throws JsonParseException, JsonMappingException, IOException {
         String result = response.getContentAsString();
         log.info("result: " + result);
         Assert.assertTrue(response.getStatus() == 200);
         Assert.assertTrue(result.length() > 0);
-        ObjectMapper m = new ObjectMapper();
-        Result r = m.readValue(result, Result.class);
+        Result r = getResult(response);
         Assert.assertTrue("result is not success", r.isSuccess());
         return r;
     }
@@ -102,8 +105,11 @@ public abstract class BasicWebTest extends BasicTestCase{
     }
 
     public boolean hasField(String str, String string) throws JsonProcessingException, IOException {
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readTree(str);
+        JsonNode node = objectMapper.readTree(str);
         return node.has(string) || node.get("data").has(string);
+    }
+
+    public JsonNode getJsonNode(MockHttpServletResponse response) throws JsonProcessingException, UnsupportedEncodingException, IOException {
+        return objectMapper.readTree(response.getContentAsString());
     }
 }

@@ -1,4 +1,4 @@
-package diamond.cms.server.controllers;
+package diamond.cms.server.mvc.controllers;
 
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;

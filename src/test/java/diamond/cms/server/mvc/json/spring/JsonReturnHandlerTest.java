@@ -1,4 +1,4 @@
-package diamond.cms.server.json.spring;
+package diamond.cms.server.mvc.json.spring;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;

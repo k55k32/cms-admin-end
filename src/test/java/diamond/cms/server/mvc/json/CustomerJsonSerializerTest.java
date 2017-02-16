@@ -1,4 +1,4 @@
-package diamond.cms.server.json;
+package diamond.cms.server.mvc.json;
 
 import java.io.IOException;
 import java.sql.Timestamp;
