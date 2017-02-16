@@ -51,7 +51,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(crosInterceptor);
         registry.addInterceptor(authorizationInterceptor);
-        registry.addInterceptor(requestParamValidAspect);
     }
 
 }
