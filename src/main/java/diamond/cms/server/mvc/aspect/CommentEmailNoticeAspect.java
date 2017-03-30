@@ -37,7 +37,8 @@ public class CommentEmailNoticeAspect{
                 EmailSendService emailSendService;
                 @Override
                 public void run() {
-                    emailSendService.sendEmail(admin.getUsername(), "Blog Comment Notice", "User Comment \n nickname: %s, ", "comment-notice");
+                    // TODO read template and send Email
+                    // emailSendService.sendEmail(admin.getUsername(), "Blog Comment Notice", "User Comment \n nickname: %s, ", "comment-notice");
                 }
             });
         }
