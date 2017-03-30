@@ -1,8 +1,7 @@
 package diamond.cms.server.mvc.advice;
 
-import java.lang.reflect.UndeclaredThrowableException;
-
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,13 +9,14 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.HandlerMethod;
 
 import diamond.cms.server.core.Result;
 import diamond.cms.server.core.exceptions.AppException;
 import diamond.cms.server.core.exceptions.AuthorizationException;
 import diamond.cms.server.core.exceptions.Error;
+import diamond.cms.server.core.exceptions.ParamValidException;
 import diamond.cms.server.core.exceptions.UserNotInitException;
-import diamond.cms.server.mvc.valid.ParamValidException;
 
 @ControllerAdvice
 @ResponseBody
@@ -54,13 +54,9 @@ public class ExceptionControllerAdvice{
         return paramValidExceptionHandler(new ParamValidException(ex), response);
     }
 
-    @ExceptionHandler(UndeclaredThrowableException.class)
-    public Result undeclaredThrowableException(UndeclaredThrowableException ex, HttpServletResponse response){
-        Throwable throwable = ex.getUndeclaredThrowable();
-        if (throwable instanceof ParamValidException) {
-            return paramValidExceptionHandler((ParamValidException)throwable, response);
-        }
-        return exception(ex, response);
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Result constraintViolationExceptionHandler(ConstraintViolationException ex, HttpServletResponse response, HandlerMethod handlerMethod) {
+        return paramValidExceptionHandler(new ParamValidException(ex, handlerMethod.getMethodParameters()), response);
     }
 
     @ExceptionHandler(Exception.class)

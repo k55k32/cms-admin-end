@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -15,7 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import diamond.cms.server.mvc.interceptor.AuthorizationInterceptor;
 import diamond.cms.server.mvc.interceptor.CORSInterceptor;
 import diamond.cms.server.mvc.json.spring.JsonReturnHandler;
-import diamond.cms.server.mvc.valid.aspect.RequestParamValidAspect;
 
 @Configuration
 @EnableWebMvc
@@ -27,8 +27,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Resource
     CORSInterceptor crosInterceptor;
 
-    @Resource
-    RequestParamValidAspect requestParamValidAspect;
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        MethodValidationPostProcessor processor = new MethodValidationPostProcessor();
+        return processor;
+    }
 
     @Bean
     public JsonReturnHandler JsonReturnHandler(){

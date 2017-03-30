@@ -1,9 +1,13 @@
-package diamond.cms.server.mvc.valid;
+package diamond.cms.server.core.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.ConstraintViolationException;
+
+import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindException;
 
 public class ParamValidException extends Exception{
@@ -18,6 +22,19 @@ public class ParamValidException extends Exception{
     @Override
     public String getMessage() {
         return fieldErrors.toString();
+    }
+
+    public ParamValidException(ConstraintViolationException violationException, MethodParameter[] methodParameters) {
+        List<FieldError> errors = violationException.getConstraintViolations().stream().map(constraintViolation -> {
+            PathImpl pathImpl = (PathImpl) constraintViolation.getPropertyPath();
+            int paramIndex = pathImpl.getLeafNode().getParameterIndex();
+            String paramName = methodParameters[paramIndex].getParameterName();
+            FieldError error = new FieldError();
+            error.setName(paramName);
+            error.setMessage(constraintViolation.getMessage());
+            return error;
+        }).collect(Collectors.toList());
+        this.fieldErrors = errors;
     }
 
     public ParamValidException(List<FieldError> errors) {

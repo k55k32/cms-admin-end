@@ -1,4 +1,4 @@
-package diamond.cms.server.mvc.valid.aspect;
+package diamond.cms.server;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,7 +6,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import diamond.cms.server.BasicWebTest;
 import diamond.cms.server.core.exceptions.Error;
 public class RequestParamVaildAdviceTest extends BasicWebTest{
 
