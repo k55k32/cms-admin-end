@@ -22,6 +22,8 @@ public class CommentEmailNoticeAspect{
 
     @Resource
     UserService userService;
+    @Resource
+    EmailSendService emailSendService;
 
     Logger log = LoggerFactory.getLogger(getClass());
     @Pointcut("execution(* diamond.cms.server.mvc.controllers.CommentController.saveComment(..))")
@@ -30,17 +32,16 @@ public class CommentEmailNoticeAspect{
     @AfterReturning(returning="comment", pointcut="execution(* diamond.cms.server.mvc.controllers.CommentController.saveComment(..))")
     public void after(Comment comment) {
         log.info("save comment");
-        User admin = userService.findAdmin();
-        if (admin != null) {
-            CompletableFuture.runAsync(new Runnable() {
-                @Resource
-                EmailSendService emailSendService;
-                @Override
-                public void run() {
-                    // TODO read template and send Email
-                    // emailSendService.sendEmail(admin.getUsername(), "Blog Comment Notice", "User Comment \n nickname: %s, ", "comment-notice");
-                }
-            });
-        }
+        CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
+            	User admin = userService.findAdmin();
+            	if (admin != null) {
+            	    
+            	    // TODO read template and send Email
+            	    // emailSendService.sendEmail(admin.getUsername(), "Blog Comment Notice", "User Comment \n nickname: %s, ", "comment-notice");
+            	}
+            }
+        });
     }
 }

@@ -1,5 +1,11 @@
 package diamond.cms.server.utils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +13,35 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TemplateRenderUtil {
+    
+    /**
+     * @see diamond.cms.server.utils.TemplateRenderUtil#render(String, Map)
+     * @param file
+     * @param value
+     * @return
+     * @throws IOException
+     */
+    public static String render(File file, Object value) throws IOException {
+        return render(new FileInputStream(file), value);
+    }
+    
+    /**
+     * @see diamond.cms.server.utils.TemplateRenderUtil#render(String, Map)
+     * @param in
+     * @param value
+     * @return
+     * @throws IOException
+     */
+    public static String render(InputStream in, Object value) throws IOException {
+        BufferedReader re = new BufferedReader(new InputStreamReader(in));
+        String line = null;
+        StringBuffer fileContent = new StringBuffer();
+        while((line = re.readLine()) != null) {
+            fileContent.append(line);
+        }
+        re.close();
+        return render(fileContent.toString(), value);
+    }
 
     /**
      * @see diamond.cms.server.utils.TemplateRenderUtil#render(String, Map)
@@ -15,6 +50,16 @@ public class TemplateRenderUtil {
      * @return
      */
     public static String render(String temp, Object value) {
+        if (value instanceof Map) {
+            Map<?,?> map = (Map<?, ?>) value;
+            Map<String,String> stringMap = new HashMap<>();
+            map.entrySet().forEach(entry -> {
+                String key = entry.getKey() == null ? null : entry.getKey().toString();
+                String mapValue = entry.getValue() == null ? null : entry.getValue().toString();
+                stringMap.put(key, mapValue);
+            });
+            return render(temp, stringMap);
+        }
         Map<String, String> map = new HashMap<>();
                 Arrays.asList(value.getClass().getMethods()).stream().filter(m -> {
             return m.getName().startsWith("get") && m.getParameterCount() == 0;
