@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CCommentPojo implements ICComment {
 
-    private static final long serialVersionUID = -1296540777;
+    private static final long serialVersionUID = 1428575756;
 
     private String    id;
     private String    articleId;
@@ -37,6 +37,8 @@ public class CCommentPojo implements ICComment {
     private Timestamp createTime;
     private Timestamp updateTime;
     private String    ip;
+    private String    replyId;
+    private Boolean   fromAuthor;
 
     public CCommentPojo() {}
 
@@ -50,6 +52,8 @@ public class CCommentPojo implements ICComment {
         this.createTime = value.createTime;
         this.updateTime = value.updateTime;
         this.ip = value.ip;
+        this.replyId = value.replyId;
+        this.fromAuthor = value.fromAuthor;
     }
 
     public CCommentPojo(
@@ -61,7 +65,9 @@ public class CCommentPojo implements ICComment {
         Integer   state,
         Timestamp createTime,
         Timestamp updateTime,
-        String    ip
+        String    ip,
+        String    replyId,
+        Boolean   fromAuthor
     ) {
         this.id = id;
         this.articleId = articleId;
@@ -72,6 +78,8 @@ public class CCommentPojo implements ICComment {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.ip = ip;
+        this.replyId = replyId;
+        this.fromAuthor = fromAuthor;
     }
 
     @NotNull
@@ -175,6 +183,27 @@ public class CCommentPojo implements ICComment {
         this.ip = ip;
     }
 
+    @Size(max = 40)
+    @Override
+    public String getReplyId() {
+        return this.replyId;
+    }
+
+    @Override
+    public void setReplyId(String replyId) {
+        this.replyId = replyId;
+    }
+
+    @Override
+    public Boolean getFromAuthor() {
+        return this.fromAuthor;
+    }
+
+    @Override
+    public void setFromAuthor(Boolean fromAuthor) {
+        this.fromAuthor = fromAuthor;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CCommentPojo (");
@@ -188,6 +217,8 @@ public class CCommentPojo implements ICComment {
         sb.append(", ").append(createTime);
         sb.append(", ").append(updateTime);
         sb.append(", ").append(ip);
+        sb.append(", ").append(replyId);
+        sb.append(", ").append(fromAuthor);
 
         sb.append(")");
         return sb.toString();
@@ -211,6 +242,8 @@ public class CCommentPojo implements ICComment {
         setCreateTime(from.getCreateTime());
         setUpdateTime(from.getUpdateTime());
         setIp(from.getIp());
+        setReplyId(from.getReplyId());
+        setFromAuthor(from.getFromAuthor());
     }
 
     /**
