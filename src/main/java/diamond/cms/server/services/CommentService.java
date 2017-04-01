@@ -44,7 +44,7 @@ public class CommentService extends GenericService<Comment>{
             return e.select(Fields.all(comment.fields(), article.TITLE.as("articleTitle")))
             .from(comment)
             .leftJoin(article).on(comment.ARTICLE_ID.eq(article.ID))
-            .where(conditions);
+            .where(conditions).orderBy(comment.CREATE_TIME.desc());
         }, Comment.class);
     }
 
@@ -73,5 +73,12 @@ public class CommentService extends GenericService<Comment>{
         comment.setState(Const.STATE_NORMAL);
         super.save(comment);
         return comment;
+    }
+
+    public Comment reply(Comment comment) {
+        String replyId = comment.getReplyId();
+        String articleId = dao.get(replyId).getArticleId();
+        comment.setArticleId(articleId);
+        return this.saveNewComment(comment);
     }
 }

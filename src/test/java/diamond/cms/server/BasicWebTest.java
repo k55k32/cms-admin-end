@@ -35,19 +35,10 @@ public abstract class BasicWebTest extends BasicTestCase{
     UserService userService;
     MockMvc mvc;
     String token = "";
-    String url;
     protected final ObjectMapper objectMapper = new ObjectMapper();
-
-    protected abstract String getUrl();
 
     @Before
     public void setUp() throws Exception {
-        url = getUrl();
-        if (!url.startsWith("/")) {
-            url = "/" + url;
-        }
-        log.info("url", url);
-
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationConnect).build();
         String login = "/user/token";
         String username = "test_user" + System.currentTimeMillis();

@@ -255,4 +255,10 @@ public class ArticleService extends GenericService<Article>{
         return list;
     }
 
+    public String getTitle(String articleId) {
+        return dao.getOptional(articleId).map(a -> {
+            return a.getTitle();
+        }).orElse(null);
+    }
+
 }

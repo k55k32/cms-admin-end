@@ -15,10 +15,7 @@ import diamond.cms.server.services.ArticleService;
 
 public class JsonReturnHandlerTest extends BasicWebTest{
 
-    @Override
-    protected String getUrl() {
-        return "/article";
-    }
+    String url = "/article";
 
     @Resource
     ArticleService articleService;
@@ -31,7 +28,7 @@ public class JsonReturnHandlerTest extends BasicWebTest{
         article.setContent("123123");
         article.setCreateTime(new Timestamp(System.currentTimeMillis()));
         articleService.save(article);
-        MockHttpServletResponse response = perform(get(getUrl()+"/"+article.getId()));
+        MockHttpServletResponse response = perform(get(url+"/"+article.getId()));
         asserts(response);
         String result = response.getContentAsString();
         Assert.assertFalse("should not has createTime field~", hasField(result, "createTime"));
@@ -45,7 +42,7 @@ public class JsonReturnHandlerTest extends BasicWebTest{
         article.setContent("123123");
         article.setCreateTime(new Timestamp(System.currentTimeMillis()));
         articleService.save(article);
-        MockHttpServletResponse response = perform(get(getUrl()+"/"+article.getId()));
+        MockHttpServletResponse response = perform(get(url+"/"+article.getId()));
         asserts(response);
         String result = response.getContentAsString();
         Assert.assertFalse("should not has createTime field~", hasField(result, "createTime"));

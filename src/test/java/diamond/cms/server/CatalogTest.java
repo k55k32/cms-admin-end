@@ -10,6 +10,7 @@ import diamond.cms.server.core.Result;
 
 public class CatalogTest extends BasicWebTest{
 
+    final String url = "/catalog";
 
     @Test
     public void findTest() throws Exception {
@@ -38,9 +39,4 @@ public class CatalogTest extends BasicWebTest{
         asserts(response);
     }
 
-
-    @Override
-    public String getUrl() {
-        return "catalog";
-    }
 }

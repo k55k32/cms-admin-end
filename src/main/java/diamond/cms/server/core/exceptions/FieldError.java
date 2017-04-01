@@ -1,4 +1,4 @@
-package diamond.cms.server.mvc.valid;
+package diamond.cms.server.core.exceptions;
 
 import java.io.Serializable;
 

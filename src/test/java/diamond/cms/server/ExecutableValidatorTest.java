@@ -1,4 +1,4 @@
-package diamond.cms.server.mvc.valid;
+package diamond.cms.server;
 
 import java.lang.reflect.Method;
 import java.util.Set;

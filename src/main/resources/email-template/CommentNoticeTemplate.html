@@ -1,0 +1,39 @@
+<style>
+    .email-content{
+        padding: 15px;
+        max-width: 560px;
+        margin: auto;
+        background: rgba(239, 239, 239, 0.14);
+        border: 1px solid #eee;
+    }
+    .content{
+        border: 1px solid #eee;
+        padding: 15px;
+    }
+    .remark{
+        color:#666;
+        font-size: .8em;
+    }
+    hr{
+        border: 1px solid #eee;
+        border-top: 0;
+    }
+    a{
+        color: inherit;
+    }
+</style>
+<div class="email-content">
+    <h1>Comment Notice</h1>
+    <hr>
+    <p><strong>{{nickname}} <{{email}}></strong>  comment article <u>{{articleTitle}}</u></p>
+    <h4>Content:</h4>
+    <p class="content">{{content}}</p>
+    <div class="remark">
+        <p>
+            CREATE TIME: {{createTime}}
+        </p>
+        <p>
+            <a href="https://diamondfsd.com/article/{{articleId}}">See the details</a>
+        </p>
+    </div>
+</div>

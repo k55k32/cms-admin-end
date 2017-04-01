@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class CComment extends TableImpl<CCommentRecord> {
 
-    private static final long serialVersionUID = 1694370022;
+    private static final long serialVersionUID = -1335219646;
 
     /**
      * The reference instance of <code>cms.c_comment</code>
@@ -96,6 +96,16 @@ public class CComment extends TableImpl<CCommentRecord> {
      * The column <code>cms.c_comment.ip</code>.
      */
     public final TableField<CCommentRecord, String> IP = createField("ip", org.jooq.impl.SQLDataType.VARCHAR.length(40).nullable(false), this, "");
+
+    /**
+     * The column <code>cms.c_comment.reply_id</code>.
+     */
+    public final TableField<CCommentRecord, String> REPLY_ID = createField("reply_id", org.jooq.impl.SQLDataType.VARCHAR.length(40), this, "");
+
+    /**
+     * The column <code>cms.c_comment.from_author</code>.
+     */
+    public final TableField<CCommentRecord, Boolean> FROM_AUTHOR = createField("from_author", org.jooq.impl.SQLDataType.BIT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("b'0'", org.jooq.impl.SQLDataType.BIT)), this, "");
 
     /**
      * Create a <code>cms.c_comment</code> table reference

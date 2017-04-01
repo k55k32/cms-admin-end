@@ -17,6 +17,7 @@ import diamond.cms.server.core.exceptions.AuthorizationException;
 import diamond.cms.server.model.User;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
 import diamond.cms.server.mvc.controllers.ControllerUtils;
+import diamond.cms.server.mvc.controllers.ControllerPackageInfo;
 import diamond.cms.server.services.UserService;
 
 @Component
@@ -37,7 +38,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor{
             HandlerMethod methodHandler = (HandlerMethod) handler;
             Object bean = methodHandler.getBean();
             Class<?> type = bean.getClass();
-            if(type.getName().startsWith("diamond.cms.server.controllers")){
+            if(type.getName().startsWith(ControllerPackageInfo.class.getPackage().getName())){
                 if (type.getAnnotation(IgnoreToken.class)!=null || methodHandler.getMethodAnnotation(IgnoreToken.class)!=null) {
                     return true;
                 }

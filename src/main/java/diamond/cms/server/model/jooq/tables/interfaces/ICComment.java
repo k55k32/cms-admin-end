@@ -130,6 +130,27 @@ public interface ICComment extends Serializable {
     @Size(max = 40)
     public String getIp();
 
+    /**
+     * Setter for <code>cms.c_comment.reply_id</code>.
+     */
+    public void setReplyId(String value);
+
+    /**
+     * Getter for <code>cms.c_comment.reply_id</code>.
+     */
+    @Size(max = 40)
+    public String getReplyId();
+
+    /**
+     * Setter for <code>cms.c_comment.from_author</code>.
+     */
+    public void setFromAuthor(Boolean value);
+
+    /**
+     * Getter for <code>cms.c_comment.from_author</code>.
+     */
+    public Boolean getFromAuthor();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

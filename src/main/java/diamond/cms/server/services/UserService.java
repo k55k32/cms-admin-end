@@ -2,6 +2,7 @@ package diamond.cms.server.services;
 
 import static diamond.cms.server.model.jooq.Tables.C_USER;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,17 @@ public class UserService extends GenericService<User>{
 
     public void checkoutInit() {
         if (isInit()) throw new AppException(Error.USER_INIT_API_REFUSE);
+    }
+
+    public User findAdmin() {
+        User user = this.findAll().stream().min(new Comparator<User>() {
+            @Override
+            public int compare(User user1, User user2) {
+                return user1.getCreateTime().compareTo(user2.getCreateTime());
+            }
+
+        }).orElse(null);
+        return user;
     }
 
 }
