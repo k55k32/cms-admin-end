@@ -3,4 +3,7 @@ database:
     username: root
     password: root
 
+server:
+    port: 8889
+    
 logging.level.org.jooq: DEBUG

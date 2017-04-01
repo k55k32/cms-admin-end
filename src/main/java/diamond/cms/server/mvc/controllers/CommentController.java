@@ -44,12 +44,12 @@ public class CommentController {
         return commentService.list(articleId, Const.STATE_NORMAL, lastTime);
     }
 
-    @RequestMapping(value = "reply", method = RequestMethod.POST)
-    public Comment replyComment(String content, String replyId, HttpServletRequest request) {
+    @RequestMapping(value = "reply/{id}", method = RequestMethod.POST)
+    public Comment replyComment(String content, @PathVariable String id, HttpServletRequest request) {
         User user = ControllerUtils.currentUser();
         Comment comment = new Comment();
         comment.setContent(content);
-        comment.setReplyId(replyId);
+        comment.setReplyId(id);
         comment.setEmail(user.getUsername());
         comment.setNickname("Author");
         comment.setIp(ControllerUtils.getIpAddr(request));

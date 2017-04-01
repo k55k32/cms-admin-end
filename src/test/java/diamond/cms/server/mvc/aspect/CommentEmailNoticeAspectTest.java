@@ -35,11 +35,7 @@ public class CommentEmailNoticeAspectTest extends BasicWebTest{
         MockHttpServletResponse response = perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(comment)));
         String id = getJsonNode(response).get("data").get("id").asText();
         Assert.assertNotNull(id);
-        Comment reply = new Comment();
-        reply.setReplyId(id);
-        reply.setContent("reply: replyTest replyTest");
-        response = perform(post(url + "/reply").param("content", reply.getContent())
-                .param("replyId", reply.getReplyId()));
+        response = perform(post(url + "/reply/" + id).param("content", "reply: replyTest replyTest"));
         asserts(response);
         JsonNode reponseData = getJsonNode(response).get("data");
         String articleId = reponseData.get("articleId").asText();
