@@ -14,6 +14,12 @@ import java.util.regex.Pattern;
 
 public class TemplateRenderUtil {
     
+    
+    public static String renderResource(String resourcePath, Object value) throws IOException {
+        InputStream input = TemplateRenderUtil.class.getResourceAsStream(resourcePath);
+        return render(input, value);
+    }
+    
     /**
      * @see diamond.cms.server.utils.TemplateRenderUtil#render(String, Map)
      * @param file
@@ -89,7 +95,8 @@ public class TemplateRenderUtil {
         while (m.find()) {
             String mp = m.group();
             String key = mp.substring(2).substring(0, mp.length() - 4);
-            temp = temp.replace(mp, data.get(key) == null ? "" : data.get(key));
+            String value = data.get(key);
+            temp = temp.replace(mp, value == null ? "" : value);
         }
         return temp;
     }

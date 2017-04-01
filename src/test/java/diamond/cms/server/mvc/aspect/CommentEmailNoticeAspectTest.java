@@ -21,6 +21,7 @@ public class CommentEmailNoticeAspectTest extends BasicWebTest{
         comment.setContent("test comment");
         MockHttpServletResponse response = perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(comment)));
         asserts(response);
+        Thread.sleep(3000);
     }
 
 }
