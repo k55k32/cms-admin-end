@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import diamond.cms.server.services.CommentService;
 
 @RestController()
 @RequestMapping(value = "comment")
+@Validated
 public class CommentController {
 
     @Autowired
@@ -39,13 +42,13 @@ public class CommentController {
 
     @RequestMapping(value = "{articleId}", method = RequestMethod.GET)
     @IgnoreToken
-    @JSON(type = Comment.class, include = "id,nickname,createTime,content")
+    @JSON(type = Comment.class, include = "id,nickname,createTime,content,replyId,fromAuthor")
     public List<Comment> frontList(@PathVariable String articleId, Optional<Long> lastTime){
         return commentService.list(articleId, Const.STATE_NORMAL, lastTime);
     }
 
     @RequestMapping(value = "reply/{id}", method = RequestMethod.POST)
-    public Comment replyComment(String content, @PathVariable String id, HttpServletRequest request) {
+    public Comment replyComment(@NotBlank String content, @PathVariable String id, HttpServletRequest request) {
         User user = ControllerUtils.currentUser();
         Comment comment = new Comment();
         comment.setContent(content);
