@@ -1,9 +1,11 @@
 package diamond.cms.server.mvc.aspect;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import diamond.cms.server.BasicWebTest;
 import diamond.cms.server.model.Comment;
@@ -23,4 +25,25 @@ public class CommentEmailNoticeAspectTest extends BasicWebTest{
         asserts(response);
     }
 
+    @Test
+    public void replyTest() throws JsonProcessingException, Exception {
+        Comment comment = new Comment();
+        comment.setArticleId("123");
+        comment.setNickname("diamond");
+        comment.setEmail("diamondfsd@gmail.com");
+        comment.setContent("save comment test replyTest");
+        MockHttpServletResponse response = perform(post(url).contentType("application/json").content(objectMapper.writeValueAsString(comment)));
+        String id = getJsonNode(response).get("data").get("id").asText();
+        Assert.assertNotNull(id);
+        Comment reply = new Comment();
+        reply.setReplyId(id);
+        reply.setContent("reply: replyTest replyTest");
+        response = perform(post(url + "/reply").param("content", reply.getContent())
+                .param("replyId", reply.getReplyId()));
+        asserts(response);
+        JsonNode reponseData = getJsonNode(response).get("data");
+        String articleId = reponseData.get("articleId").asText();
+        Assert.assertEquals(articleId, comment.getArticleId());
+    }
+    
 }

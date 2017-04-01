@@ -45,8 +45,11 @@ public class CommentController {
     }
 
     @RequestMapping(value = "reply", method = RequestMethod.POST)
-    public Comment replyComment(Comment comment, HttpServletRequest request) {
+    public Comment replyComment(String content, String replyId, HttpServletRequest request) {
         User user = ControllerUtils.currentUser();
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setReplyId(replyId);
         comment.setEmail(user.getUsername());
         comment.setNickname("Author");
         comment.setIp(ControllerUtils.getIpAddr(request));
