@@ -3,7 +3,7 @@ package diamond.cms.server.services;
 import static diamond.cms.server.model.jooq.Tables.C_PAGE_VIEW;
 
 import java.sql.Timestamp;
-import java.util.Map;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
@@ -28,12 +28,8 @@ public class PageViewService extends GenericService<PageView>{
         return Stream.of(C_PAGE_VIEW.CREATE_TIME.ge(new Timestamp(start)), C_PAGE_VIEW.CREATE_TIME.le(new Timestamp(end)));
     }
 
-    public Map<String, Long> pvRangeCount(Long start, Long end) {
-        @SuppressWarnings("unchecked")
-        Map<String, Long> map = (Map<String, Long>) dao.execute(e -> {
-            return e.fetch("SELECT DATE_FORMAT(create_time, '%Y-%m-%d') createTime, COUNT(1) countPv FROM c_page_view GROUP BY DATE_FORMAT(create_time, '%Y%m%d')")
-            .intoMap("createTime", "countPv");
-        });
-        return map;
+    public List<PageView> findByTime(Long start, Long end) {
+        return dao.fetch(getCondition(start, end), C_PAGE_VIEW.CREATE_TIME.asc());
     }
+
 }

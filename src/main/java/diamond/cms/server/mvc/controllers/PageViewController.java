@@ -1,6 +1,7 @@
 package diamond.cms.server.mvc.controllers;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -42,11 +43,11 @@ public class PageViewController {
         return page;
     }
 
-    @RequestMapping(value = "range-count", method = RequestMethod.GET)
-    public Map<String,Long> rangeCount(Long start, Long end) {
-        return pageViewService.pvRangeCount(start, end);
+    @RequestMapping(value = "pv-count", method = RequestMethod.GET)
+    public List<PageView> pvCount(Long start, Long end) {
+        return pageViewService.findByTime(start, end);
     }
-
+    
     @RequestMapping(method = RequestMethod.POST)
     @IgnoreToken
     public void pv(@RequestBody PageView pv, HttpServletRequest request){
