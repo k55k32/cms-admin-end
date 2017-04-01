@@ -64,21 +64,26 @@ public class CommentEmailNoticeAspect{
     
     @AfterReturning(returning="comment", pointcut="execution(* diamond.cms.server.mvc.controllers.CommentController.replyComment(..))")
     public void afterReply(Comment comment) {
-        try {
-            Comment byReplyComment = commentService.get(comment.getReplyId());
-            String toEmail = byReplyComment.getEmail();
-            if (ValidateUtils.isEmail(toEmail)) {
-                String articleTitle = articleService.getTitle(comment.getArticleId());
-                comment.setArticleTitle(articleTitle);
+        CompletableFuture.runAsync(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    String emailContent = TemplateRenderUtil.renderResource(REPLY_NOTICE_TEMP, comment);
-                    emailSendService.sendEmail(toEmail, "Comment Reply Notice", emailContent, "comment-reply-" + comment.getId());
-                } catch (IOException e) {
-                    log.error("template render error, send email reply comment faild", e);
-                }
+                    Comment byReplyComment = commentService.get(comment.getReplyId());
+                    String toEmail = byReplyComment.getEmail();
+                    if (ValidateUtils.isEmail(toEmail)) {
+                        String articleTitle = articleService.getTitle(comment.getArticleId());
+                        comment.setArticleTitle(articleTitle);
+                        try {
+                            String emailContent = TemplateRenderUtil.renderResource(REPLY_NOTICE_TEMP, comment);
+                            emailSendService.sendEmail(toEmail, "Comment Reply Notice", emailContent, "comment-reply-" + comment.getId());
+                        } catch (IOException e) {
+                            log.error("template render error, send email reply comment faild", e);
+                        }
+                    }
+                } catch (Exception e) {
+                    log.error("send comment reply email faild", e);
+                }                
             }
-        } catch (Exception e) {
-            log.error("send comment reply email faild", e);
-        }
+        });
     }
 }
