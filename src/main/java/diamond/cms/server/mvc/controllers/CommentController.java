@@ -18,6 +18,7 @@ import diamond.cms.server.core.PageResult;
 import diamond.cms.server.model.Comment;
 import diamond.cms.server.model.User;
 import diamond.cms.server.mvc.Const;
+import diamond.cms.server.mvc.annotations.CheckGuestLogin;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
 import diamond.cms.server.mvc.json.JSON;
 import diamond.cms.server.services.CommentService;
@@ -42,6 +43,7 @@ public class CommentController {
 
     @RequestMapping(value = "{articleId}", method = RequestMethod.GET)
     @IgnoreToken
+    @CheckGuestLogin
     @JSON(type = Comment.class, include = "id,nickname,createTime,content,replyId,fromAuthor")
     public List<Comment> frontList(@PathVariable String articleId, Optional<Long> lastTime){
         return commentService.list(articleId, Const.STATE_NORMAL, lastTime);

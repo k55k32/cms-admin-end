@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import diamond.cms.server.mvc.interceptor.AuthorizationInterceptor;
 import diamond.cms.server.mvc.interceptor.CORSInterceptor;
+import diamond.cms.server.mvc.interceptor.CheckGuestLoginInterceptor;
 import diamond.cms.server.mvc.json.spring.JsonReturnHandler;
 
 @Configuration
@@ -24,6 +25,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Resource
     AuthorizationInterceptor authorizationInterceptor;
 
+    @Resource
+    CheckGuestLoginInterceptor checkGuestLoginInterceptor;
+    
     @Resource
     CORSInterceptor crosInterceptor;
 
@@ -54,6 +58,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(crosInterceptor);
         registry.addInterceptor(authorizationInterceptor);
+        registry.addInterceptor(checkGuestLoginInterceptor);
     }
 
 }

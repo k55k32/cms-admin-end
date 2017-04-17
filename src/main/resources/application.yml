@@ -5,5 +5,9 @@ database:
 
 server:
     port: 8889
+
+auth2:
+    githubClientId: c10fd104be25fa95bcc4
+    githubClientSecret: 9f61e620ac587154b787e2dd8b4205f4494b11d6
     
 logging.level.org.jooq: DEBUG

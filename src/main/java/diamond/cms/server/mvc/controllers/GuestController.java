@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import diamond.cms.server.model.Guest;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
 import diamond.cms.server.services.GuestService;
 
@@ -25,5 +26,10 @@ public class GuestController {
     public String loginByCode(@PathVariable String code) throws JsonProcessingException, IOException {
         String token = guestService.loginByGithub(code);
         return token;
+    }
+    
+    @RequestMapping("{token}")
+    public Guest getByToken(@PathVariable String token) {
+        return guestService.getByToken(token);
     }
 }
