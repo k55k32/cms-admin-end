@@ -13,7 +13,8 @@ public enum Error {
     SEND_EMAIL_FAILD(10009, "send email faild: %s"),
     USER_INIT_API_REFUSE(10010, "this api user init use only"),
     INVALID_EMAIL_CODE(10011, "invalid email code"),
-    INVALID_PARAMS(10012, "invalid params: %s"),
+    INVALID_PARAMS(10012, "invalid params: %s"), 
+    AUTH2_CODE_ERROR(10013, "get token failed auth2 code error message: %s"),
     ;
 
     private int code;

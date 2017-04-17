@@ -10,6 +10,7 @@ import diamond.cms.server.model.jooq.tables.CCatalog;
 import diamond.cms.server.model.jooq.tables.CComment;
 import diamond.cms.server.model.jooq.tables.CEmailConfig;
 import diamond.cms.server.model.jooq.tables.CEmailSend;
+import diamond.cms.server.model.jooq.tables.CGuest;
 import diamond.cms.server.model.jooq.tables.CIpLocation;
 import diamond.cms.server.model.jooq.tables.CKeyword;
 import diamond.cms.server.model.jooq.tables.CPageView;
@@ -62,6 +63,11 @@ public class Tables {
      * The table <code>cms.c_email_send</code>.
      */
     public static final CEmailSend C_EMAIL_SEND = diamond.cms.server.model.jooq.tables.CEmailSend.C_EMAIL_SEND;
+
+    /**
+     * The table <code>cms.c_guest</code>.
+     */
+    public static final CGuest C_GUEST = diamond.cms.server.model.jooq.tables.CGuest.C_GUEST;
 
     /**
      * The table <code>cms.c_ip_location</code>.
