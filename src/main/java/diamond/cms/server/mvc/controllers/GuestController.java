@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import diamond.cms.server.model.Guest;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
+import diamond.cms.server.mvc.json.JSON;
 import diamond.cms.server.services.GuestService;
 
 
@@ -29,6 +30,7 @@ public class GuestController {
     }
     
     @RequestMapping("{token}")
+    @JSON(type = Guest.class, include = "id,email,nickname,avatar")
     public Guest getByToken(@PathVariable String token) {
         return guestService.getByToken(token);
     }
