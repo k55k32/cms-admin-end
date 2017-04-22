@@ -33,6 +33,7 @@ public class CommentController {
 
     @RequestMapping(method = RequestMethod.POST)
     @IgnoreToken
+    @CheckGuestLogin
     @JSON(type = Comment.class, filter = "ip,state,updateTime")
     public Comment saveComment(@RequestBody Comment comment, HttpServletRequest request){
         comment.setIp(ControllerUtils.getIpAddr(request));
@@ -43,7 +44,6 @@ public class CommentController {
 
     @RequestMapping(value = "{articleId}", method = RequestMethod.GET)
     @IgnoreToken
-    @CheckGuestLogin
     @JSON(type = Comment.class, include = "id,nickname,createTime,content,replyId,fromAuthor")
     public List<Comment> frontList(@PathVariable String articleId, Optional<Long> lastTime){
         return commentService.list(articleId, Const.STATE_NORMAL, lastTime);
