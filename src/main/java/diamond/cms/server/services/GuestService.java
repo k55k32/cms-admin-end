@@ -42,7 +42,7 @@ public class GuestService extends GenericService<Guest>{
         String token = UUID.randomUUID().toString();
         String tokenKey = tokenCacheKey(token);
         cacheManager.set(userKey, tokenKey);
-        cacheManager.set(tokenKey, guest, Const.TOKEN_EXPIRE);
+        cacheManager.set(tokenKey, guest, Const.TOKEN_EXPIRE * 24 * 30);
         return token;
     }
 
