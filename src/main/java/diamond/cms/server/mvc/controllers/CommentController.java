@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import diamond.cms.server.core.PageResult;
 import diamond.cms.server.model.Comment;
+import diamond.cms.server.model.Guest;
 import diamond.cms.server.model.User;
 import diamond.cms.server.mvc.Const;
+import diamond.cms.server.mvc.annotations.CheckGuestLogin;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
 import diamond.cms.server.mvc.json.JSON;
 import diamond.cms.server.services.CommentService;
@@ -32,8 +34,12 @@ public class CommentController {
 
     @RequestMapping(method = RequestMethod.POST)
     @IgnoreToken
+    @CheckGuestLogin
     @JSON(type = Comment.class, filter = "ip,state,updateTime")
     public Comment saveComment(@RequestBody Comment comment, HttpServletRequest request){
+        Guest guest = ControllerUtils.currentGuest();
+        comment.setEmail(guest.getEmail());
+        comment.setNickname(guest.getNickname());
         comment.setIp(ControllerUtils.getIpAddr(request));
         comment.setFromAuthor(false);
         return commentService.saveNewComment(comment);

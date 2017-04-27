@@ -5,5 +5,8 @@ database:
 
 server:
     port: 8889
+
+auth2:
+    githubClientId: c10fd104be25fa95bcc4
     
 logging.level.org.jooq: DEBUG

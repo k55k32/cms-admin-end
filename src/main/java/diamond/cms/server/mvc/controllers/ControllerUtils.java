@@ -4,10 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
+import diamond.cms.server.model.Guest;
 import diamond.cms.server.model.User;
 
 public class ControllerUtils {
     private static final ThreadLocal<User> CURRENT_USER = new ThreadLocal<>();
+    private static final ThreadLocal<Guest> CURRENT_GUEST = new ThreadLocal<>();
     public static String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
@@ -32,9 +34,15 @@ public class ControllerUtils {
         CURRENT_USER.set(user);
     }
 
-
-
     public static User currentUser(){
         return CURRENT_USER.get();
+    }
+
+    public static void setCurrentGuest(Guest guest) {
+        CURRENT_GUEST.set(guest);
+    }
+    
+    public static Guest currentGuest() {
+        return CURRENT_GUEST.get();
     }
 }
