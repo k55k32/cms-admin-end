@@ -23,25 +23,25 @@ import diamond.cms.server.model.Guest;
 
 @Service
 public class GithubAuth2Service {
-    
+
     Logger log  = LoggerFactory.getLogger(getClass());
-    
+
     static String AUTH2_URL = "https://github.com/login/oauth/authorize?client_id=";
-    
+
     static String ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token";
     static String USER_URL = "https://api.github.com/user";
     @Autowired
     Auth2Config config;
-    
+
     @Resource
     CacheManager cacheManager;
- 
+
     ObjectMapper om = new ObjectMapper();
-    
+
     public String getToken(String code) throws JsonProcessingException, IOException {
-        String body = HttpRequest.post(ACCESS_TOKEN_URL, 
+        String body = HttpRequest.post(ACCESS_TOKEN_URL,
                 ImmutableMap.of(
-                        "client_id", config.getGithubClientId(), 
+                        "client_id", config.getGithubClientId(),
                         "client_secret", config.getGithubClientSecret(),
                         "code", code
                         ),
@@ -54,20 +54,20 @@ public class GithubAuth2Service {
             throw new AppException(Error.AUTH2_CODE_ERROR, body);
         }
     }
-    
+
     public Guest getGuest(String code) throws JsonProcessingException, IOException {
         String token = getToken(code);
         String body = HttpRequest.get(USER_URL, ImmutableMap.of("access_token", token), true).body();
         JsonNode jsonNode = om.readTree(body);
-        String email = jsonNode.get("email").asText();
-        String nickname = jsonNode.get("name").asText();
-        String avatar = jsonNode.get("avatar_url").asText();
+        String email = jsonNode.get("email").asText(null);
+        String nickname = jsonNode.get("login").asText(null);
+        String avatar = jsonNode.get("avatar_url").asText(null);
         Guest guest = new Guest();
         guest.setEmail(email);
         guest.setNickname(nickname);
         guest.setAvatar(avatar);
         guest.setThirdData(body);
         return guest;
-        
+
     }
 }

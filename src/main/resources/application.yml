@@ -8,5 +8,5 @@ server:
 
 auth2:
     githubClientId: c10fd104be25fa95bcc4
-    
+    githubClientSecret: 465fafde07d1f100e4a2a6e527737f90099f36d5
 logging.level.org.jooq: DEBUG

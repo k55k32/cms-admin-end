@@ -16,10 +16,10 @@ import diamond.cms.server.mvc.Const;
 
 @Service
 public class GuestService extends GenericService<Guest>{
-    
+
     @Autowired
     CacheManager cacheManager;
-    
+
     @Autowired
     GithubAuth2Service githubAuth2Service;
 
@@ -33,7 +33,7 @@ public class GuestService extends GenericService<Guest>{
         Guest guest = cacheManager.get(tokenCacheKey(token), Guest.class, Const.TOKEN_EXPIRE);
         return guest;
     }
-    
+
     private String generateToken(Guest guest) {
         String userKey = guestCacheKey(guest.getId());
         cacheManager.getOptional(userKey, String.class).ifPresent(tokenKey -> {
@@ -46,16 +46,16 @@ public class GuestService extends GenericService<Guest>{
         return token;
     }
 
-    
+
     private String tokenCacheKey(String token) {
         return Const.CACHE_PREFIX_TOKEN_GUEST_VERSION + token;
     }
     private String guestCacheKey(String id) {
         return Const.CACHE_PREFIX_GUEST_TOKEN + id;
     }
-    
+
     private Guest loginOrRegister(Guest guest) {
-        Guest existsGuest = getByEmail(guest.getEmail());
+        Guest existsGuest = getByNickname(guest.getNickname());
         if (existsGuest == null) {
             guest.setCreateTime(currentTime());
             guest.setLoginTime(currentTime());
@@ -70,11 +70,11 @@ public class GuestService extends GenericService<Guest>{
         }
         return guest;
     }
-    
-    public Guest getByEmail(String email) {
+    public Guest getByNickname(String nickname) {
         CGuest GUEST_TABLE = Tables.C_GUEST;
         Guest guest = dao.execute(e -> {
-            return e.select(GUEST_TABLE.fields()).from(GUEST_TABLE).fetchOptionalInto(Guest.class).orElse(null);
+            return e.select(GUEST_TABLE.fields()).from(GUEST_TABLE)
+                    .where(GUEST_TABLE.NICKNAME.eq(nickname)).fetchOptionalInto(Guest.class).orElse(null);
         });
         return guest;
     }
