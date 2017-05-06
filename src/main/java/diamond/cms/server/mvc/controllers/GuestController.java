@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.collect.ImmutableMap;
 
+import diamond.cms.server.core.exceptions.AppException;
+import diamond.cms.server.core.exceptions.Error;
 import diamond.cms.server.model.Guest;
 import diamond.cms.server.mvc.annotations.IgnoreToken;
 import diamond.cms.server.mvc.json.JSON;
@@ -24,16 +26,20 @@ public class GuestController {
 
     @Autowired
     GuestService guestService;
-    
+
     @RequestMapping("login/github/{code}")
     public Map<String, String> loginByCode(@PathVariable String code) throws JsonProcessingException, IOException {
         String token = guestService.loginByGithub(code);
         return ImmutableMap.of("token", token);
     }
-    
+
     @RequestMapping("{token}")
     @JSON(type = Guest.class, include = "id,email,nickname,avatar")
     public Guest getByToken(@PathVariable String token) {
-        return guestService.getByToken(token);
+        Guest guest = guestService.getByToken(token);
+        if (guest == null) {
+            throw new AppException(Error.INVALID_TOKEN);
+        }
+        return guest;
     }
 }
