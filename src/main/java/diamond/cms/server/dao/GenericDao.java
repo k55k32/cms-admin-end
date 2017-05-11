@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.jooq.Condition;
-import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.SelectLimitStep;
@@ -76,12 +75,6 @@ public interface GenericDao<T, ID extends Serializable> {
 
     Optional<T> fetchOneWithOptional(Stream<Optional<Condition>> conditions);
 
-    <O> O execute(Executor<O> cb);
-
-    @FunctionalInterface
-    interface Executor<E> {
-        E execute(DSLContext context);
-    }
-
+    <Obj> Obj execute(Executor<Obj> execute);
 
 }

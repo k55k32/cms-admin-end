@@ -19,24 +19,21 @@ public class MapCacheManagerImpl implements CacheManager{
     private final Thread expireThread;
 
     public MapCacheManagerImpl() {
-        expireThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true){
-                    List<String> expireKey = new ArrayList<>();
-                    CACHE_EXPIRE.keySet().forEach(key -> {
-                        Long expireTime = CACHE_EXPIRE.get(key);
-                        if (System.currentTimeMillis() >= expireTime) {
-                            expireKey.add(key);
-                        }
-                    });
-                    expireKey.forEach(k -> removeCache(k));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        break;
+        expireThread = new Thread(() -> {
+            while(true){
+                List<String> expireKey = new ArrayList<>();
+                CACHE_EXPIRE.keySet().forEach(key -> {
+                    Long expireTime = CACHE_EXPIRE.get(key);
+                    if (System.currentTimeMillis() >= expireTime) {
+                        expireKey.add(key);
                     }
+                });
+                expireKey.forEach(k -> removeCache(k));
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
                 }
             }
         });
